@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "521890849193",
+    "project_id": "guc-scheduling-app",
+    "storage_bucket": "guc-scheduling-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521890849193:android:cbe607fb75fafc5248e4b8",
+        "android_client_info": {
+          "package_name": "com.aya.guc_scheduling_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "521890849193-5qjrjq59r87g4n5ubv2vm05te5ptb4g4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAm3j4uQ5yt6cLEj2aLqP-czUrVPbYOMa4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "521890849193-5qjrjq59r87g4n5ubv2vm05te5ptb4g4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

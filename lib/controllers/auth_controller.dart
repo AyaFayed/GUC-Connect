@@ -1,0 +1,50 @@
+import "package:firebase_auth/firebase_auth.dart";
+import 'package:guc_scheduling_app/controllers/user_controller.dart';
+import 'package:guc_scheduling_app/shared/constants.dart';
+
+class AuthService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final UserController _database = UserController();
+
+  // sign up
+  Future signup(String email, String password, String name) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      User? user = result.user;
+
+      UserType userType = email == 'ayaa_fayed@yahoo.com'
+          ? UserType.admin
+          : email.split('@')[1].split('.')[0] == 'student'
+              ? UserType.student
+              : UserType.professor;
+
+      await _database.createUser(user?.uid, name, userType);
+
+      return user;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // log in
+  Future login(String email, String password) async {
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      User? user = result.user;
+      return user;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // log out
+  Future logout() async {
+    try {
+      return await _auth.signOut();
+    } catch (e) {
+      return null;
+    }
+  }
+}
