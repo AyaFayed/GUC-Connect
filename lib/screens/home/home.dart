@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/screens/Course/my_courses.dart';
-import '../../controllers/auth_controller.dart';
+import 'package:guc_scheduling_app/screens/calendar/calendar.dart';
+import 'package:guc_scheduling_app/screens/notifications/notifications.dart';
+import 'package:guc_scheduling_app/screens/settings/settings.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -10,21 +12,19 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final AuthService _auth = AuthService();
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
     MyCourses(),
+    Notifications(),
+    Calendar(),
+    Settings(),
   ];
 
   Future<void> _onItemTapped(int index) async {
-    if (index == 1) {
-      await _auth.logout();
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
@@ -34,7 +34,6 @@ class _HomeState extends State<Home> {
         title: const Text('GUC Notifications'),
         backgroundColor: const Color.fromARGB(255, 191, 26, 47),
         elevation: 0.0,
-        actions: <Widget>[],
       ),
       body: SingleChildScrollView(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -46,11 +45,23 @@ class _HomeState extends State<Home> {
             label: 'Courses',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.logout),
-            label: 'Log out',
+            icon: Icon(Icons.notifications),
+            label: 'Notifications',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: 'Calendar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
           ),
         ],
         currentIndex: _selectedIndex,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Color.fromARGB(255, 235, 235, 235),
+        showUnselectedLabels: true,
+        unselectedItemColor: Colors.grey,
         selectedItemColor: Colors.black,
         onTap: (val) async {
           await _onItemTapped(val);

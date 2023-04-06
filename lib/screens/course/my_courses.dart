@@ -3,6 +3,7 @@ import 'package:guc_scheduling_app/controllers/course_controller.dart';
 import 'package:guc_scheduling_app/screens/course/admin_course.dart';
 import 'package:guc_scheduling_app/screens/course/all_courses.dart';
 import 'package:guc_scheduling_app/screens/course/course_card.dart';
+import 'package:guc_scheduling_app/screens/enroll/enroll.dart';
 
 import '../../models/course/course_model.dart';
 
@@ -72,7 +73,7 @@ class _MyCoursesState extends State<MyCourses> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const Card(child: AllCourses()),
+                          builder: (context) => const Card(child: Enroll()),
                         ));
                   }),
             ])));

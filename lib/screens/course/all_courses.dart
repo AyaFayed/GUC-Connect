@@ -16,8 +16,8 @@ class AllCourses extends StatefulWidget {
 }
 
 class _AllCoursesState extends State<AllCourses> {
-  CourseController _courseController = CourseController();
-  UserController _userController = UserController();
+  final CourseController _courseController = CourseController();
+  final UserController _userController = UserController();
 
   @override
   Widget build(BuildContext context) {

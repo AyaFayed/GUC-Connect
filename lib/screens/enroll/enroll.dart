@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/screens/course/all_courses.dart';
 
 class Enroll extends StatefulWidget {
   const Enroll({super.key});
@@ -17,6 +18,8 @@ class _EnrollState extends State<Enroll> {
           elevation: 0.0,
           actions: <Widget>[],
         ),
-        body: SingleChildScrollView());
+        body: const SingleChildScrollView(
+          child: AllCourses(),
+        ));
   }
 }
