@@ -104,4 +104,32 @@ class DivisionController {
       }
     }
   }
+
+  Future<List<Group>> getGroupListFromIds(List<String> ids) async {
+    List<Group> groups = [];
+    for (String id in ids) {
+      final docGroup = _database.collection('groups').doc(id);
+      final groupSnapshot = await docGroup.get();
+      if (groupSnapshot.exists) {
+        final group =
+            Group.fromJson(groupSnapshot.data() as Map<String, dynamic>);
+        groups.add(group);
+      }
+    }
+    return groups;
+  }
+
+  Future<List<Tutorial>> getTutorialListFromIds(List<String> ids) async {
+    List<Tutorial> tutorials = [];
+    for (String id in ids) {
+      final docTutorial = _database.collection('tutorials').doc(id);
+      final tutorialSnapshot = await docTutorial.get();
+      if (tutorialSnapshot.exists) {
+        final tutorial =
+            Tutorial.fromJson(tutorialSnapshot.data() as Map<String, dynamic>);
+        tutorials.add(tutorial);
+      }
+    }
+    return tutorials;
+  }
 }

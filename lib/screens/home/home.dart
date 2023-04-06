@@ -59,7 +59,7 @@ class _HomeState extends State<Home> {
         ],
         currentIndex: _selectedIndex,
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Color.fromARGB(255, 235, 235, 235),
+        backgroundColor: const Color.fromARGB(255, 235, 235, 235),
         showUnselectedLabels: true,
         unselectedItemColor: Colors.grey,
         selectedItemColor: Colors.black,

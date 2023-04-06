@@ -4,7 +4,6 @@ import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/models/user/professor_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/models/user/ta_model.dart';
-import 'package:guc_scheduling_app/models/user/user_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 
@@ -35,6 +34,27 @@ class CourseController {
   Stream<List<Course>> getAllCourses() =>
       _database.collection('courses').snapshots().map((snapshot) =>
           snapshot.docs.map((doc) => Course.fromJson(doc.data())).toList());
+
+  Future<List<Course>> getEnrollCourses() async {
+    QuerySnapshot querySnapshot = await _database.collection('courses').get();
+
+    List<Course> allCourses = querySnapshot.docs
+        .map((doc) => Course.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
+
+    List<Course> myCourses = await getMyCourses();
+
+    Iterable<String> myCourseIds = myCourses.map((course) => course.id);
+
+    List<Course> enrollCourses = [];
+
+    for (Course course in allCourses) {
+      if (!myCourseIds.contains(course.id)) {
+        enrollCourses.add(course);
+      }
+    }
+    return enrollCourses;
+  }
 
   Future<List<Course>> getMyCourses() async {
     final docUser = _database.collection('users').doc(_auth.currentUser?.uid);

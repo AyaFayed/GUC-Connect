@@ -1,16 +1,19 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/enrollment_controller.dart';
 import 'package:guc_scheduling_app/screens/home/home.dart';
+import 'package:guc_scheduling_app/shared/constants.dart';
 
-class ProfessorEnroll extends StatelessWidget {
+class InstructorEnroll extends StatelessWidget {
   final String courseId;
-  final String name;
-  final String semester;
+  final String courseName;
+  final Semester semester;
   final int year;
 
-  const ProfessorEnroll(
+  const InstructorEnroll(
       {super.key,
-      required this.name,
+      required this.courseName,
       required this.semester,
       required this.year,
       required this.courseId});
@@ -19,10 +22,9 @@ class ProfessorEnroll extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(name),
+          title: Text(courseName),
           backgroundColor: const Color.fromARGB(255, 191, 26, 47),
           elevation: 0.0,
-          actions: <Widget>[],
         ),
         body: SingleChildScrollView(
             child: Container(
@@ -32,12 +34,12 @@ class ProfessorEnroll extends StatelessWidget {
             children: <Widget>[
               const SizedBox(height: 40.0),
               Text(
-                name,
+                courseName,
                 style: const TextStyle(fontSize: 20),
               ),
               const SizedBox(height: 20.0),
               Text(
-                semester,
+                semester.name,
                 style: const TextStyle(fontSize: 20),
               ),
               const SizedBox(height: 20.0),
@@ -52,7 +54,7 @@ class ProfessorEnroll extends StatelessWidget {
           onPressed: () async {
             final EnrollmentController enrollmentController =
                 EnrollmentController();
-            await enrollmentController.professorEnroll(courseId);
+            await enrollmentController.InstructorEnroll(courseId);
             Navigator.pop(context);
             Navigator.pop(context);
             Navigator.pop(context);

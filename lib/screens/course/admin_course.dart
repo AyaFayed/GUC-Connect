@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/shared/constants.dart';
 
 class AdminCourse extends StatelessWidget {
+  final String id;
   final String name;
-  final String semester;
+  final Semester semester;
   final int year;
 
   const AdminCourse(
       {super.key,
+      required this.id,
       required this.name,
       required this.semester,
       required this.year});
@@ -33,7 +36,7 @@ class AdminCourse extends StatelessWidget {
             ),
             const SizedBox(height: 20.0),
             Text(
-              semester,
+              semester.name,
               style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 20.0),

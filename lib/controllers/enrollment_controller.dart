@@ -26,62 +26,63 @@ class EnrollmentController {
     }
   }
 
-  Future professorEnroll(String courseId) async {
+  Future InstructorEnroll(String courseId) async {
     final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
     final userSnapshot = await docUser.get();
 
     if (userSnapshot.exists) {
       final user = userSnapshot.data();
       if (getUserTypeFromString(user!['type']) == UserType.professor) {
-        Professor userData = Professor.fromJson(user);
-        List<ProfessorCourse> courses = userData.courses;
-        for (ProfessorCourse course in courses) {
-          if (course.id == courseId) {
-            return;
-          }
-        }
-        ProfessorCourse newCourse = ProfessorCourse(
-            id: courseId,
-            groups: [],
-            announcements: [],
-            quizzes: [],
-            assignments: [],
-            compensationLectures: []);
-        courses.add(newCourse);
-        await docUser
-            .update({'courses': courses.map((course) => course.toJson())});
-
-        await addInstructorToCourse(courseId, InstructorType.professors);
+        await professorEnroll(courseId, user);
+      }
+      if (getUserTypeFromString(user['type']) == UserType.ta) {
+        await taEnroll(courseId, user);
       }
     }
   }
 
-  Future taEnroll(String courseId) async {
+  Future professorEnroll(String courseId, user) async {
     final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
-    final userSnapshot = await docUser.get();
 
-    if (userSnapshot.exists) {
-      final user = userSnapshot.data();
-      if (getUserTypeFromString(user!['type']) == UserType.ta) {
-        TA userData = TA.fromJson(user);
-        List<TACourse> courses = userData.courses;
-        for (TACourse course in courses) {
-          if (course.id == courseId) {
-            return;
-          }
-        }
-        TACourse newCourse = TACourse(
-            id: courseId,
-            tutorials: [],
-            announcements: [],
-            compensationTutorials: []);
-        courses.add(newCourse);
-        await docUser
-            .update({'courses': courses.map((course) => course.toJson())});
-
-        await addInstructorToCourse(courseId, InstructorType.tas);
+    Professor userData = Professor.fromJson(user);
+    List<ProfessorCourse> courses = userData.courses;
+    for (ProfessorCourse course in courses) {
+      if (course.id == courseId) {
+        return;
       }
     }
+    ProfessorCourse newCourse = ProfessorCourse(
+        id: courseId,
+        groups: [],
+        announcements: [],
+        quizzes: [],
+        assignments: [],
+        compensationLectures: []);
+    courses.add(newCourse);
+    await docUser.update({'courses': courses.map((course) => course.toJson())});
+
+    await addInstructorToCourse(courseId, InstructorType.professors);
+  }
+
+  Future taEnroll(String courseId, user) async {
+    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
+
+    TA userData = TA.fromJson(user);
+    List<TACourse> courses = userData.courses;
+    for (TACourse course in courses) {
+      if (course.id == courseId) {
+        return;
+      }
+    }
+    TACourse newCourse = TACourse(
+        id: courseId,
+        tutorials: [],
+        announcements: [],
+        compensationTutorials: []);
+    courses.add(newCourse);
+    await docUser.update({'courses': courses.map((course) => course.toJson())});
+
+    await addInstructorToCourse(courseId, InstructorType.tas);
   }
 
   Future addStudentToDivision(

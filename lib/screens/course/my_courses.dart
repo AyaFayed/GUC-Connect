@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/course_controller.dart';
-import 'package:guc_scheduling_app/screens/course/admin_course.dart';
-import 'package:guc_scheduling_app/screens/course/all_courses.dart';
-import 'package:guc_scheduling_app/screens/course/course_card.dart';
-import 'package:guc_scheduling_app/screens/enroll/enroll.dart';
+import 'package:guc_scheduling_app/controllers/user_controller.dart';
+import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/widgets/course_list.dart';
 
 import '../../models/course/course_model.dart';
+import '../enroll/enroll.dart';
 
 class MyCourses extends StatefulWidget {
   const MyCourses({super.key});
@@ -16,6 +16,26 @@ class MyCourses extends StatefulWidget {
 
 class _MyCoursesState extends State<MyCourses> {
   final CourseController _courseController = CourseController();
+  final UserController _userController = UserController();
+
+  List<Course>? _courses;
+  UserType? _userType;
+
+  @override
+  void initState() {
+    super.initState();
+    _getData();
+  }
+
+  Future<void> _getData() async {
+    List<Course> coursesData = await _courseController.getMyCourses();
+    UserType userTypeData = await _userController.getUserType();
+
+    setState(() {
+      _courses = coursesData;
+      _userType = userTypeData;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,59 +43,41 @@ class _MyCoursesState extends State<MyCourses> {
         child: Container(
             padding:
                 const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-            child: Column(children: [
-              FutureBuilder<List<Course>>(
-                future: _courseController.getMyCourses(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasData) {
-                    print(snapshot.data);
-                    final courses = snapshot.data!;
-
-                    return courses.isEmpty
-                        ? const Text("You haven't enrolled in any courses yet")
-                        : ListView(
-                            shrinkWrap: true,
-                            children: courses.map((Course course) {
-                              return CourseCard(
-                                  name: course.name,
-                                  widget: AdminCourse(
-                                    name: course.name,
-                                    semester: course.semester.name,
-                                    year: course.year,
-                                  ));
-                            }).toList(),
-                          );
-                  }
-
-                  if (snapshot.hasError) {
-                    return const Text('Something went wrong');
-                  }
-                  return const Text('No Data');
-                },
-              ),
-              const SizedBox(
-                height: 40.0,
-              ),
-              ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(120, 40),
-                      textStyle: const TextStyle(fontSize: 18),
-                      backgroundColor: const Color.fromARGB(255, 240, 173, 41)),
-                  label: const Text(
-                    'Enroll in new course',
-                  ),
-                  icon: const Icon(Icons.add),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Card(child: Enroll()),
-                        ));
-                  }),
-            ])));
+            child: _userType == null
+                ? const CircularProgressIndicator()
+                : Column(children: [
+                    _courses == null || _userType == null
+                        ? const CircularProgressIndicator()
+                        : _courses!.isEmpty
+                            ? const Text(
+                                "You haven't enrolled in any courses yet")
+                            : CourseList(
+                                courses: _courses ?? [],
+                                userType: _userType ?? UserType.student,
+                                enroll: false),
+                    const SizedBox(
+                      height: 40.0,
+                    ),
+                    ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(120, 40),
+                            textStyle: const TextStyle(fontSize: 18),
+                            backgroundColor:
+                                const Color.fromARGB(255, 240, 173, 41)),
+                        label: const Text(
+                          'Enroll in new course',
+                        ),
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Card(
+                                    child: Enroll(
+                                        userType:
+                                            _userType ?? UserType.student)),
+                              ));
+                        }),
+                  ])));
   }
 }
