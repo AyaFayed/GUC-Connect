@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/screens/course/admin_course.dart';
 import 'package:guc_scheduling_app/screens/course/course_card.dart';
+import 'package:guc_scheduling_app/screens/course/professor_course.dart';
 import 'package:guc_scheduling_app/screens/enroll/instructor_enroll.dart';
 import 'package:guc_scheduling_app/screens/enroll/student_enroll.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
@@ -26,6 +27,16 @@ class CourseList extends StatelessWidget {
             semester: course.semester,
             year: course.year);
       case UserType.professor:
+        return enroll
+            ? InstructorEnroll(
+                courseName: course.name,
+                semester: course.semester,
+                year: course.year,
+                courseId: course.id)
+            : ProfessorCourse(
+                courseId: course.id,
+                courseName: course.name,
+              );
       case UserType.ta:
         return enroll
             ? InstructorEnroll(

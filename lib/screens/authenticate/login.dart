@@ -18,6 +18,13 @@ class _LoginState extends State<Login> {
   String error = '';
 
   @override
+  void dispose() {
+    controllerEmail.dispose();
+    controllerPassword.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
