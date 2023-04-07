@@ -54,7 +54,7 @@ class InstructorEnroll extends StatelessWidget {
           onPressed: () async {
             final EnrollmentController enrollmentController =
                 EnrollmentController();
-            await enrollmentController.InstructorEnroll(courseId);
+            await enrollmentController.instructorEnroll(courseId);
             Navigator.pop(context);
             Navigator.pop(context);
             Navigator.pop(context);

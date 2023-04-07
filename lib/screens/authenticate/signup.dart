@@ -2,8 +2,8 @@ import "package:flutter/material.dart";
 import "package:guc_scheduling_app/controllers/auth_controller.dart";
 
 class Signup extends StatefulWidget {
-  final toggleView;
-  const Signup({Key? key, this.toggleView}) : super(key: key);
+  final Function toggleView;
+  const Signup({super.key, required this.toggleView});
 
   @override
   State<Signup> createState() => _SignupState();

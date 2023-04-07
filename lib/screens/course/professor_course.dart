@@ -26,9 +26,11 @@ class _ProfessorCourseState extends State<ProfessorCourse> {
       AddAnnouncement(
         courseId: _courseId ?? '',
       ),
-      ScheduleEvent(),
-      AddGroup(),
-      ScheduleEvent(),
+      const ScheduleEvent(),
+      AddGroup(
+        courseId: _courseId ?? '',
+      ),
+      const ScheduleEvent(),
     ];
   }
 

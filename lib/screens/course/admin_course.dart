@@ -21,7 +21,6 @@ class AdminCourse extends StatelessWidget {
         title: Text(name),
         backgroundColor: const Color.fromARGB(255, 191, 26, 47),
         elevation: 0.0,
-        actions: <Widget>[],
       ),
       body: SingleChildScrollView(
           child: Container(

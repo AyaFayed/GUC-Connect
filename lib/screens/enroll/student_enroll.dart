@@ -31,7 +31,6 @@ class StudentEnroll extends StatefulWidget {
 
 class _StudentEnrollState extends State<StudentEnroll> {
   final DivisionController _divisionController = DivisionController();
-  final _formKey = GlobalKey<FormState>();
 
   String selectedGroupId = '';
   String selectedTutorialId = '';

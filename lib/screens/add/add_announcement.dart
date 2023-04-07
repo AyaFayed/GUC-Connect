@@ -17,7 +17,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
   final AnnouncementsController _announcementsController =
       AnnouncementsController();
 
-  final String error = '';
+  String error = '';
 
   @override
   void dispose() {

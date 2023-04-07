@@ -26,7 +26,7 @@ class EnrollmentController {
     }
   }
 
-  Future InstructorEnroll(String courseId) async {
+  Future instructorEnroll(String courseId) async {
     final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
     final userSnapshot = await docUser.get();
 
