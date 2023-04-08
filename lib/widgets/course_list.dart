@@ -54,8 +54,6 @@ class CourseList extends StatelessWidget {
             ? StudentEnroll(
                 courseId: course.id,
                 courseName: course.name,
-                groupIds: course.groups,
-                tutorialIds: course.tutorials,
                 semester: course.semester,
                 year: course.year,
               )

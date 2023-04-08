@@ -132,4 +132,97 @@ class DivisionController {
     }
     return tutorials;
   }
+
+  Future<List<Group>> getCourseGroups(String courseId) async {
+    final docCourse = _database.collection('courses').doc(courseId);
+    final courseSnapshot = await docCourse.get();
+
+    if (courseSnapshot.exists) {
+      final course = courseSnapshot.data();
+      List<String> groupIds =
+          (course!['groups'] as List<dynamic>).cast<String>();
+      return await getGroupListFromIds(groupIds);
+    }
+    return [];
+  }
+
+  Future<List<Group>> getOtherCourseGroups(String courseId) async {
+    final docCourse = _database.collection('courses').doc(courseId);
+    final courseSnapshot = await docCourse.get();
+
+    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
+    final userSnapshot = await docUser.get();
+
+    List<String> groupIds = [];
+
+    if (courseSnapshot.exists && userSnapshot.exists) {
+      final course = courseSnapshot.data();
+      final user = userSnapshot.data();
+      List<String> myGroups = [];
+      for (var course in user!['courses']) {
+        if (course['id'] == courseId) {
+          myGroups = (course!['groups'] as List<dynamic>).cast<String>();
+        }
+      }
+      List<String> allGroups =
+          (course!['groups'] as List<dynamic>).cast<String>();
+
+      for (String groupId in allGroups) {
+        if (!myGroups.contains(groupId)) {
+          groupIds.add(groupId);
+        }
+      }
+      return await getGroupListFromIds(groupIds);
+    }
+    return [];
+  }
+
+  Future<List<Group>> getMyCourseGroups(String courseId) async {
+    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
+    final userSnapshot = await docUser.get();
+
+    if (userSnapshot.exists) {
+      final user = userSnapshot.data();
+      for (var course in user!['courses']) {
+        if (course['id'] == courseId) {
+          List<String> groupIds =
+              (course!['groups'] as List<dynamic>).cast<String>();
+          return await getGroupListFromIds(groupIds);
+        }
+      }
+      return [];
+    }
+    return [];
+  }
+
+  Future<List<Tutorial>> getCourseTutorials(String courseId) async {
+    final docCourse = _database.collection('courses').doc(courseId);
+    final courseSnapshot = await docCourse.get();
+
+    if (courseSnapshot.exists) {
+      final course = courseSnapshot.data();
+      List<String> tutorialIds =
+          (course!['tutorials'] as List<dynamic>).cast<String>();
+      return await getTutorialListFromIds(tutorialIds);
+    }
+    return [];
+  }
+
+  Future<List<Tutorial>> getMyCourseTutorials(String courseId) async {
+    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
+    final userSnapshot = await docUser.get();
+
+    if (userSnapshot.exists) {
+      final user = userSnapshot.data();
+      for (var course in user!['courses']) {
+        if (course['id'] == courseId) {
+          List<String> tutorialIds =
+              (course!['tutorials'] as List<dynamic>).cast<String>();
+          return await getTutorialListFromIds(tutorialIds);
+        }
+      }
+      return [];
+    }
+    return [];
+  }
 }

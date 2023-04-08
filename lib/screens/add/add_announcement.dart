@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/announcements_controller.dart';
+import 'package:guc_scheduling_app/widgets/groups_dropdown.dart';
 
 class AddAnnouncement extends StatefulWidget {
   final String courseId;
@@ -18,6 +19,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
       AnnouncementsController();
 
   String error = '';
+  List<String> selectedGroupIds = [];
 
   @override
   void dispose() {
@@ -35,6 +37,10 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
           child: Column(
             children: <Widget>[
               const SizedBox(height: 40.0),
+              GroupsDropdown(
+                  courseId: widget.courseId,
+                  selectedGroupIds: selectedGroupIds),
+              const SizedBox(height: 20.0),
               TextFormField(
                 decoration: const InputDecoration(hintText: 'Title'),
                 validator: (val) => val!.isEmpty ? 'Enter a title' : null,
@@ -61,7 +67,10 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
                     await _announcementsController.createAnnouncement(
                         widget.courseId,
                         controllerTitle.text,
-                        controllerAnnouncement.text, [], [], []);
+                        controllerAnnouncement.text,
+                        [],
+                        selectedGroupIds,
+                        []);
                   }
                 },
               ),

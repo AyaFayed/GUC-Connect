@@ -13,15 +13,11 @@ class StudentEnroll extends StatefulWidget {
   final String courseName;
   final Semester semester;
   final int year;
-  final List<String> groupIds;
-  final List<String> tutorialIds;
 
   const StudentEnroll(
       {super.key,
       required this.courseId,
       required this.courseName,
-      required this.groupIds,
-      required this.tutorialIds,
       required this.semester,
       required this.year});
 
@@ -50,9 +46,9 @@ class _StudentEnrollState extends State<StudentEnroll> {
 
   Future<void> _getData() async {
     List<Group> groupsData =
-        await _divisionController.getGroupListFromIds(widget.groupIds);
+        await _divisionController.getCourseGroups(widget.courseId);
     List<Tutorial> tutorialsData =
-        await _divisionController.getTutorialListFromIds(widget.tutorialIds);
+        await _divisionController.getCourseTutorials(widget.courseId);
 
     setState(() {
       _groups = groupsData;

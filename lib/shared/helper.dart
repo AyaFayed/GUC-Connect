@@ -1,4 +1,5 @@
 import 'package:guc_scheduling_app/models/course/course_model.dart';
+import 'package:guc_scheduling_app/models/divisions/division_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 
 List<Course> searchCourses(String query, List<Course> courses) {
@@ -65,4 +66,49 @@ Semester getSemesterFromString(String semester) {
     default:
       return Semester.summer;
   }
+}
+
+String abbreviateDay(Day day) {
+  switch (day) {
+    case Day.saturday:
+      return 'Sat';
+    case Day.sunday:
+      return 'Sun';
+    case Day.monday:
+      return 'Mon';
+    case Day.tuesday:
+      return 'Tues';
+    case Day.wednesday:
+      return 'Wed';
+    case Day.thursday:
+      return 'Thurs';
+  }
+}
+
+String abbreviateSlot(Slot slot) {
+  switch (slot) {
+    case Slot.first:
+      return '1st';
+    case Slot.second:
+      return '2nd';
+    case Slot.third:
+      return '3rd';
+    case Slot.fourth:
+      return '4th';
+    case Slot.fifth:
+      return '5th';
+  }
+}
+
+String formatLectures(List<Lecture> lectures) {
+  String result = '(';
+  for (int i = 0; i < lectures.length; i++) {
+    Lecture lecture = lectures[i];
+    result += '${abbreviateDay(lecture.day)}-${abbreviateSlot(lecture.slot)}';
+    if (i < lectures.length - 1) {
+      result += ' , ';
+    }
+  }
+  result += ')';
+  return result;
 }
