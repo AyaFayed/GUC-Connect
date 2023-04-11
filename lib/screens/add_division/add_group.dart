@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:guc_scheduling_app/controllers/division_controller.dart';
 import 'package:guc_scheduling_app/models/divisions/division_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/widgets/add_lectutre.dart';
 
 class AddGroup extends StatefulWidget {
   final String courseId;
@@ -17,25 +18,15 @@ class _AddGroupState extends State<AddGroup> {
   final _formKey = GlobalKey<FormState>();
   final DivisionController _divisionController = DivisionController();
 
-  List<DropdownMenuItem<Day>> daysOfWeek = Day.values
-      .map((day) => DropdownMenuItem<Day>(
-            value: day,
-            child: Text(day.name),
-          ))
-      .cast<DropdownMenuItem<Day>>()
-      .toList();
-
-  List<DropdownMenuItem<Slot>> slots = Slot.values
-      .map((slot) => DropdownMenuItem<Slot>(
-            value: slot,
-            child: Text(slot.name),
-          ))
-      .cast<DropdownMenuItem<Slot>>()
-      .toList();
+  static Lecture lecture = Lecture(day: Day.monday, slot: Slot.first);
+  static List<Lecture> lectures = [lecture];
+  static List<AddLecture> addLecture = [
+    AddLecture(
+      lecture: lecture,
+    )
+  ];
 
   String error = '';
-  Day? lectureDay;
-  Slot? lectureSlot;
 
   @override
   void dispose() {
@@ -63,24 +54,37 @@ class _AddGroupState extends State<AddGroup> {
                 controller: controllerGroupNumber,
               ),
               const SizedBox(height: 20.0),
-              DropdownButtonFormField(
-                  decoration: const InputDecoration(hintText: 'Lecture Day'),
-                  validator: (val) =>
-                      val == null ? 'Choose a lecture day' : null,
-                  items: daysOfWeek,
-                  onChanged: (val) => setState(() {
-                        lectureDay = val;
-                      })),
+              ...addLecture,
               const SizedBox(height: 20.0),
-              DropdownButtonFormField(
-                  decoration: const InputDecoration(hintText: 'Lecture slot'),
-                  validator: (val) =>
-                      val == null ? 'Choose a lecture slot' : null,
-                  items: slots,
-                  onChanged: (val) => setState(() {
-                        lectureSlot = val;
-                      })),
-              const SizedBox(height: 60.0),
+              ElevatedButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      Lecture lecture =
+                          Lecture(day: Day.monday, slot: Slot.first);
+                      lectures.add(lecture);
+                      addLecture.add(AddLecture(
+                        lecture: lecture,
+                      ));
+                    });
+                  },
+                  icon: const Icon(Icons.add),
+                  label: const Text(
+                    'Add Lecture',
+                  )),
+              addLecture.length > 1
+                  ? ElevatedButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          lectures.removeLast();
+                          addLecture.removeLast();
+                        });
+                      },
+                      icon: const Icon(Icons.delete),
+                      label: const Text(
+                        'Remove Lecture',
+                      ))
+                  : const SizedBox(height: 0.0),
+              const SizedBox(height: 30.0),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(50.0),
@@ -92,11 +96,7 @@ class _AddGroupState extends State<AddGroup> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     await _divisionController.createGroup(widget.courseId,
-                        int.parse(controllerGroupNumber.text), [
-                      Lecture(
-                          day: lectureDay ?? Day.saturday,
-                          slot: lectureSlot ?? Slot.first)
-                    ]);
+                        int.parse(controllerGroupNumber.text), lectures);
                   }
                 },
               ),

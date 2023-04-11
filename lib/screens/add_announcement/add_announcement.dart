@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/announcements_controller.dart';
-import 'package:guc_scheduling_app/widgets/groups_dropdown.dart';
+import 'package:guc_scheduling_app/widgets/add_event.dart';
 
 class AddAnnouncement extends StatefulWidget {
   final String courseId;
@@ -13,18 +13,19 @@ class AddAnnouncement extends StatefulWidget {
 
 class _AddAnnouncementState extends State<AddAnnouncement> {
   final controllerTitle = TextEditingController();
-  final controllerAnnouncement = TextEditingController();
+  final controllerDescription = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final AnnouncementsController _announcementsController =
       AnnouncementsController();
 
   String error = '';
   List<String> selectedGroupIds = [];
+  List<String> files = [];
 
   @override
   void dispose() {
     controllerTitle.dispose();
-    controllerAnnouncement.dispose();
+    controllerDescription.dispose();
     super.dispose();
   }
 
@@ -37,22 +38,12 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
           child: Column(
             children: <Widget>[
               const SizedBox(height: 40.0),
-              GroupsDropdown(
-                  courseId: widget.courseId,
-                  selectedGroupIds: selectedGroupIds),
-              const SizedBox(height: 20.0),
-              TextFormField(
-                decoration: const InputDecoration(hintText: 'Title'),
-                validator: (val) => val!.isEmpty ? 'Enter a title' : null,
-                controller: controllerTitle,
-              ),
-              const SizedBox(height: 20.0),
-              TextFormField(
-                decoration: const InputDecoration(hintText: 'Announcement'),
-                validator: (val) =>
-                    val!.isEmpty ? 'Enter the announcement' : null,
-                controller: controllerAnnouncement,
-              ),
+              AddEvent(
+                  controllerTitle: controllerTitle,
+                  controllerDescription: controllerDescription,
+                  files: files,
+                  selectedGroupIds: selectedGroupIds,
+                  courseId: widget.courseId),
               const SizedBox(height: 60.0),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -67,7 +58,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
                     await _announcementsController.createAnnouncement(
                         widget.courseId,
                         controllerTitle.text,
-                        controllerAnnouncement.text,
+                        controllerDescription.text,
                         [],
                         selectedGroupIds,
                         []);

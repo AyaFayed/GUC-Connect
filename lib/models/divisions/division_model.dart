@@ -45,6 +45,14 @@ class Lecture {
         'slot': slot.name,
       };
 
+  void setDay(Day day) {
+    this.day = day;
+  }
+
+  void setSlot(Slot slot) {
+    this.slot = slot;
+  }
+
   static Lecture fromJson(Map<String, dynamic> json) => Lecture(
         day: getDayFromString(json['day']),
         slot: getSlotFromString(json['slot']),

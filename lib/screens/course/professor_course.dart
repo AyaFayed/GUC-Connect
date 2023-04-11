@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:guc_scheduling_app/screens/add/add_announcement.dart';
-import 'package:guc_scheduling_app/screens/add/add_division/add_group.dart';
-import 'package:guc_scheduling_app/screens/add/schedule_event/schedule_event.dart';
+import 'package:guc_scheduling_app/screens/add_announcement/add_announcement.dart';
+import 'package:guc_scheduling_app/screens/add_division/add_group.dart';
+import 'package:guc_scheduling_app/screens/schedule_event/schedule_event.dart';
 
 class ProfessorCourse extends StatefulWidget {
   final String courseId;
@@ -16,28 +16,44 @@ class ProfessorCourse extends StatefulWidget {
 
 class _ProfessorCourseState extends State<ProfessorCourse> {
   int _selectedIndex = 0;
-  String? _courseId;
   List<Widget>? _widgetOptions;
+
   @override
   void initState() {
     super.initState();
-    _courseId = widget.courseId;
     _widgetOptions = <Widget>[
       AddAnnouncement(
-        courseId: _courseId ?? '',
+        courseId: widget.courseId,
       ),
-      const ScheduleEvent(),
       AddGroup(
-        courseId: _courseId ?? '',
+        courseId: widget.courseId,
       ),
-      const ScheduleEvent(),
+      AddGroup(
+        courseId: widget.courseId,
+      ),
+      AddGroup(
+        courseId: widget.courseId,
+      ),
     ];
   }
 
   Future<void> _onItemTapped(int index) async {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Card(
+              child: ScheduleEvent(
+            courseId: widget.courseId,
+            courseName: widget.courseName,
+          )),
+        ),
+      );
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
