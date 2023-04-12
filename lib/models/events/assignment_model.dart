@@ -23,7 +23,7 @@ class Assignment extends Event {
         'notes': notes,
         'files': files,
         'groups': groups,
-        'deadline': deadline,
+        'deadline': deadline.millisecondsSinceEpoch,
       };
 
   static Assignment fromJson(Map<String, dynamic> json) => Assignment(
@@ -34,5 +34,5 @@ class Assignment extends Event {
       notes: json['notes'],
       files: (json['files'] as List<dynamic>).cast<String>(),
       groups: (json['groups'] as List<dynamic>).cast<String>(),
-      deadline: DateTime.parse(json['dealine'].toString()));
+      deadline: DateTime.fromMillisecondsSinceEpoch(json['dealine']));
 }

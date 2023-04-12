@@ -1,13 +1,14 @@
 import "package:firebase_auth/firebase_auth.dart";
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/shared/helper.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final UserController _database = UserController();
 
   // sign up
-  Future signup(String email, String password, String name) async {
+  Future signup(String email, String password, String name, bool isTA) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -15,9 +16,11 @@ class AuthService {
 
       UserType userType = email == 'ayaa_fayed@yahoo.com'
           ? UserType.admin
-          : email.split('@')[1].split('.')[0] == 'student'
+          : !isInstructor(email)
               ? UserType.student
-              : UserType.professor;
+              : isTA
+                  ? UserType.ta
+                  : UserType.professor;
 
       await _database.createUser(user?.uid, name, userType);
 

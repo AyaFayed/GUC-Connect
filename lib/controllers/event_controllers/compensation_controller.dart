@@ -32,6 +32,7 @@ class CompensationController {
     int conflicts =
         await _scheduleEventsController.canScheduleGroup(groups, start, end);
     if (conflicts > 0) {
+      print(conflicts);
       return conflicts;
     }
 
@@ -66,6 +67,7 @@ class CompensationController {
             EventType.compensationLectures, DivisionType.groups, groupIds);
       }
     }
+    print(conflicts);
     return conflicts;
   }
 

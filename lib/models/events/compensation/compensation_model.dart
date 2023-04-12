@@ -22,8 +22,8 @@ class Compensation extends Event {
         'title': title,
         'notes': notes,
         'files': files,
-        'start': start,
-        'end': end,
+        'start': start.millisecondsSinceEpoch,
+        'end': end.millisecondsSinceEpoch,
       };
 
   static Compensation fromJson(Map<String, dynamic> json) => Compensation(
@@ -33,6 +33,6 @@ class Compensation extends Event {
       title: json['title'],
       notes: json['notes'],
       files: (json['files'] as List<dynamic>).cast<String>(),
-      start: DateTime.parse(json['start'].toString()),
-      end: DateTime.parse(json['end'].toString()));
+      start: DateTime.fromMillisecondsSinceEpoch(json['start']),
+      end: DateTime.fromMillisecondsSinceEpoch(json['end']));
 }

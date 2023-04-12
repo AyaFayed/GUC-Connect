@@ -112,3 +112,12 @@ String formatLectures(List<Lecture> lectures) {
   result += ')';
   return result;
 }
+
+bool isInstructor(String email) {
+  try {
+    String emailSecondHalf = email.split('@')[1];
+    return !(emailSecondHalf.split('.')[0] == 'student');
+  } catch (e) {
+    return false;
+  }
+}

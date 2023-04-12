@@ -25,8 +25,8 @@ class Quiz extends Event {
         'notes': notes,
         'files': files,
         'groups': groups,
-        'start': start,
-        'end': end,
+        'start': start.millisecondsSinceEpoch,
+        'end': end.millisecondsSinceEpoch,
       };
 
   static Quiz fromJson(Map<String, dynamic> json) => Quiz(
@@ -37,6 +37,6 @@ class Quiz extends Event {
       notes: json['notes'],
       files: (json['files'] as List<dynamic>).cast<String>(),
       groups: (json['groups'] as List<dynamic>).cast<String>(),
-      start: DateTime.parse(json['start'].toString()),
-      end: DateTime.parse(json['end'].toString()));
+      start: DateTime.fromMillisecondsSinceEpoch(json['start']),
+      end: DateTime.fromMillisecondsSinceEpoch(json['end']));
 }

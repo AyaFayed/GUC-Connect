@@ -102,6 +102,9 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
                   'Schedule Quiz',
                 ),
                 onPressed: () async {
+                  setState(() {
+                    error = '';
+                  });
                   if (_formKey.currentState!.validate()) {
                     if (startDateTime == null) {
                       setState(() {

@@ -22,8 +22,8 @@ class CompensationTutorial extends Compensation {
         'title': title,
         'notes': notes,
         'files': files,
-        'start': start,
-        'end': end,
+        'start': start.millisecondsSinceEpoch,
+        'end': end.millisecondsSinceEpoch,
         'tutorials': tutorials,
       };
 
@@ -35,8 +35,8 @@ class CompensationTutorial extends Compensation {
         title: json['title'],
         notes: json['notes'],
         files: (json['files'] as List<dynamic>).cast<String>(),
-        start: DateTime.parse(json['start'].toString()),
-        end: DateTime.parse(json['end'].toString()),
+        start: DateTime.fromMillisecondsSinceEpoch(json['start']),
+        end: DateTime.fromMillisecondsSinceEpoch(json['end']),
         tutorials: (json['tutorials'] as List<dynamic>).cast<String>(),
       );
 }
