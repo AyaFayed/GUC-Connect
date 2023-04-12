@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/compensation_controller.dart';
 import 'package:guc_scheduling_app/widgets/add_event.dart';
 
 class ScheduleCompensationLecture extends StatefulWidget {
@@ -18,6 +19,8 @@ class _ScheduleCompensationLectureState
   final controllerDescription = TextEditingController();
   final controllerDuration = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final CompensationController _compensationController =
+      CompensationController();
 
   String error = '';
   List<String> selectedGroupIds = [];
@@ -102,7 +105,16 @@ class _ScheduleCompensationLectureState
                 ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // schedule
+                    await _compensationController.scheduleCompensationLecture(
+                        widget.courseId,
+                        controllerTitle.text,
+                        controllerDescription.text,
+                        files,
+                        selectedGroupIds,
+                        startDateTime ?? DateTime.now(),
+                        startDateTime?.add(Duration(
+                                minutes: int.parse(controllerDuration.text))) ??
+                            DateTime.now());
                   }
                 },
               ),

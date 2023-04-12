@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/assignment_controller.dart';
 import 'package:guc_scheduling_app/widgets/add_event.dart';
 
 class ScheduleAssignment extends StatefulWidget {
@@ -14,6 +15,7 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
   final controllerTitle = TextEditingController();
   final controllerDescription = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final AssignmentController _assignmentController = AssignmentController();
 
   String error = '';
   List<String> selectedGroupIds = [];
@@ -86,7 +88,14 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
                 ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // schedule
+                    await _assignmentController.scheduleAssignment(
+                      widget.courseId,
+                      controllerTitle.text,
+                      controllerDescription.text,
+                      files,
+                      selectedGroupIds,
+                      startDateTime ?? DateTime.now(),
+                    );
                   }
                 },
               ),

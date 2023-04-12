@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/quiz_controller.dart';
 import 'package:guc_scheduling_app/widgets/add_event.dart';
 
 class ScheduleQuiz extends StatefulWidget {
@@ -15,6 +16,7 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
   final controllerTitle = TextEditingController();
   final controllerDescription = TextEditingController();
   final controllerDuration = TextEditingController();
+  final QuizController _quizController = QuizController();
   final _formKey = GlobalKey<FormState>();
 
   String error = '';
@@ -106,7 +108,17 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
                         error = 'Select a valid start date and time';
                       });
                     } else {
-                      // schedule
+                      await _quizController.scheduleQuiz(
+                          widget.courseId,
+                          controllerTitle.text,
+                          controllerDescription.text,
+                          files,
+                          selectedGroupIds,
+                          startDateTime ?? DateTime.now(),
+                          startDateTime?.add(Duration(
+                                  minutes:
+                                      int.parse(controllerDuration.text))) ??
+                              DateTime.now());
                     }
                   } else if (startDateTime == null) {
                     setState(() {
