@@ -3,6 +3,7 @@ import 'package:guc_scheduling_app/shared/helper.dart';
 
 class Division {
   String id;
+  String courseId;
   int number;
   List<Lecture> lectures;
   List<String> students;
@@ -10,6 +11,7 @@ class Division {
 
   Division(
       {required this.id,
+      required this.courseId,
       required this.number,
       required this.lectures,
       required this.students,
@@ -17,6 +19,7 @@ class Division {
 
   Map<String, dynamic> toJson() => {
         'id': id,
+        'courseId': courseId,
         'number': number,
         'lectures': lectures.map((lecture) => lecture.toJson()).toList(),
         'students': students,
@@ -25,6 +28,7 @@ class Division {
 
   static Division fromJson(Map<String, dynamic> json) => Division(
         id: json['id'],
+        courseId: json['courseId'],
         number: json['number'],
         lectures: (json['lectures'] as List<dynamic>)
             .map((lecture) => Lecture.fromJson(lecture))

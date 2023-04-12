@@ -30,6 +30,18 @@ class DivisionController {
 
   Future createGroup(
       String courseId, int number, List<Lecture> lectures) async {
+    QuerySnapshot querySnapshot = await _database.collection('groups').get();
+
+    List<Group> allGroups = querySnapshot.docs
+        .map((doc) => Group.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
+
+    for (Group group in allGroups) {
+      if (group.courseId == courseId && group.number == number) {
+        return;
+      }
+    }
+
     final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
     final userSnapshot = await docUser.get();
 
@@ -40,6 +52,7 @@ class DivisionController {
 
         final group = Group(
             id: docGroup.id,
+            courseId: courseId,
             number: number,
             lectures: lectures,
             students: [],
@@ -69,6 +82,18 @@ class DivisionController {
 
   Future createTutorial(
       String courseId, int number, List<Lecture> lectures) async {
+    QuerySnapshot querySnapshot = await _database.collection('tutorials').get();
+
+    List<Tutorial> allTutorials = querySnapshot.docs
+        .map((doc) => Tutorial.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
+
+    for (Tutorial tutorial in allTutorials) {
+      if (tutorial.courseId == courseId && tutorial.number == number) {
+        return;
+      }
+    }
+
     final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
     final userSnapshot = await docUser.get();
 
@@ -79,6 +104,7 @@ class DivisionController {
 
         final tutorial = Tutorial(
             id: docTutorial.id,
+            courseId: courseId,
             number: number,
             lectures: lectures,
             students: [],

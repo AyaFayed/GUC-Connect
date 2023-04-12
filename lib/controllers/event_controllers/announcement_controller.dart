@@ -8,7 +8,7 @@ import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 
-class AnnouncementsController {
+class AnnouncementController {
   final FirebaseFirestore _database = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final EventsControllerHelper _helper = EventsControllerHelper();

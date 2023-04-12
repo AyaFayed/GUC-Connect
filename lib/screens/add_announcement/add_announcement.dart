@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guc_scheduling_app/controllers/event_controllers/announcements_controller.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/announcement_controller.dart';
 import 'package:guc_scheduling_app/widgets/add_event.dart';
 
 class AddAnnouncement extends StatefulWidget {
@@ -15,8 +15,8 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
   final controllerTitle = TextEditingController();
   final controllerDescription = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final AnnouncementsController _announcementsController =
-      AnnouncementsController();
+  final AnnouncementController _announcementsController =
+      AnnouncementController();
 
   String error = '';
   List<String> selectedGroupIds = [];
