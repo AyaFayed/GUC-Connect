@@ -108,7 +108,7 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
                         error = 'Select a valid start date and time';
                       });
                     } else {
-                      await _quizController.scheduleQuiz(
+                      int conflicts = await _quizController.scheduleQuiz(
                           widget.courseId,
                           controllerTitle.text,
                           controllerDescription.text,
@@ -119,6 +119,13 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
                                   minutes:
                                       int.parse(controllerDuration.text))) ??
                               DateTime.now());
+
+                      if (conflicts > 0) {
+                        setState(() {
+                          error =
+                              '$conflicts student(s) has conflicts with this timing';
+                        });
+                      }
                     }
                   } else if (startDateTime == null) {
                     setState(() {

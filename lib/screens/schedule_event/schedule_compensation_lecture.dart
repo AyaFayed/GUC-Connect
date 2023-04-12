@@ -105,16 +105,25 @@ class _ScheduleCompensationLectureState
                 ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    await _compensationController.scheduleCompensationLecture(
-                        widget.courseId,
-                        controllerTitle.text,
-                        controllerDescription.text,
-                        files,
-                        selectedGroupIds,
-                        startDateTime ?? DateTime.now(),
-                        startDateTime?.add(Duration(
-                                minutes: int.parse(controllerDuration.text))) ??
-                            DateTime.now());
+                    int conflicts = await _compensationController
+                        .scheduleCompensationLecture(
+                            widget.courseId,
+                            controllerTitle.text,
+                            controllerDescription.text,
+                            files,
+                            selectedGroupIds,
+                            startDateTime ?? DateTime.now(),
+                            startDateTime?.add(Duration(
+                                    minutes:
+                                        int.parse(controllerDuration.text))) ??
+                                DateTime.now());
+
+                    if (conflicts > 0) {
+                      setState(() {
+                        error =
+                            '$conflicts student(s) has conflicts with this timing';
+                      });
+                    }
                   }
                 },
               ),
