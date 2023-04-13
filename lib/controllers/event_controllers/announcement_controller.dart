@@ -13,7 +13,7 @@ class AnnouncementController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final EventsControllerHelper _helper = EventsControllerHelper();
 
-  Future createAnnouncement(String courseId, String title, String notes,
+  Future createAnnouncement(String courseId, String title, String description,
       List<String> files, List<String> groups, List<String> tutorials) async {
     final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
     final userSnapshot = await docUser.get();
@@ -29,7 +29,7 @@ class AnnouncementController {
             creator: _auth.currentUser?.uid ?? '',
             course: courseId,
             title: title,
-            notes: notes,
+            description: description,
             files: files,
             groups: groups,
             tutorials: tutorials,

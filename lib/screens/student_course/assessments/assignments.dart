@@ -1,16 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/assignment_controller.dart';
+import 'package:guc_scheduling_app/models/events/assignment_model.dart';
+import 'package:guc_scheduling_app/models/events/event_model.dart';
+import 'package:guc_scheduling_app/shared/helper.dart';
+import 'package:guc_scheduling_app/widgets/event_widgets/event_list.dart';
 
 class Assignments extends StatefulWidget {
   final String courseId;
-  const Assignments({super.key, required this.courseId});
+  final String courseName;
+  const Assignments(
+      {super.key, required this.courseId, required this.courseName});
 
   @override
   State<Assignments> createState() => _AssignmentsState();
 }
 
 class _AssignmentsState extends State<Assignments> {
+  final AssignmentController _assignmentController = AssignmentController();
+
+  List<DisplayEvent>? _events;
+
+  @override
+  void initState() {
+    super.initState();
+    _getData();
+  }
+
+  Future<void> _getData() async {
+    List<Assignment> assignments =
+        await _assignmentController.getAssignments(widget.courseId);
+
+    List<DisplayEvent> events = assignments.map((Assignment assignment) {
+      return DisplayEvent(
+          title: assignment.title,
+          subtitle: 'Deadline ${formatDate(assignment.deadline)}',
+          description: assignment.description,
+          files: assignment.files);
+    }).toList();
+
+    setState(() {
+      _events = events;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return _events == null
+        ? const CircularProgressIndicator()
+        : EventList(
+            events: _events ?? [],
+            courseName: widget.courseName,
+          );
   }
 }

@@ -43,7 +43,7 @@ class _AnnouncementsState extends State<Announcements> {
           title:
               '${userType == UserType.professor ? 'Dr.' : 'Ta.'} $instructorName',
           subtitle: announcement.title,
-          description: announcement.notes,
+          description: announcement.description,
           files: announcement.files);
     }));
     setState(() {

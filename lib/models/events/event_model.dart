@@ -3,7 +3,7 @@ class Event {
   String creator;
   String course;
   String title;
-  String notes;
+  String description;
   List<String> files;
 
   Event(
@@ -11,7 +11,7 @@ class Event {
       required this.creator,
       required this.course,
       required this.title,
-      required this.notes,
+      required this.description,
       required this.files});
 
   Map<String, dynamic> toJson() => {
@@ -19,7 +19,7 @@ class Event {
         'creator': creator,
         'course': course,
         'title': title,
-        'notes': notes,
+        'description': description,
         'files': files
       };
 
@@ -28,7 +28,7 @@ class Event {
         creator: json['creator'],
         course: json['course'],
         title: json['title'],
-        notes: json['notes'],
+        description: json['description'],
         files: (json['files'] as List<dynamic>).cast<String>(),
       );
 }

@@ -20,7 +20,7 @@ class QuizController {
   Future<int> scheduleQuiz(
       String courseId,
       String title,
-      String notes,
+      String description,
       List<String> files,
       List<String> groupIds,
       DateTime start,
@@ -46,7 +46,7 @@ class QuizController {
             creator: _auth.currentUser?.uid ?? '',
             course: courseId,
             title: title,
-            notes: notes,
+            description: description,
             files: files,
             groups: groupIds,
             start: start,

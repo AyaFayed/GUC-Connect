@@ -12,7 +12,7 @@ class AssignmentController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final EventsControllerHelper _helper = EventsControllerHelper();
 
-  Future scheduleAssignment(String courseId, String title, String notes,
+  Future scheduleAssignment(String courseId, String title, String description,
       List<String> files, List<String> groupIds, DateTime deadline) async {
     final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
     final userSnapshot = await docUser.get();
@@ -27,7 +27,7 @@ class AssignmentController {
             creator: _auth.currentUser?.uid ?? '',
             course: courseId,
             title: title,
-            notes: notes,
+            description: description,
             files: files,
             groups: groupIds,
             deadline: deadline);

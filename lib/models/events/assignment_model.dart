@@ -9,7 +9,7 @@ class Assignment extends Event {
       required super.creator,
       required super.course,
       required super.title,
-      required super.notes,
+      required super.description,
       required super.files,
       required this.groups,
       required this.deadline});
@@ -26,7 +26,7 @@ class Assignment extends Event {
       creator: json['creator'],
       course: json['course'],
       title: json['title'],
-      notes: json['notes'],
+      description: json['description'],
       files: (json['files'] as List<dynamic>).cast<String>(),
       groups: (json['groups'] as List<dynamic>).cast<String>(),
       deadline: DateTime.fromMillisecondsSinceEpoch(json['dealine']));
