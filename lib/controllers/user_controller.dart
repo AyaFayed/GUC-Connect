@@ -45,7 +45,7 @@ class UserController {
     }
   }
 
-  Future<UserType> getUserType() async {
+  Future<UserType> getCurrentUserType() async {
     final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
     final userSnapshot = await docUser.get();
 
@@ -55,6 +55,32 @@ class UserController {
       return type;
     } else {
       return UserType.student;
+    }
+  }
+
+  Future<UserType> getUserType(String uid) async {
+    final docUser = _database.collection('users').doc(uid);
+    final userSnapshot = await docUser.get();
+
+    if (userSnapshot.exists) {
+      final user = userSnapshot.data();
+      final type = getUserTypeFromString(user!['type']);
+      return type;
+    } else {
+      return UserType.student;
+    }
+  }
+
+  Future<String> getUserName(String uid) async {
+    final docUser = _database.collection('users').doc(uid);
+    final userSnapshot = await docUser.get();
+
+    if (userSnapshot.exists) {
+      final userData = userSnapshot.data();
+      final user = UserModel.fromJson(userData!);
+      return user.name;
+    } else {
+      return '';
     }
   }
 }

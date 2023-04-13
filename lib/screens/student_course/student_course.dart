@@ -24,12 +24,15 @@ class _StudentCourseState extends State<StudentCourse> {
     _widgetOptions = <Widget>[
       Announcements(
         courseId: widget.courseId,
+        courseName: widget.courseName,
       ),
       Announcements(
         courseId: widget.courseId,
+        courseName: widget.courseName,
       ),
       Announcements(
         courseId: widget.courseId,
+        courseName: widget.courseName,
       ),
     ];
   }

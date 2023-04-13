@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/screens/course/course_details.dart';
+import 'package:guc_scheduling_app/screens/student_course/student_course.dart';
 import 'package:guc_scheduling_app/widgets/course_widgets/course_card.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/professor_course.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/ta_course.dart';
@@ -57,11 +58,7 @@ class CourseList extends StatelessWidget {
                 semester: course.semester,
                 year: course.year,
               )
-            : CourseDetails(
-                id: course.id,
-                name: course.name,
-                semester: course.semester,
-                year: course.year);
+            : StudentCourse(courseId: course.id, courseName: course.name);
     }
   }
 

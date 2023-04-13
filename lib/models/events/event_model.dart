@@ -32,3 +32,16 @@ class Event {
         files: (json['files'] as List<dynamic>).cast<String>(),
       );
 }
+
+class DisplayEvent {
+  String title;
+  String subtitle;
+  String description;
+  List<String> files;
+
+  DisplayEvent(
+      {required this.title,
+      required this.subtitle,
+      required this.description,
+      required this.files});
+}

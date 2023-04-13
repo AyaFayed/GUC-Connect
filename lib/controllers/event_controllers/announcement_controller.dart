@@ -59,8 +59,9 @@ class AnnouncementController {
       final groupData = groupSnapshot.data();
       Group group = Group.fromJson(groupData!);
 
-      return await _helper.getEventsFromList(
-          group.announcements, EventType.announcements);
+      return (await _helper.getEventsFromList(
+              group.announcements, EventType.announcements) as List<dynamic>)
+          .cast<Announcement>();
     } else {
       return [];
     }
@@ -74,8 +75,9 @@ class AnnouncementController {
       final tutorialData = tutorialSnapshot.data();
       Tutorial tutorial = Tutorial.fromJson(tutorialData!);
 
-      return await _helper.getEventsFromList(
-          tutorial.announcements, EventType.announcements);
+      return (await _helper.getEventsFromList(
+              tutorial.announcements, EventType.announcements) as List<dynamic>)
+          .cast<Announcement>();
     } else {
       return [];
     }
