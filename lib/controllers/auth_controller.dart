@@ -14,7 +14,7 @@ class AuthService {
           email: email, password: password);
       User? user = result.user;
 
-      UserType userType = email == 'ayaa_fayed@yahoo.com'
+      UserType userType = isAdmin(email)
           ? UserType.admin
           : !isInstructor(email)
               ? UserType.student

@@ -84,7 +84,7 @@ class _StudentCourseState extends State<StudentCourse> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications),
-            label: 'Announcement',
+            label: 'Announcements',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.assignment),

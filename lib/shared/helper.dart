@@ -116,7 +116,26 @@ String formatLectures(List<Lecture> lectures) {
 bool isInstructor(String email) {
   try {
     String emailSecondHalf = email.split('@')[1];
-    return !(emailSecondHalf.split('.')[0] == 'student');
+    return emailSecondHalf.split('.')[0] == 'guc';
+  } catch (e) {
+    return false;
+  }
+}
+
+bool isAdmin(String email) {
+  try {
+    return email == 'ayaa_fayed@yahoo.com';
+  } catch (e) {
+    return false;
+  }
+}
+
+bool isValidMail(String email) {
+  try {
+    String emailSecondHalf = email.split('@')[1];
+    return isAdmin(email) ||
+        emailSecondHalf == 'student.guc.edu.eg' ||
+        emailSecondHalf == 'guc.edu.eg';
   } catch (e) {
     return false;
   }

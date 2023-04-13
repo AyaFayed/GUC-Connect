@@ -75,11 +75,10 @@ class _SignupState extends State<Signup> {
                 const SizedBox(height: 40.0),
                 TextFormField(
                   decoration: const InputDecoration(hintText: 'Email'),
-                  validator: (val) => val!.isEmpty ? 'Enter an email' : null,
+                  validator: (val) =>
+                      !isValidMail(val!) ? 'Enter a valid email' : null,
                   controller: controllerEmail,
                   onChanged: (value) {
-                    print(value);
-                    print(isInstructor(value));
                     if (isInstructor(value)) {
                       setState(() {
                         _isInstructor = true;
@@ -90,7 +89,8 @@ class _SignupState extends State<Signup> {
                 const SizedBox(height: 20.0),
                 TextFormField(
                   decoration: const InputDecoration(hintText: 'Name'),
-                  validator: (val) => val!.isEmpty ? 'Enter a name' : null,
+                  validator: (val) =>
+                      val!.isEmpty ? 'Enter a valid name' : null,
                   controller: controllerName,
                 ),
                 const SizedBox(height: 20.0),

@@ -54,7 +54,7 @@ class _AnnouncementsState extends State<Announcements> {
   @override
   Widget build(BuildContext context) {
     return _events == null
-        ? const CircularProgressIndicator()
+        ? const Center(child: CircularProgressIndicator())
         : EventList(
             events: _events ?? [],
             courseName: widget.courseName,

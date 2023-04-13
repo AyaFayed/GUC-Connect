@@ -53,8 +53,8 @@ class AssignmentController {
       final groupData = groupSnapshot.data();
       Group group = Group.fromJson(groupData!);
 
-      return (await _helper.getEventsFromList(group.quizzes, EventType.quizzes)
-              as List<dynamic>)
+      return (await _helper.getEventsFromList(
+              group.assignments, EventType.assignments) as List<dynamic>)
           .cast<Assignment>();
     } else {
       return [];

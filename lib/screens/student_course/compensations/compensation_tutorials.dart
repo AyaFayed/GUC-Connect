@@ -49,7 +49,7 @@ class _CompensationTutorialsState extends State<CompensationTutorials> {
   @override
   Widget build(BuildContext context) {
     return _events == null
-        ? const CircularProgressIndicator()
+        ? const Center(child: CircularProgressIndicator())
         : EventList(
             events: _events ?? [],
             courseName: widget.courseName,

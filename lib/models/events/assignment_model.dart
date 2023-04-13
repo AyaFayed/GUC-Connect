@@ -29,5 +29,5 @@ class Assignment extends Event {
       description: json['description'],
       files: (json['files'] as List<dynamic>).cast<String>(),
       groups: (json['groups'] as List<dynamic>).cast<String>(),
-      deadline: DateTime.fromMillisecondsSinceEpoch(json['dealine']));
+      deadline: DateTime.fromMillisecondsSinceEpoch(json['deadline']));
 }

@@ -43,14 +43,14 @@ class _TutorialsDropdownState extends State<TutorialsDropdown> {
       tutorials = myTutorials
           .map((tutorial) => MultiSelectItem<String>(
                 tutorial.id,
-                'Group ${tutorial.number.toString()} ${formatLectures(tutorial.lectures)}',
+                'Tutorial ${tutorial.number.toString()} ${formatLectures(tutorial.lectures)}',
               ))
           .toList();
 
       tutorials.addAll(otherTutorials
           .map((tutorial) => MultiSelectItem<String>(
                 tutorial.id,
-                'Group ${tutorial.number.toString()} ${formatLectures(tutorial.lectures)}',
+                'Tutorial ${tutorial.number.toString()} ${formatLectures(tutorial.lectures)}',
               ))
           .toList());
     });
