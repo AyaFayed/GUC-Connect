@@ -251,4 +251,35 @@ class DivisionController {
     }
     return [];
   }
+
+  Future<List<Tutorial>> getOtherCourseTutorials(String courseId) async {
+    final docCourse = _database.collection('courses').doc(courseId);
+    final courseSnapshot = await docCourse.get();
+
+    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
+    final userSnapshot = await docUser.get();
+
+    List<String> tutorialIds = [];
+
+    if (courseSnapshot.exists && userSnapshot.exists) {
+      final course = courseSnapshot.data();
+      final user = userSnapshot.data();
+      List<String> myTutorials = [];
+      for (var course in user!['courses']) {
+        if (course['id'] == courseId) {
+          myTutorials = (course!['tutorials'] as List<dynamic>).cast<String>();
+        }
+      }
+      List<String> allTutorials =
+          (course!['tutorials'] as List<dynamic>).cast<String>();
+
+      for (String tutorialId in allTutorials) {
+        if (!myTutorials.contains(tutorialId)) {
+          tutorialIds.add(tutorialId);
+        }
+      }
+      return await getTutorialListFromIds(tutorialIds);
+    }
+    return [];
+  }
 }

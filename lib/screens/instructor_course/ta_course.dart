@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_announcement/add_announcement.dart';
-import 'package:guc_scheduling_app/screens/add_division/add_group.dart';
 import 'package:guc_scheduling_app/screens/add_division/add_tutorial.dart';
-import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_event.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_compensation_tutorial.dart';
 
 class TACourse extends StatefulWidget {
   final String courseId;
@@ -25,7 +24,7 @@ class _TACourseState extends State<TACourse> {
       AddAnnouncement(
         courseId: widget.courseId,
       ),
-      AddTutorial(
+      ScheduleCompensationTutorial(
         courseId: widget.courseId,
       ),
       AddTutorial(
@@ -64,7 +63,7 @@ class _TACourseState extends State<TACourse> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.schedule),
-            label: 'Schedule',
+            label: 'Compensation',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add),

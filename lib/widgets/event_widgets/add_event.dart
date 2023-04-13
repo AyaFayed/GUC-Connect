@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/controllers/user_controller.dart';
+import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/widgets/groups_dropdown.dart';
+import 'package:guc_scheduling_app/widgets/tutorials_dropdown.dart';
 
 class AddEvent extends StatefulWidget {
   final String courseId;
@@ -21,30 +24,55 @@ class AddEvent extends StatefulWidget {
 }
 
 class _AddEventState extends State<AddEvent> {
+  final UserController _userController = UserController();
+
+  UserType? _userType;
+
+  @override
+  void initState() {
+    super.initState();
+    _getData();
+  }
+
+  Future<void> _getData() async {
+    UserType userType = await _userController.getCurrentUserType();
+
+    setState(() {
+      _userType = userType;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      TextFormField(
-        decoration: const InputDecoration(hintText: 'Title'),
-        validator: (val) => val!.isEmpty ? 'Enter a title' : null,
-        controller: widget.controllerTitle,
-      ),
-      const SizedBox(height: 20.0),
-      TextFormField(
-        decoration: const InputDecoration(hintText: 'Description'),
-        validator: (val) => val!.isEmpty ? 'Enter the description' : null,
-        controller: widget.controllerDescription,
-      ),
-      const SizedBox(height: 20.0),
-      GroupsDropdown(
-          courseId: widget.courseId, selectedGroupIds: widget.selectedGroupIds),
-      const SizedBox(height: 20.0),
-      ElevatedButton.icon(
-          onPressed: () {},
-          style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 240, 173, 41)),
-          icon: const Icon(Icons.add),
-          label: const Text('Add files'))
-    ]);
+    return _userType == null
+        ? const CircularProgressIndicator()
+        : Column(children: <Widget>[
+            TextFormField(
+              decoration: const InputDecoration(hintText: 'Title'),
+              validator: (val) => val!.isEmpty ? 'Enter a title' : null,
+              controller: widget.controllerTitle,
+            ),
+            const SizedBox(height: 20.0),
+            TextFormField(
+              decoration: const InputDecoration(hintText: 'Description'),
+              validator: (val) => val!.isEmpty ? 'Enter the description' : null,
+              controller: widget.controllerDescription,
+            ),
+            const SizedBox(height: 20.0),
+            _userType == UserType.professor
+                ? GroupsDropdown(
+                    courseId: widget.courseId,
+                    selectedGroupIds: widget.selectedGroupIds)
+                : TutorialsDropdown(
+                    courseId: widget.courseId,
+                    selectedTutorialIds: widget.selectedGroupIds),
+            const SizedBox(height: 20.0),
+            ElevatedButton.icon(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 240, 173, 41)),
+                icon: const Icon(Icons.add),
+                label: const Text('Add files'))
+          ]);
   }
 }
