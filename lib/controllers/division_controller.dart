@@ -109,7 +109,7 @@ class DivisionController {
             lectures: lectures,
             students: [],
             announcements: [],
-            compensationTutorial: []);
+            compensationTutorials: []);
 
         final json = tutorial.toJson();
 

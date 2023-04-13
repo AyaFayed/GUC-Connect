@@ -1,7 +1,7 @@
 import 'package:guc_scheduling_app/models/divisions/division_model.dart';
 
 class Tutorial extends Division {
-  List<String> compensationTutorial;
+  List<String> compensationTutorials;
 
   Tutorial(
       {required super.id,
@@ -10,12 +10,12 @@ class Tutorial extends Division {
       required super.lectures,
       required super.students,
       required super.announcements,
-      required this.compensationTutorial});
+      required this.compensationTutorials});
 
   @override
   Map<String, dynamic> toJson() => {
         ...super.toJson(),
-        'compensationTutorial': compensationTutorial,
+        'compensationTutorials': compensationTutorials,
       };
 
   static Tutorial fromJson(Map<String, dynamic> json) => Tutorial(
@@ -27,7 +27,7 @@ class Tutorial extends Division {
             .toList(),
         students: (json['students'] as List<dynamic>).cast<String>(),
         announcements: (json['announcements'] as List<dynamic>).cast<String>(),
-        compensationTutorial:
-            (json['compensationTutorial'] as List<dynamic>).cast<String>(),
+        compensationTutorials:
+            (json['compensationTutorials'] as List<dynamic>).cast<String>(),
       );
 }

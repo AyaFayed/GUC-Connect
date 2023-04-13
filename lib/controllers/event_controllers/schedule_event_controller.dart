@@ -145,7 +145,7 @@ class ScheduleEventsController {
             Tutorial courseTutorial = Tutorial.fromJson(courseTutorialData!);
             bool compensationTutorialConflict =
                 await isConflictingWithCompensationTutorial(
-                    courseTutorial.compensationTutorial, start, end);
+                    courseTutorial.compensationTutorials, start, end);
             if (compensationTutorialConflict) {
               return true;
             }

@@ -7,6 +7,7 @@ import 'package:guc_scheduling_app/models/divisions/group_model.dart';
 import 'package:guc_scheduling_app/models/divisions/tutorial_model.dart';
 import 'package:guc_scheduling_app/models/events/compensation/compensation_lecture_model.dart';
 import 'package:guc_scheduling_app/models/events/compensation/compensation_tutorial_model.dart';
+import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 
@@ -32,7 +33,6 @@ class CompensationController {
     int conflicts =
         await _scheduleEventsController.canScheduleGroup(groups, start, end);
     if (conflicts > 0) {
-      print(conflicts);
       return conflicts;
     }
 
@@ -67,7 +67,6 @@ class CompensationController {
             EventType.compensationLectures, DivisionType.groups, groupIds);
       }
     }
-    print(conflicts);
     return conflicts;
   }
 
@@ -122,5 +121,74 @@ class CompensationController {
       }
     }
     return conflicts;
+  }
+
+  Future<List<CompensationLecture>> getGroupCompensationLectures(
+      String groupId) async {
+    final docGroup = _database.collection('groups').doc(groupId);
+    final groupSnapshot = await docGroup.get();
+
+    if (groupSnapshot.exists) {
+      final groupData = groupSnapshot.data();
+      Group group = Group.fromJson(groupData!);
+
+      return (await _helper.getEventsFromList(
+                  group.compensationLectures, EventType.compensationLectures)
+              as List<dynamic>)
+          .cast<CompensationLecture>();
+    } else {
+      return [];
+    }
+  }
+
+  Future<List<CompensationLecture>> getCompensationLectures(
+      String courseId) async {
+    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
+    final userSnapshot = await docUser.get();
+
+    if (userSnapshot.exists) {
+      final userData = userSnapshot.data();
+      Student student = Student.fromJson(userData!);
+      for (StudentCourse course in student.courses) {
+        if (course.id == courseId) {
+          return await getGroupCompensationLectures(course.group);
+        }
+      }
+    }
+    return [];
+  }
+
+  Future<List<CompensationTutorial>> getTutorialCompensationTutorials(
+      String tutorialId) async {
+    final docTutorial = _database.collection('tutorials').doc(tutorialId);
+    final tutorialSnapshot = await docTutorial.get();
+
+    if (tutorialSnapshot.exists) {
+      final tutorialData = tutorialSnapshot.data();
+      Tutorial tutorial = Tutorial.fromJson(tutorialData!);
+
+      return (await _helper.getEventsFromList(tutorial.compensationTutorials,
+              EventType.compensationTutorials) as List<dynamic>)
+          .cast<CompensationTutorial>();
+    } else {
+      return [];
+    }
+  }
+
+  Future<List<CompensationTutorial>> getCompensationTutorials(
+      String courseId) async {
+    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
+    final userSnapshot = await docUser.get();
+
+    if (userSnapshot.exists) {
+      final userData = userSnapshot.data();
+      Student student = Student.fromJson(userData!);
+      for (StudentCourse course in student.courses) {
+        if (course.id == courseId) {
+          return await getTutorialCompensationTutorials(course.tutorial);
+        }
+      }
+    }
+    return [];
   }
 }

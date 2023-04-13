@@ -5,6 +5,7 @@ import 'package:guc_scheduling_app/controllers/event_controllers/event_controlle
 import 'package:guc_scheduling_app/controllers/event_controllers/schedule_event_controller.dart';
 import 'package:guc_scheduling_app/models/divisions/group_model.dart';
 import 'package:guc_scheduling_app/models/events/quiz_model.dart';
+import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 
@@ -63,5 +64,37 @@ class QuizController {
       }
     }
     return conflicts;
+  }
+
+  Future<List<Quiz>> getGroupQuizzes(String groupId) async {
+    final docGroup = _database.collection('groups').doc(groupId);
+    final groupSnapshot = await docGroup.get();
+
+    if (groupSnapshot.exists) {
+      final groupData = groupSnapshot.data();
+      Group group = Group.fromJson(groupData!);
+
+      return (await _helper.getEventsFromList(group.quizzes, EventType.quizzes)
+              as List<dynamic>)
+          .cast<Quiz>();
+    } else {
+      return [];
+    }
+  }
+
+  Future<List<Quiz>> getQuizzes(String courseId) async {
+    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
+    final userSnapshot = await docUser.get();
+
+    if (userSnapshot.exists) {
+      final userData = userSnapshot.data();
+      Student student = Student.fromJson(userData!);
+      for (StudentCourse course in student.courses) {
+        if (course.id == courseId) {
+          return await getGroupQuizzes(course.group);
+        }
+      }
+    }
+    return [];
   }
 }
