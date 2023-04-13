@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 
-class AdminCourse extends StatelessWidget {
+class CourseDetails extends StatelessWidget {
   final String id;
   final String name;
   final Semester semester;
   final int year;
 
-  const AdminCourse(
+  const CourseDetails(
       {super.key,
       required this.id,
       required this.name,

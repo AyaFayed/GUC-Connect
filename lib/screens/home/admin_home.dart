@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/auth_controller.dart';
 import 'package:guc_scheduling_app/screens/Course/create_course.dart';
-import 'package:guc_scheduling_app/screens/course/admin_all_courses.dart';
+import 'package:guc_scheduling_app/screens/course/all_courses.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
@@ -15,7 +15,7 @@ class _AdminHomeState extends State<AdminHome> {
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    AdminAllCourses(),
+    AllCourses(),
     CreateCourse(),
   ];
 

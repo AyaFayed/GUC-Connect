@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:guc_scheduling_app/controllers/event_controllers/quiz_controller.dart';
-import 'package:guc_scheduling_app/widgets/add_event.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/compensation_controller.dart';
+import 'package:guc_scheduling_app/widgets/event_widgets/add_event.dart';
 
-class ScheduleQuiz extends StatefulWidget {
+class ScheduleCompensationLecture extends StatefulWidget {
   final String courseId;
-  const ScheduleQuiz({super.key, required this.courseId});
+  const ScheduleCompensationLecture({super.key, required this.courseId});
 
   @override
-  State<ScheduleQuiz> createState() => _ScheduleQuizState();
+  State<ScheduleCompensationLecture> createState() =>
+      _ScheduleCompensationLectureState();
 }
 
-class _ScheduleQuizState extends State<ScheduleQuiz> {
+class _ScheduleCompensationLectureState
+    extends State<ScheduleCompensationLecture> {
   final controllerTitle = TextEditingController();
   final controllerDescription = TextEditingController();
   final controllerDuration = TextEditingController();
-  final QuizController _quizController = QuizController();
   final _formKey = GlobalKey<FormState>();
+  final CompensationController _compensationController =
+      CompensationController();
 
   String error = '';
   List<String> selectedGroupIds = [];
   List<String> files = [];
   DateTime? startDateTime;
-
   @override
   void dispose() {
     controllerTitle.dispose();
@@ -92,50 +94,45 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
                   files: files,
                   selectedGroupIds: selectedGroupIds,
                   courseId: widget.courseId),
-              const SizedBox(height: 40.0),
+              const SizedBox(height: 60.0),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(50.0),
                     textStyle: const TextStyle(fontSize: 22),
                     backgroundColor: const Color.fromARGB(255, 50, 55, 59)),
                 child: const Text(
-                  'Schedule Quiz',
+                  'Schedule Lecture',
                 ),
                 onPressed: () async {
-                  setState(() {
-                    error = '';
-                  });
                   if (_formKey.currentState!.validate()) {
-                    if (startDateTime == null) {
-                      setState(() {
-                        error = 'Select a valid start date and time';
-                      });
-                    } else {
-                      int conflicts = await _quizController.scheduleQuiz(
-                          widget.courseId,
-                          controllerTitle.text,
-                          controllerDescription.text,
-                          files,
-                          selectedGroupIds,
-                          startDateTime ?? DateTime.now(),
-                          startDateTime?.add(Duration(
-                                  minutes:
-                                      int.parse(controllerDuration.text))) ??
-                              DateTime.now());
+                    int conflicts = await _compensationController
+                        .scheduleCompensationLecture(
+                            widget.courseId,
+                            controllerTitle.text,
+                            controllerDescription.text,
+                            files,
+                            selectedGroupIds,
+                            startDateTime ?? DateTime.now(),
+                            startDateTime?.add(Duration(
+                                    minutes:
+                                        int.parse(controllerDuration.text))) ??
+                                DateTime.now());
 
-                      if (conflicts > 0) {
-                        setState(() {
-                          error =
-                              '$conflicts student(s) has conflicts with this timing';
-                        });
-                      }
+                    if (conflicts > 0) {
+                      setState(() {
+                        error =
+                            '$conflicts student(s) has conflicts with this timing';
+                      });
                     }
-                  } else if (startDateTime == null) {
-                    setState(() {
-                      error = 'Select a valid start date and time';
-                    });
                   }
                 },
+              ),
+              const SizedBox(
+                height: 12.0,
+              ),
+              Text(
+                error,
+                style: const TextStyle(color: Colors.red, fontSize: 14.0),
               ),
             ],
           ),

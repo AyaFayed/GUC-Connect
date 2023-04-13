@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/course_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
-import 'package:guc_scheduling_app/widgets/course_list.dart';
+import 'package:guc_scheduling_app/widgets/course_widgets/course_list.dart';
 
 import '../../models/course/course_model.dart';
 
-class AdminAllCourses extends StatefulWidget {
-  const AdminAllCourses({super.key});
+class AllCourses extends StatefulWidget {
+  const AllCourses({super.key});
 
   @override
-  State<AdminAllCourses> createState() => _AdminAllCoursesState();
+  State<AllCourses> createState() => _AllCoursesState();
 }
 
-class _AdminAllCoursesState extends State<AdminAllCourses> {
+class _AllCoursesState extends State<AllCourses> {
   final CourseController _courseController = CourseController();
 
   @override

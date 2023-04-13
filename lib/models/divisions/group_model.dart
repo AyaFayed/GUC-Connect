@@ -18,12 +18,7 @@ class Group extends Division {
 
   @override
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'courseId': courseId,
-        'number': number,
-        'lectures': lectures.map((lecture) => lecture.toJson()).toList(),
-        'students': students,
-        'announcements': announcements,
+        ...super.toJson(),
         'quizzes': quizzes,
         'assignments': assignments,
         'compensationLectures': compensationLectures,

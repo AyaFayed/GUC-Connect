@@ -1,36 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:guc_scheduling_app/controllers/event_controllers/compensation_controller.dart';
-import 'package:guc_scheduling_app/widgets/add_event.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/assignment_controller.dart';
+import 'package:guc_scheduling_app/widgets/event_widgets/add_event.dart';
 
-class ScheduleCompensationLecture extends StatefulWidget {
+class ScheduleAssignment extends StatefulWidget {
   final String courseId;
-  const ScheduleCompensationLecture({super.key, required this.courseId});
+  const ScheduleAssignment({super.key, required this.courseId});
 
   @override
-  State<ScheduleCompensationLecture> createState() =>
-      _ScheduleCompensationLectureState();
+  State<ScheduleAssignment> createState() => _ScheduleAssignmentState();
 }
 
-class _ScheduleCompensationLectureState
-    extends State<ScheduleCompensationLecture> {
+class _ScheduleAssignmentState extends State<ScheduleAssignment> {
   final controllerTitle = TextEditingController();
   final controllerDescription = TextEditingController();
-  final controllerDuration = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final CompensationController _compensationController =
-      CompensationController();
+  final AssignmentController _assignmentController = AssignmentController();
 
   String error = '';
   List<String> selectedGroupIds = [];
   List<String> files = [];
   DateTime? startDateTime;
+
   @override
   void dispose() {
     controllerTitle.dispose();
     controllerDescription.dispose();
-    controllerDuration.dispose();
     super.dispose();
   }
 
@@ -59,7 +54,7 @@ class _ScheduleCompensationLectureState
                   },
                   label: Text(
                     startDateTime == null
-                        ? 'Select date and time'
+                        ? 'Select due date and time'
                         : startDateTime.toString(),
                     style:
                         const TextStyle(color: Color.fromARGB(255, 50, 55, 59)),
@@ -76,18 +71,6 @@ class _ScheduleCompensationLectureState
                 style: const TextStyle(color: Colors.red, fontSize: 13.0),
               ),
               const SizedBox(height: 12.0),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-                decoration:
-                    const InputDecoration(hintText: 'Duration in minutes'),
-                validator: (val) =>
-                    val!.isEmpty ? 'Enter a valid duration' : null,
-                controller: controllerDuration,
-              ),
-              const SizedBox(height: 20.0),
               AddEvent(
                   controllerTitle: controllerTitle,
                   controllerDescription: controllerDescription,
@@ -101,29 +84,18 @@ class _ScheduleCompensationLectureState
                     textStyle: const TextStyle(fontSize: 22),
                     backgroundColor: const Color.fromARGB(255, 50, 55, 59)),
                 child: const Text(
-                  'Schedule Lecture',
+                  'Add Assignment',
                 ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    int conflicts = await _compensationController
-                        .scheduleCompensationLecture(
-                            widget.courseId,
-                            controllerTitle.text,
-                            controllerDescription.text,
-                            files,
-                            selectedGroupIds,
-                            startDateTime ?? DateTime.now(),
-                            startDateTime?.add(Duration(
-                                    minutes:
-                                        int.parse(controllerDuration.text))) ??
-                                DateTime.now());
-
-                    if (conflicts > 0) {
-                      setState(() {
-                        error =
-                            '$conflicts student(s) has conflicts with this timing';
-                      });
-                    }
+                    await _assignmentController.scheduleAssignment(
+                      widget.courseId,
+                      controllerTitle.text,
+                      controllerDescription.text,
+                      files,
+                      selectedGroupIds,
+                      startDateTime ?? DateTime.now(),
+                    );
                   }
                 },
               ),

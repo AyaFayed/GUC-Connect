@@ -16,12 +16,7 @@ class Compensation extends Event {
 
   @override
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'creator': creator,
-        'course': course,
-        'title': title,
-        'notes': notes,
-        'files': files,
+        ...super.toJson(),
         'start': start.millisecondsSinceEpoch,
         'end': end.millisecondsSinceEpoch,
       };

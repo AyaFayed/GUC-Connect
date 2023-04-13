@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:guc_scheduling_app/screens/schedule_event/schedule_assignment.dart';
-import 'package:guc_scheduling_app/screens/schedule_event/schedule_compensation_lecture.dart';
-import 'package:guc_scheduling_app/screens/schedule_event/schedule_quiz.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_assignment.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_compensation_lecture.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_quiz.dart';
 
 class ScheduleEvent extends StatefulWidget {
   final String courseId;

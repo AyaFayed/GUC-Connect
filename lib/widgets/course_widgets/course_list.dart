@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
-import 'package:guc_scheduling_app/screens/course/admin_course.dart';
-import 'package:guc_scheduling_app/screens/course/course_card.dart';
-import 'package:guc_scheduling_app/screens/course/professor_course.dart';
-import 'package:guc_scheduling_app/screens/course/ta_course.dart';
+import 'package:guc_scheduling_app/screens/course/course_details.dart';
+import 'package:guc_scheduling_app/widgets/course_widgets/course_card.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/professor_course.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/ta_course.dart';
 import 'package:guc_scheduling_app/screens/enroll/instructor_enroll.dart';
 import 'package:guc_scheduling_app/screens/enroll/student_enroll.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
@@ -22,7 +22,7 @@ class CourseList extends StatelessWidget {
   Widget getWidget(Course course) {
     switch (userType) {
       case UserType.admin:
-        return AdminCourse(
+        return CourseDetails(
             id: course.id,
             name: course.name,
             semester: course.semester,
@@ -57,7 +57,7 @@ class CourseList extends StatelessWidget {
                 semester: course.semester,
                 year: course.year,
               )
-            : AdminCourse(
+            : CourseDetails(
                 id: course.id,
                 name: course.name,
                 semester: course.semester,

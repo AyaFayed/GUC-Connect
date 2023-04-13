@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:guc_scheduling_app/screens/add_announcement/add_announcement.dart';
-import 'package:guc_scheduling_app/screens/add_division/add_group.dart';
-import 'package:guc_scheduling_app/screens/add_division/add_tutorial.dart';
-import 'package:guc_scheduling_app/screens/schedule_event/schedule_event.dart';
+import 'package:guc_scheduling_app/screens/student_course/announcements.dart';
+import 'package:guc_scheduling_app/screens/student_course/assessments/assessments.dart';
+import 'package:guc_scheduling_app/screens/student_course/compensations/compensations.dart';
 
-class TACourse extends StatefulWidget {
+class StudentCourse extends StatefulWidget {
   final String courseId;
   final String courseName;
 
-  const TACourse({super.key, required this.courseId, required this.courseName});
+  const StudentCourse(
+      {super.key, required this.courseId, required this.courseName});
 
   @override
-  State<TACourse> createState() => _TACourseState();
+  State<StudentCourse> createState() => _StudentCourseState();
 }
 
-class _TACourseState extends State<TACourse> {
+class _StudentCourseState extends State<StudentCourse> {
   int _selectedIndex = 0;
   List<Widget>? _widgetOptions;
 
@@ -22,25 +22,46 @@ class _TACourseState extends State<TACourse> {
   void initState() {
     super.initState();
     _widgetOptions = <Widget>[
-      AddAnnouncement(
+      Announcements(
         courseId: widget.courseId,
       ),
-      AddTutorial(
+      Announcements(
         courseId: widget.courseId,
       ),
-      AddTutorial(
-        courseId: widget.courseId,
-      ),
-      AddTutorial(
+      Announcements(
         courseId: widget.courseId,
       ),
     ];
   }
 
   Future<void> _onItemTapped(int index) async {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Card(
+              child: Assessments(
+            courseId: widget.courseId,
+            courseName: widget.courseName,
+          )),
+        ),
+      );
+    } else if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Card(
+              child: Compensations(
+            courseId: widget.courseId,
+            courseName: widget.courseName,
+          )),
+        ),
+      );
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
@@ -59,20 +80,16 @@ class _TACourseState extends State<TACourse> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.notification_add),
+            icon: Icon(Icons.notifications),
             label: 'Announcement',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.assignment),
+            label: 'Assessments',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.schedule),
-            label: 'Schedule',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'Add tutorial',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.more_horiz),
-            label: 'More options',
+            label: 'Compensations',
           ),
         ],
         currentIndex: _selectedIndex,

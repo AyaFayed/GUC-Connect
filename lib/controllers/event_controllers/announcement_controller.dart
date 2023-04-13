@@ -32,7 +32,8 @@ class AnnouncementController {
             notes: notes,
             files: files,
             groups: groups,
-            tutorials: tutorials);
+            tutorials: tutorials,
+            createdAt: DateTime.now());
 
         final json = announcement.toJson();
 
@@ -50,7 +51,7 @@ class AnnouncementController {
     }
   }
 
-  Future<List> getGroupAnnouncements(String groupId) async {
+  Future<List<Announcement>> getGroupAnnouncements(String groupId) async {
     final docGroup = _database.collection('groups').doc(groupId);
     final groupSnapshot = await docGroup.get();
 
@@ -65,7 +66,7 @@ class AnnouncementController {
     }
   }
 
-  Future<List> getTutorialAnnouncements(String tutorialId) async {
+  Future<List<Announcement>> getTutorialAnnouncements(String tutorialId) async {
     final docTutorial = _database.collection('tutorials').doc(tutorialId);
     final tutorialSnapshot = await docTutorial.get();
 
@@ -81,7 +82,7 @@ class AnnouncementController {
   }
 
 // my group and my tutorial
-  Future getCourseAnnouncements(String courseId) async {
+  Future<List<Announcement>> getCourseAnnouncements(String courseId) async {
     final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
     final userSnapshot = await docUser.get();
 
@@ -90,14 +91,18 @@ class AnnouncementController {
       Student student = Student.fromJson(userData!);
       for (StudentCourse course in student.courses) {
         if (courseId == course.id) {
-          final groupAnnouncements = await getGroupAnnouncements(course.group);
-          final tutorialAnnouncements =
+          List<Announcement> groupAnnouncements =
+              await getGroupAnnouncements(course.group);
+          List<Announcement> tutorialAnnouncements =
               await getTutorialAnnouncements(course.tutorial);
           groupAnnouncements.addAll(tutorialAnnouncements);
+          groupAnnouncements.sort(((Announcement a, Announcement b) =>
+              b.createdAt.compareTo(a.createdAt)));
           return groupAnnouncements;
         }
       }
     }
+    return [];
   }
 
   Future getMyAnnouncements(String courseId) async {

@@ -12,9 +12,7 @@ class TA extends UserModel {
 
   @override
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'type': type.name,
+        ...super.toJson(),
         'courses': courses.map((course) => toJson()).toList()
       };
 

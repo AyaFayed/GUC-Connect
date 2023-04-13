@@ -16,14 +16,7 @@ class CompensationTutorial extends Compensation {
 
   @override
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'creator': creator,
-        'course': course,
-        'title': title,
-        'notes': notes,
-        'files': files,
-        'start': start.millisecondsSinceEpoch,
-        'end': end.millisecondsSinceEpoch,
+        ...super.toJson(),
         'tutorials': tutorials,
       };
 

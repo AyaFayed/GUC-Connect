@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/announcement_controller.dart';
-import 'package:guc_scheduling_app/widgets/add_event.dart';
+import 'package:guc_scheduling_app/widgets/event_widgets/add_event.dart';
 
 class AddAnnouncement extends StatefulWidget {
   final String courseId;
