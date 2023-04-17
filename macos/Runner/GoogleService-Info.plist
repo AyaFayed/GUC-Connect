@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>521890849193-praqumn4inugqk13vof9nddbqi8771jf.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.521890849193-praqumn4inugqk13vof9nddbqi8771jf</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDt4JBdfHP5tpzEfTuPDoJv8z5UiMF1td4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>521890849193</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.gucSchedulingApp</string>
+	<key>PROJECT_ID</key>
+	<string>guc-scheduling-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>guc-scheduling-app.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:521890849193:ios:7e736e9ed8aac67048e4b8</string>
+	<key>DATABASE_URL</key>
+	<string>https://guc-scheduling-app-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>
+</plist>

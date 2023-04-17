@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "521890849193",
+    "firebase_url": "https://guc-scheduling-app-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "guc-scheduling-app",
     "storage_bucket": "guc-scheduling-app.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "521890849193-5qjrjq59r87g4n5ubv2vm05te5ptb4g4.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "521890849193-praqumn4inugqk13vof9nddbqi8771jf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gucSchedulingApp"
+              }
             }
           ]
         }
