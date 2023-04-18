@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/screens/course/course_details.dart';
 import 'package:guc_scheduling_app/screens/student_course/student_course.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/course_widgets/course_card.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/professor_course.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/ta_course.dart';
@@ -64,10 +66,13 @@ class CourseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return ListView.separated(
         shrinkWrap: true,
-        children: courses.map((Course course) {
-          return CourseCard(name: course.name, widget: getWidget(course));
-        }).toList());
+        itemBuilder: (BuildContext context, int index) => CourseCard(
+            name: courses[index].name, widget: getWidget(courses[index])),
+        itemCount: courses.length,
+        separatorBuilder: (BuildContext context, int index) => Divider(
+              color: AppColors.unselected,
+            ));
   }
 }

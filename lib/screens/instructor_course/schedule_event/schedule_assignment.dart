@@ -77,7 +77,7 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
               DateTimeSelector(onConfirm: setDateTime, dateTime: startDateTime),
               error.isNotEmpty
                   ? const SizedBox(
-                      height: 12.0,
+                      height: 5.0,
                     )
                   : const SizedBox(
                       height: 0.0,
@@ -86,14 +86,14 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
                 error,
                 style: TextStyle(color: AppColors.error, fontSize: 13.0),
               ),
-              const SizedBox(height: 12.0),
+              const SizedBox(height: 5.0),
               AddEvent(
                   controllerTitle: controllerTitle,
                   controllerDescription: controllerDescription,
                   files: files,
                   selectedGroupIds: selectedGroupIds,
                   courseId: widget.courseId),
-              const SizedBox(height: 60.0),
+              const SizedBox(height: 40.0),
               LargeBtn(onPressed: scheduleAssignment, text: 'Add assignment'),
             ],
           ),

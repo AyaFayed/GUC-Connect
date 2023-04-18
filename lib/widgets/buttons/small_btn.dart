@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 
 class SmallBtn extends StatelessWidget {
   final void Function() onPressed;
   final String text;
-  const SmallBtn({super.key, required this.onPressed, required this.text});
+  final Icon? icon;
+  const SmallBtn(
+      {super.key, required this.onPressed, required this.text, this.icon});
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-          minimumSize: const Size.fromHeight(50.0),
-          textStyle: const TextStyle(fontSize: 22),
-          backgroundColor: const Color.fromARGB(255, 50, 55, 59)),
-      onPressed: onPressed,
-      child: Text(text),
-    );
+    return ElevatedButton.icon(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(backgroundColor: AppColors.secondary),
+        icon: icon ?? const Icon(Icons.add),
+        label: Text(text));
   }
 }

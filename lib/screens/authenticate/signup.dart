@@ -4,6 +4,7 @@ import "package:guc_scheduling_app/shared/constants.dart";
 import "package:guc_scheduling_app/shared/errors.dart";
 import "package:guc_scheduling_app/shared/helper.dart";
 import "package:guc_scheduling_app/theme/colors.dart";
+import "package:guc_scheduling_app/theme/sizes.dart";
 import "package:guc_scheduling_app/widgets/buttons/auth_btn.dart";
 
 class Signup extends StatefulWidget {
@@ -74,7 +75,8 @@ class _SignupState extends State<Signup> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Scaffold(
+        body: SingleChildScrollView(
       child: Container(
           padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
           child: Form(
@@ -84,7 +86,7 @@ class _SignupState extends State<Signup> {
                 const SizedBox(height: 80.0),
                 Text(
                   appName,
-                  style: const TextStyle(fontSize: 36),
+                  style: TextStyle(fontSize: Sizes.xlarge),
                 ),
                 const SizedBox(height: 40.0),
                 TextFormField(
@@ -137,18 +139,19 @@ class _SignupState extends State<Signup> {
                 ),
                 Text(
                   error,
-                  style: TextStyle(color: AppColors.error, fontSize: 14.0),
+                  style:
+                      TextStyle(color: AppColors.error, fontSize: Sizes.xsmall),
                 ),
                 const SizedBox(
                   height: 20.0,
                 ),
-                const Text(
+                Text(
                   'Already have an account?',
-                  style: TextStyle(fontSize: 16.0),
+                  style: TextStyle(fontSize: Sizes.small),
                 ),
                 TextButton(
                     style: TextButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 16)),
+                        textStyle: TextStyle(fontSize: Sizes.small)),
                     onPressed: () {
                       widget.toggleView();
                     },
@@ -157,6 +160,6 @@ class _SignupState extends State<Signup> {
               ],
             ),
           )),
-    );
+    ));
   }
 }

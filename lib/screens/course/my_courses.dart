@@ -3,6 +3,7 @@ import 'package:guc_scheduling_app/controllers/course_controller.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
+import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/course_widgets/course_list.dart';
 
 import '../../models/course/course_model.dart';
@@ -43,7 +44,7 @@ class _MyCoursesState extends State<MyCourses> {
     return Center(
         child: Container(
             padding:
-                const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
             child: _courses == null || _userType == null
                 ? const CircularProgressIndicator()
                 : Column(children: [
@@ -54,12 +55,12 @@ class _MyCoursesState extends State<MyCourses> {
                             userType: _userType ?? UserType.student,
                             enroll: false),
                     const SizedBox(
-                      height: 40.0,
+                      height: 20.0,
                     ),
                     ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(120, 40),
-                          textStyle: const TextStyle(fontSize: 18),
+                          minimumSize: const Size(160, 50),
+                          textStyle: TextStyle(fontSize: Sizes.medium),
                           backgroundColor: AppColors.secondary,
                         ),
                         label: const Text(

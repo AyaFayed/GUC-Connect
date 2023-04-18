@@ -91,7 +91,7 @@ class _ScheduleCompensationLectureState
               DateTimeSelector(onConfirm: setDateTime, dateTime: startDateTime),
               error.isNotEmpty
                   ? const SizedBox(
-                      height: 12.0,
+                      height: 5.0,
                     )
                   : const SizedBox(
                       height: 0.0,
@@ -100,7 +100,7 @@ class _ScheduleCompensationLectureState
                 error,
                 style: TextStyle(color: AppColors.error, fontSize: 13.0),
               ),
-              const SizedBox(height: 12.0),
+              const SizedBox(height: 5.0),
               TextFormField(
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
@@ -118,7 +118,7 @@ class _ScheduleCompensationLectureState
                   files: files,
                   selectedGroupIds: selectedGroupIds,
                   courseId: widget.courseId),
-              const SizedBox(height: 60.0),
+              const SizedBox(height: 40.0),
               LargeBtn(
                   onPressed: scheduleCompensationLecture,
                   text: 'Schedule lecture'),

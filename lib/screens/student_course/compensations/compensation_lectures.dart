@@ -48,11 +48,13 @@ class _CompensationLecturesState extends State<CompensationLectures> {
 
   @override
   Widget build(BuildContext context) {
-    return _events == null
-        ? const Center(child: CircularProgressIndicator())
-        : EventList(
-            events: _events ?? [],
-            courseName: widget.courseName,
-          );
+    return Container(
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+        child: _events == null
+            ? const Center(child: CircularProgressIndicator())
+            : EventList(
+                events: _events ?? [],
+                courseName: widget.courseName,
+              ));
   }
 }

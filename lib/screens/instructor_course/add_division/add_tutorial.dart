@@ -7,6 +7,7 @@ import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/add_lectutre.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
+import 'package:guc_scheduling_app/widgets/buttons/small_btn.dart';
 
 class AddTutorial extends StatefulWidget {
   final String courseId;
@@ -65,7 +66,7 @@ class _AddTutorialState extends State<AddTutorial> {
               const SizedBox(height: 20.0),
               ...addLecture,
               const SizedBox(height: 20.0),
-              ElevatedButton.icon(
+              SmallBtn(
                   onPressed: () {
                     setState(() {
                       Lecture lecture =
@@ -76,22 +77,18 @@ class _AddTutorialState extends State<AddTutorial> {
                       ));
                     });
                   },
-                  icon: const Icon(Icons.add),
-                  label: const Text(
-                    'Add lecture',
-                  )),
+                  text: 'Add lecture'),
               addLecture.length > 1
-                  ? ElevatedButton.icon(
+                  ? SmallBtn(
                       onPressed: () {
                         setState(() {
                           lectures.removeLast();
                           addLecture.removeLast();
                         });
                       },
-                      icon: const Icon(Icons.delete),
-                      label: const Text(
-                        'Remove lecture',
-                      ))
+                      text: 'Remove lecture',
+                      icon: const Icon(Icons.delete_outline),
+                    )
                   : const SizedBox(height: 0.0),
               const SizedBox(height: 30.0),
               LargeBtn(onPressed: addTutorial, text: 'Add tutorial'),

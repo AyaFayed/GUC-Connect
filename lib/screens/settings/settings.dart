@@ -12,7 +12,7 @@ class _SettingsState extends State<Settings> {
   final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return TextButton(
       onPressed: () async {
         await _auth.logout();
       },

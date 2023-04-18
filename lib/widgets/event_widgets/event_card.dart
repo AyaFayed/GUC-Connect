@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/screens/event/event_details.dart';
+import 'package:guc_scheduling_app/theme/sizes.dart';
 
 class EventCard extends StatelessWidget {
   final String title;
@@ -18,8 +19,13 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(title),
-      subtitle: Text(subtitle),
+      title: Text(
+        title,
+        style: TextStyle(fontSize: Sizes.small),
+      ),
+      subtitle: Text(
+        subtitle,
+      ),
       onTap: () {
         Navigator.push(
           context,
