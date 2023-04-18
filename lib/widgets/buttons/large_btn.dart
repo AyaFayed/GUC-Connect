@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
-class LargeBtn extends StatefulWidget {
-  const LargeBtn({super.key});
+class LargeBtn extends StatelessWidget {
+  final void Function() onPressed;
+  final String text;
+  const LargeBtn({super.key, required this.onPressed, required this.text});
 
-  @override
-  State<LargeBtn> createState() => _LargeBtnState();
-}
-
-class _LargeBtnState extends State<LargeBtn> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          minimumSize: const Size.fromHeight(50.0),
+          textStyle: const TextStyle(fontSize: 22),
+          backgroundColor: const Color.fromARGB(255, 50, 55, 59)),
+      onPressed: onPressed,
+      child: Text(text),
+    );
   }
 }

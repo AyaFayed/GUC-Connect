@@ -8,4 +8,10 @@ class Errors {
   static String required = 'This field is required';
   static String login = 'Incorrect email or password';
   static String studentEnroll = 'Select a valid group and tutorial';
+  static String group = 'Choose at least one group';
+  static String tutorial = 'Choose at least one tutorial';
+  static String dateTime = 'Select a date and time';
+  static String duration = 'Enter a valid duration';
+  static String scheduling(int conflicts) =>
+      '$conflicts student(s) has conflicts with this timing';
 }

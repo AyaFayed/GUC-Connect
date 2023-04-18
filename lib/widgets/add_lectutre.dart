@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/models/divisions/division_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/shared/errors.dart';
 
 class AddLecture extends StatefulWidget {
   final Lecture lecture;
@@ -41,7 +42,7 @@ class _AddLectureState extends State<AddLecture> {
         const SizedBox(height: 20.0),
         DropdownButtonFormField(
             decoration: const InputDecoration(hintText: 'Lecture Day'),
-            validator: (val) => val == null ? 'Choose a lecture day' : null,
+            validator: (val) => val == null ? Errors.required : null,
             items: daysOfWeek,
             onChanged: (val) => setState(() {
                   lectureDay = val;
@@ -50,7 +51,7 @@ class _AddLectureState extends State<AddLecture> {
         const SizedBox(height: 20.0),
         DropdownButtonFormField(
             decoration: const InputDecoration(hintText: 'Lecture slot'),
-            validator: (val) => val == null ? 'Choose a lecture slot' : null,
+            validator: (val) => val == null ? Errors.required : null,
             items: slots,
             onChanged: (val) => setState(() {
                   lectureSlot = val;

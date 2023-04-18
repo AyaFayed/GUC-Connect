@@ -3,18 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:guc_scheduling_app/controllers/division_controller.dart';
 import 'package:guc_scheduling_app/models/divisions/division_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/widgets/add_lectutre.dart';
+import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 
-class AddTutorial extends StatefulWidget {
+class AddGroup extends StatefulWidget {
   final String courseId;
-  const AddTutorial({super.key, required this.courseId});
+  const AddGroup({super.key, required this.courseId});
 
   @override
-  State<AddTutorial> createState() => _AddTutorialState();
+  State<AddGroup> createState() => _AddGroupState();
 }
 
-class _AddTutorialState extends State<AddTutorial> {
-  final controllerTutorialNumber = TextEditingController();
+class _AddGroupState extends State<AddGroup> {
+  final controllerGroupNumber = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final DivisionController _divisionController = DivisionController();
 
@@ -28,9 +30,16 @@ class _AddTutorialState extends State<AddTutorial> {
 
   String error = '';
 
+  void addGroup() async {
+    if (_formKey.currentState!.validate()) {
+      await _divisionController.createGroup(
+          widget.courseId, int.parse(controllerGroupNumber.text), lectures);
+    }
+  }
+
   @override
   void dispose() {
-    controllerTutorialNumber.dispose();
+    controllerGroupNumber.dispose();
     super.dispose();
   }
 
@@ -48,10 +57,9 @@ class _AddTutorialState extends State<AddTutorial> {
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly
                 ],
-                decoration: const InputDecoration(hintText: 'Tutorial Number'),
-                validator: (val) =>
-                    val!.isEmpty ? 'Enter a valid tutorial number' : null,
-                controller: controllerTutorialNumber,
+                decoration: const InputDecoration(hintText: 'Group number'),
+                validator: (val) => val!.isEmpty ? Errors.required : null,
+                controller: controllerGroupNumber,
               ),
               const SizedBox(height: 20.0),
               ...addLecture,
@@ -69,7 +77,7 @@ class _AddTutorialState extends State<AddTutorial> {
                   },
                   icon: const Icon(Icons.add),
                   label: const Text(
-                    'Add Lecture',
+                    'Add lecture',
                   )),
               addLecture.length > 1
                   ? ElevatedButton.icon(
@@ -81,25 +89,11 @@ class _AddTutorialState extends State<AddTutorial> {
                       },
                       icon: const Icon(Icons.delete),
                       label: const Text(
-                        'Remove Lecture',
+                        'Remove lecture',
                       ))
                   : const SizedBox(height: 0.0),
               const SizedBox(height: 30.0),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(50.0),
-                    textStyle: const TextStyle(fontSize: 22),
-                    backgroundColor: const Color.fromARGB(255, 50, 55, 59)),
-                child: const Text(
-                  'Add tutorial',
-                ),
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    await _divisionController.createTutorial(widget.courseId,
-                        int.parse(controllerTutorialNumber.text), lectures);
-                  }
-                },
-              ),
+              LargeBtn(onPressed: addGroup, text: 'Add group'),
               const SizedBox(
                 height: 12.0,
               ),

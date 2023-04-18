@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/announcement_controller.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/add_event.dart';
 
 class AddAnnouncement extends StatefulWidget {
@@ -27,17 +28,17 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
   List<String> selectedGroupIds = [];
   List<String> files = [];
 
-  @override
-  void dispose() {
-    controllerTitle.dispose();
-    controllerDescription.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getData();
+  void addAnnouncement() async {
+    if (_formKey.currentState!.validate()) {
+      await _announcementsController.createAnnouncement(
+        widget.courseId,
+        controllerTitle.text,
+        controllerDescription.text,
+        [],
+        _userType == UserType.professor ? selectedGroupIds : [],
+        _userType == UserType.ta ? selectedGroupIds : [],
+      );
+    }
   }
 
   Future<void> _getData() async {
@@ -46,6 +47,19 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
     setState(() {
       _userType = userType;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getData();
+  }
+
+  @override
+  void dispose() {
+    controllerTitle.dispose();
+    controllerDescription.dispose();
+    super.dispose();
   }
 
   @override
@@ -66,30 +80,8 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
                         selectedGroupIds: selectedGroupIds,
                         courseId: widget.courseId),
                     const SizedBox(height: 60.0),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(50.0),
-                          textStyle: const TextStyle(fontSize: 22),
-                          backgroundColor:
-                              const Color.fromARGB(255, 50, 55, 59)),
-                      child: const Text(
-                        'Add announcement',
-                      ),
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          await _announcementsController.createAnnouncement(
-                            widget.courseId,
-                            controllerTitle.text,
-                            controllerDescription.text,
-                            [],
-                            _userType == UserType.professor
-                                ? selectedGroupIds
-                                : [],
-                            _userType == UserType.ta ? selectedGroupIds : [],
-                          );
-                        }
-                      },
-                    ),
+                    LargeBtn(
+                        onPressed: addAnnouncement, text: 'Add announcement'),
                     const SizedBox(
                       height: 12.0,
                     ),

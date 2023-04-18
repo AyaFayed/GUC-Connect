@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_announcement/add_announcement.dart';
-import 'package:guc_scheduling_app/screens/add_division/add_tutorial.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/add_division/add_tutorial.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_compensation_tutorial.dart';
 
 class TACourse extends StatefulWidget {

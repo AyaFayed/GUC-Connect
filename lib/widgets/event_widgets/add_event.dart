@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/widgets/groups_dropdown.dart';
 import 'package:guc_scheduling_app/widgets/tutorials_dropdown.dart';
 
@@ -49,13 +50,13 @@ class _AddEventState extends State<AddEvent> {
         : Column(children: <Widget>[
             TextFormField(
               decoration: const InputDecoration(hintText: 'Title'),
-              validator: (val) => val!.isEmpty ? 'Enter a title' : null,
+              validator: (val) => val!.isEmpty ? Errors.required : null,
               controller: widget.controllerTitle,
             ),
             const SizedBox(height: 20.0),
             TextFormField(
               decoration: const InputDecoration(hintText: 'Description'),
-              validator: (val) => val!.isEmpty ? 'Enter the description' : null,
+              validator: (val) => val!.isEmpty ? Errors.required : null,
               controller: widget.controllerDescription,
             ),
             const SizedBox(height: 20.0),

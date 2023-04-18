@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_announcement/add_announcement.dart';
-import 'package:guc_scheduling_app/screens/add_division/add_group.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/add_division/add_group.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_event.dart';
 
 class ProfessorCourse extends StatefulWidget {

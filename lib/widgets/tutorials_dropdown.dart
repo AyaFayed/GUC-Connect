@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/division_controller.dart';
 import 'package:guc_scheduling_app/models/divisions/tutorial_model.dart';
+import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
@@ -66,9 +67,8 @@ class _TutorialsDropdownState extends State<TutorialsDropdown> {
             items: tutorials,
             title: const Text('Select tutorials'),
             searchable: true,
-            validator: (val) => val == null || val.isEmpty
-                ? 'Choose at least one tutorial'
-                : null,
+            validator: (val) =>
+                val == null || val.isEmpty ? Errors.tutorial : null,
             listType: MultiSelectListType.LIST,
             onConfirm: (values) {
               setState(() {
