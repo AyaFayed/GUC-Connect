@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:guc_scheduling_app/controllers/course_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
+import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 
 class CreateCourse extends StatefulWidget {
   const CreateCourse({super.key});
@@ -21,6 +24,14 @@ class _CreateCourseState extends State<CreateCourse> {
   String year = '';
   String error = '';
 
+  void createCourse() async {
+    setState(() => error = '');
+    if (_formKey.currentState!.validate()) {
+      await _courseController.createCourse(
+          name.trim(), semester, int.parse(year));
+    }
+  }
+
   var semesterDropdownItems = [
     Semester.winter,
     Semester.spring,
@@ -39,8 +50,7 @@ class _CreateCourseState extends State<CreateCourse> {
             TextFormField(
               decoration: const InputDecoration(
                   hintText: 'Name e.g.(CSEN 702 Microprocessors)'),
-              validator: (val) =>
-                  val!.isEmpty ? 'Enter a valid course name' : null,
+              validator: (val) => val!.isEmpty ? Errors.required : null,
               onChanged: (val) {
                 setState(() => name = val);
               },
@@ -52,9 +62,7 @@ class _CreateCourseState extends State<CreateCourse> {
                   'Select semester',
                   style: TextStyle(fontSize: 16),
                 ),
-                const SizedBox(
-                    width:
-                        10), // Add some space between the text and the dropdown
+                const SizedBox(width: 10),
                 DropdownButton(
                   value: semester,
                   icon: const Icon(Icons.keyboard_arrow_down),
@@ -82,34 +90,19 @@ class _CreateCourseState extends State<CreateCourse> {
                 FilteringTextInputFormatter.digitsOnly
               ],
               decoration: const InputDecoration(hintText: 'Year'),
-              validator: (val) => val!.isEmpty ? 'Enter a valid year' : null,
+              validator: (val) => val!.isEmpty ? Errors.required : null,
               onChanged: (val) {
                 setState(() => year = val);
               },
             ),
             const SizedBox(height: 40.0),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(50.0),
-                    textStyle: const TextStyle(fontSize: 22),
-                    backgroundColor: const Color.fromARGB(255, 191, 26, 47)),
-                child: const Text(
-                  'Create Course',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () async {
-                  setState(() => error = '');
-                  if (_formKey.currentState!.validate()) {
-                    await _courseController.createCourse(
-                        name.trim(), semester, int.parse(year));
-                  }
-                }),
+            LargeBtn(onPressed: createCourse, text: 'Create course'),
             const SizedBox(
               height: 12.0,
             ),
             Text(
               error,
-              style: const TextStyle(color: Colors.red, fontSize: 14.0),
+              style: TextStyle(color: AppColors.error, fontSize: 14.0),
             ),
           ],
         ),

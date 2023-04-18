@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/quiz_controller.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/date_time_selector.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/add_event.dart';
@@ -93,7 +94,7 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
                     ),
               Text(
                 error,
-                style: const TextStyle(color: Colors.red, fontSize: 13.0),
+                style: TextStyle(color: AppColors.error, fontSize: 13.0),
               ),
               const SizedBox(height: 12.0),
               TextFormField(

@@ -8,6 +8,7 @@ import 'package:guc_scheduling_app/models/divisions/tutorial_model.dart';
 import 'package:guc_scheduling_app/screens/home/home.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/floating_btn.dart';
 
 class StudentEnroll extends StatefulWidget {
@@ -93,7 +94,6 @@ class _StudentEnrollState extends State<StudentEnroll> {
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.courseName),
-          backgroundColor: const Color.fromARGB(255, 191, 26, 47),
           elevation: 0.0,
         ),
         body: SingleChildScrollView(
@@ -138,7 +138,7 @@ class _StudentEnrollState extends State<StudentEnroll> {
               ),
               Text(
                 error,
-                style: const TextStyle(color: Colors.red, fontSize: 14.0),
+                style: TextStyle(color: AppColors.error, fontSize: 14.0),
               ),
             ],
           ),

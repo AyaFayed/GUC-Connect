@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 
 class FloatingBtn extends StatelessWidget {
   final void Function() onPressed;
@@ -9,7 +10,7 @@ class FloatingBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: onPressed,
-      backgroundColor: const Color.fromARGB(255, 50, 55, 59),
+      backgroundColor: AppColors.dark,
       label: Text(text),
     );
   }

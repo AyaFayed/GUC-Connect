@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/course_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/widgets/course_widgets/course_list.dart';
 
 import '../../models/course/course_model.dart';
@@ -29,7 +30,7 @@ class _AllCoursesState extends State<AllCourses> {
         }
 
         if (snapshot.hasError) {
-          return const Text('Something went wrong');
+          return Text(Errors.backend);
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {

@@ -3,6 +3,7 @@ import "package:guc_scheduling_app/controllers/auth_controller.dart";
 import "package:guc_scheduling_app/shared/constants.dart";
 import "package:guc_scheduling_app/shared/errors.dart";
 import "package:guc_scheduling_app/shared/helper.dart";
+import "package:guc_scheduling_app/theme/colors.dart";
 import "package:guc_scheduling_app/widgets/buttons/auth_btn.dart";
 
 class Signup extends StatefulWidget {
@@ -136,7 +137,7 @@ class _SignupState extends State<Signup> {
                 ),
                 Text(
                   error,
-                  style: const TextStyle(color: Colors.red, fontSize: 14.0),
+                  style: TextStyle(color: AppColors.error, fontSize: 14.0),
                 ),
                 const SizedBox(
                   height: 20.0,
@@ -151,9 +152,8 @@ class _SignupState extends State<Signup> {
                     onPressed: () {
                       widget.toggleView();
                     },
-                    child: const Text('Log in',
-                        style:
-                            TextStyle(color: Color.fromARGB(255, 191, 26, 47))))
+                    child: Text('Log in',
+                        style: TextStyle(color: AppColors.primary)))
               ],
             ),
           )),

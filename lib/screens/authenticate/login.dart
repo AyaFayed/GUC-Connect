@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:guc_scheduling_app/controllers/auth_controller.dart";
 import "package:guc_scheduling_app/shared/constants.dart";
 import "package:guc_scheduling_app/shared/errors.dart";
+import "package:guc_scheduling_app/theme/colors.dart";
 import "package:guc_scheduling_app/widgets/buttons/auth_btn.dart";
 
 class Login extends StatefulWidget {
@@ -71,7 +72,7 @@ class _LoginState extends State<Login> {
                 ),
                 Text(
                   error,
-                  style: const TextStyle(color: Colors.red, fontSize: 14.0),
+                  style: TextStyle(color: AppColors.error, fontSize: 14.0),
                 ),
                 const SizedBox(height: 40.0),
                 const Text(
@@ -86,9 +87,9 @@ class _LoginState extends State<Login> {
                     onPressed: () {
                       widget.toggleView();
                     },
-                    child: const Text(
+                    child: Text(
                       'Sign up',
-                      style: TextStyle(color: Color.fromARGB(255, 191, 26, 47)),
+                      style: TextStyle(color: AppColors.primary),
                     ))
               ],
             ),

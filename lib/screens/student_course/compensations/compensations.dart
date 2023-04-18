@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/screens/student_course/compensations/compensation_lectures.dart';
 import 'package:guc_scheduling_app/screens/student_course/compensations/compensation_tutorials.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 
 class Compensations extends StatefulWidget {
   final String courseId;
@@ -20,14 +21,13 @@ class _CompensationsState extends State<Compensations> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: const Color.fromARGB(255, 191, 26, 47),
             elevation: 0.0,
-            bottom: const TabBar(
-              tabs: [
+            bottom: TabBar(
+              tabs: const [
                 Tab(text: 'Lectures'),
                 Tab(text: 'Tutorials'),
               ],
-              indicatorColor: Colors.white,
+              indicatorColor: AppColors.light,
             ),
             title: Text(widget.courseName),
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/screens/student_course/assessments/assignments.dart';
 import 'package:guc_scheduling_app/screens/student_course/assessments/quizzes.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 
 class Assessments extends StatefulWidget {
   final String courseId;
@@ -20,14 +21,13 @@ class _AssessmentsState extends State<Assessments> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: const Color.fromARGB(255, 191, 26, 47),
             elevation: 0.0,
-            bottom: const TabBar(
-              tabs: [
+            bottom: TabBar(
+              tabs: const [
                 Tab(text: 'Quizzes'),
                 Tab(text: 'Assignments'),
               ],
-              indicatorColor: Colors.white,
+              indicatorColor: AppColors.light,
             ),
             title: Text(widget.courseName),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_announcement/add_announcement.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_division/add_tutorial.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_compensation_tutorial.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 
 class TACourse extends StatefulWidget {
   final String courseId;
@@ -47,7 +48,6 @@ class _TACourseState extends State<TACourse> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.courseName),
-        backgroundColor: const Color.fromARGB(255, 191, 26, 47),
         elevation: 0.0,
       ),
       body: SingleChildScrollView(
@@ -76,10 +76,10 @@ class _TACourseState extends State<TACourse> {
         ],
         currentIndex: _selectedIndex,
         type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromARGB(255, 235, 235, 235),
+        backgroundColor: AppColors.bottomNavbar,
         showUnselectedLabels: true,
-        unselectedItemColor: Colors.grey,
-        selectedItemColor: Colors.black,
+        unselectedItemColor: AppColors.unselected,
+        selectedItemColor: AppColors.selected,
         onTap: (val) async {
           await _onItemTapped(val);
         },

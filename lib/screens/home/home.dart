@@ -3,6 +3,8 @@ import 'package:guc_scheduling_app/screens/Course/my_courses.dart';
 import 'package:guc_scheduling_app/screens/calendar/calendar.dart';
 import 'package:guc_scheduling_app/screens/notifications/notifications.dart';
 import 'package:guc_scheduling_app/screens/settings/settings.dart';
+import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -31,8 +33,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('GUC Notifications'),
-        backgroundColor: const Color.fromARGB(255, 191, 26, 47),
+        title: Text(appName),
         elevation: 0.0,
       ),
       body: SingleChildScrollView(
@@ -59,10 +60,10 @@ class _HomeState extends State<Home> {
         ],
         currentIndex: _selectedIndex,
         type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromARGB(255, 235, 235, 235),
+        backgroundColor: AppColors.bottomNavbar,
         showUnselectedLabels: true,
-        unselectedItemColor: Colors.grey,
-        selectedItemColor: Colors.black,
+        unselectedItemColor: AppColors.unselected,
+        selectedItemColor: AppColors.selected,
         onTap: (val) async {
           await _onItemTapped(val);
         },

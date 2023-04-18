@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/groups_dropdown.dart';
 import 'package:guc_scheduling_app/widgets/tutorials_dropdown.dart';
 
@@ -71,7 +72,7 @@ class _AddEventState extends State<AddEvent> {
             ElevatedButton.icon(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 240, 173, 41)),
+                    backgroundColor: AppColors.secondary),
                 icon: const Icon(Icons.add),
                 label: const Text('Add files'))
           ]);

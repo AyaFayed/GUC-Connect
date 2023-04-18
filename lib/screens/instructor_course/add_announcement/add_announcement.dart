@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/announcement_controller.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/add_event.dart';
 
@@ -87,7 +88,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
                     ),
                     Text(
                       error,
-                      style: const TextStyle(color: Colors.red, fontSize: 14.0),
+                      style: TextStyle(color: AppColors.error, fontSize: 14.0),
                     ),
                   ],
                 ),

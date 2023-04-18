@@ -19,7 +19,6 @@ class CourseDetails extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(name),
-        backgroundColor: const Color.fromARGB(255, 191, 26, 47),
         elevation: 0.0,
       ),
       body: SingleChildScrollView(

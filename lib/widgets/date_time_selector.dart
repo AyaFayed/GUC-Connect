@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 
 class DateTimeSelector extends StatefulWidget {
   final dynamic Function(DateTime) onConfirm;
@@ -17,8 +18,7 @@ class _SelectState extends State<DateTimeSelector> {
   Widget build(BuildContext context) {
     return TextButton.icon(
         icon: const Icon(Icons.calendar_month),
-        style: TextButton.styleFrom(
-            iconColor: const Color.fromARGB(255, 50, 55, 59)),
+        style: TextButton.styleFrom(iconColor: AppColors.dark),
         onPressed: () {
           DatePicker.showDateTimePicker(context,
               showTitleActions: true,
@@ -32,7 +32,7 @@ class _SelectState extends State<DateTimeSelector> {
           widget.dateTime == null
               ? Errors.dateTime
               : widget.dateTime.toString(),
-          style: const TextStyle(color: Color.fromARGB(255, 50, 55, 59)),
+          style: TextStyle(color: AppColors.dark),
         ));
   }
 }

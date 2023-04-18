@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/auth_controller.dart';
 import 'package:guc_scheduling_app/screens/Course/create_course.dart';
 import 'package:guc_scheduling_app/screens/course/all_courses.dart';
+import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
@@ -33,8 +35,7 @@ class _AdminHomeState extends State<AdminHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('GUC Notifications'),
-        backgroundColor: const Color.fromARGB(255, 191, 26, 47),
+        title: Text(appName),
         elevation: 0.0,
       ),
       body: SingleChildScrollView(
@@ -48,7 +49,7 @@ class _AdminHomeState extends State<AdminHome> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add),
-            label: 'Create Course',
+            label: 'Create course',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.logout),
@@ -56,7 +57,7 @@ class _AdminHomeState extends State<AdminHome> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black,
+        selectedItemColor: AppColors.selected,
         onTap: (val) async {
           await _onItemTapped(val);
         },

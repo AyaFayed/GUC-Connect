@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 
 class AuthBtn extends StatelessWidget {
   final void Function() onPressed;
@@ -11,7 +12,7 @@ class AuthBtn extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             minimumSize: const Size.fromHeight(50.0),
             textStyle: const TextStyle(fontSize: 22),
-            backgroundColor: const Color.fromARGB(255, 191, 26, 47)),
+            backgroundColor: AppColors.primary),
         onPressed: onPressed,
         child: Text(
           text,

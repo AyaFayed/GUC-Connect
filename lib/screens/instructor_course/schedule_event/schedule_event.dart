@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_assignment.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_compensation_lecture.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_quiz.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 
 class ScheduleEvent extends StatefulWidget {
   final String courseId;
@@ -21,15 +22,14 @@ class _ScheduleEventState extends State<ScheduleEvent> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: const Color.fromARGB(255, 191, 26, 47),
             elevation: 0.0,
-            bottom: const TabBar(
-              tabs: [
+            bottom: TabBar(
+              tabs: const [
                 Tab(text: 'Quiz'),
                 Tab(text: 'Assignment'),
                 Tab(text: 'Compensation'),
               ],
-              indicatorColor: Colors.white,
+              indicatorColor: AppColors.light,
             ),
             title: Text(widget.courseName),
           ),

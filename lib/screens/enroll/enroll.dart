@@ -36,7 +36,6 @@ class _EnrollState extends State<Enroll> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Enroll'),
-          backgroundColor: const Color.fromARGB(255, 191, 26, 47),
           elevation: 0.0,
         ),
         body: SingleChildScrollView(

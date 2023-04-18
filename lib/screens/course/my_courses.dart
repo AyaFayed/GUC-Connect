@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/course_controller.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/course_widgets/course_list.dart';
 
 import '../../models/course/course_model.dart';
@@ -43,27 +44,24 @@ class _MyCoursesState extends State<MyCourses> {
         child: Container(
             padding:
                 const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-            child: _userType == null
+            child: _courses == null || _userType == null
                 ? const CircularProgressIndicator()
                 : Column(children: [
-                    _courses == null || _userType == null
-                        ? const CircularProgressIndicator()
-                        : _courses!.isEmpty
-                            ? const Text(
-                                "You haven't enrolled in any courses yet")
-                            : CourseList(
-                                courses: _courses ?? [],
-                                userType: _userType ?? UserType.student,
-                                enroll: false),
+                    _courses!.isEmpty
+                        ? const Text("You haven't enrolled in any courses yet")
+                        : CourseList(
+                            courses: _courses ?? [],
+                            userType: _userType ?? UserType.student,
+                            enroll: false),
                     const SizedBox(
                       height: 40.0,
                     ),
                     ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(120, 40),
-                            textStyle: const TextStyle(fontSize: 18),
-                            backgroundColor:
-                                const Color.fromARGB(255, 240, 173, 41)),
+                          minimumSize: const Size(120, 40),
+                          textStyle: const TextStyle(fontSize: 18),
+                          backgroundColor: AppColors.secondary,
+                        ),
                         label: const Text(
                           'Enroll in new course',
                         ),
