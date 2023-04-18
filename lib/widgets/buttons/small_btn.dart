@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
-class SmallBtn extends StatefulWidget {
-  const SmallBtn({super.key});
+class SmallBtn extends StatelessWidget {
+  final void Function() onPressed;
+  final String text;
+  const SmallBtn({super.key, required this.onPressed, required this.text});
 
-  @override
-  State<SmallBtn> createState() => _SmallBtnState();
-}
-
-class _SmallBtnState extends State<SmallBtn> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          minimumSize: const Size.fromHeight(50.0),
+          textStyle: const TextStyle(fontSize: 22),
+          backgroundColor: const Color.fromARGB(255, 50, 55, 59)),
+      onPressed: onPressed,
+      child: Text(text),
+    );
   }
 }

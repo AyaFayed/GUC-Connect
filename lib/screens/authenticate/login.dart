@@ -78,17 +78,18 @@ class _LoginState extends State<Login> {
                   "Don't have an account?",
                   style: TextStyle(fontSize: 16),
                 ),
-                const SizedBox(
-                  height: 8.0,
-                ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 191, 26, 47),
-                        textStyle: const TextStyle(fontSize: 16)),
+                TextButton(
+                    style: TextButton.styleFrom(
+                        textStyle: const TextStyle(
+                      fontSize: 16,
+                    )),
                     onPressed: () {
                       widget.toggleView();
                     },
-                    child: const Text('Sign up'))
+                    child: const Text(
+                      'Sign up',
+                      style: TextStyle(color: Color.fromARGB(255, 191, 26, 47)),
+                    ))
               ],
             ),
           )),

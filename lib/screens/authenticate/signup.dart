@@ -145,17 +145,15 @@ class _SignupState extends State<Signup> {
                   'Already have an account?',
                   style: TextStyle(fontSize: 16.0),
                 ),
-                const SizedBox(
-                  height: 8.0,
-                ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 191, 26, 47),
+                TextButton(
+                    style: TextButton.styleFrom(
                         textStyle: const TextStyle(fontSize: 16)),
                     onPressed: () {
                       widget.toggleView();
                     },
-                    child: const Text('Log in'))
+                    child: const Text('Log in',
+                        style:
+                            TextStyle(color: Color.fromARGB(255, 191, 26, 47))))
               ],
             ),
           )),
