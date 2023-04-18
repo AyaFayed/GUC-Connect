@@ -1,5 +1,8 @@
 import "package:flutter/material.dart";
 import "package:guc_scheduling_app/controllers/auth_controller.dart";
+import "package:guc_scheduling_app/shared/constants.dart";
+import "package:guc_scheduling_app/shared/errors.dart";
+import "package:guc_scheduling_app/widgets/buttons/auth_btn.dart";
 
 class Login extends StatefulWidget {
   final Function toggleView;
@@ -16,6 +19,16 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
 
   String error = '';
+
+  void login() async {
+    if (_formKey.currentState!.validate()) {
+      dynamic result = await _auth.login(
+          controllerEmail.text.trim(), controllerPassword.text);
+      if (result == null) {
+        setState(() => error = Errors.login);
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -34,43 +47,25 @@ class _LoginState extends State<Login> {
             child: Column(
               children: <Widget>[
                 const SizedBox(height: 150.0),
-                const Text(
-                  'GUC Notifications',
-                  style: TextStyle(fontSize: 36),
+                Text(
+                  appName,
+                  style: const TextStyle(fontSize: 36),
                 ),
                 const SizedBox(height: 60.0),
                 TextFormField(
                   decoration: const InputDecoration(hintText: 'Email'),
-                  validator: (val) => val!.isEmpty ? 'Enter an email' : null,
+                  validator: (val) => val!.isEmpty ? Errors.required : null,
                   controller: controllerEmail,
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
                   obscureText: true,
                   decoration: const InputDecoration(hintText: 'Password'),
-                  validator: (val) => val!.isEmpty ? 'Enter a password' : null,
+                  validator: (val) => val!.isEmpty ? Errors.required : null,
                   controller: controllerPassword,
                 ),
                 const SizedBox(height: 60.0),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(50.0),
-                        textStyle: const TextStyle(fontSize: 22),
-                        backgroundColor:
-                            const Color.fromARGB(255, 191, 26, 47)),
-                    child: const Text(
-                      'Log In',
-                    ),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        dynamic result = await _auth.login(
-                            controllerEmail.text.trim(),
-                            controllerPassword.text);
-                        if (result == null) {
-                          setState(() => error = 'Incorrect email or password');
-                        }
-                      }
-                    }),
+                AuthBtn(onPressed: login, text: 'Log in'),
                 const SizedBox(
                   height: 12.0,
                 ),
@@ -80,7 +75,7 @@ class _LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 40.0),
                 const Text(
-                  'Do not have an account?',
+                  "Don't have an account?",
                   style: TextStyle(fontSize: 16),
                 ),
                 const SizedBox(
@@ -93,7 +88,7 @@ class _LoginState extends State<Login> {
                     onPressed: () {
                       widget.toggleView();
                     },
-                    child: const Text('Sign Up'))
+                    child: const Text('Sign up'))
               ],
             ),
           )),

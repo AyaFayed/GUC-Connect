@@ -23,3 +23,5 @@ enum EventType {
 enum DivisionType { groups, tutorials }
 
 enum InstructorType { professors, tas }
+
+String appName = 'GUC Notifications';

@@ -24,9 +24,9 @@ class AuthService {
 
       await _database.createUser(user?.uid, name, userType);
 
-      return user;
-    } catch (e) {
       return null;
+    } catch (e) {
+      return e.toString();
     }
   }
 

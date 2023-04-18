@@ -1,6 +1,9 @@
 import "package:flutter/material.dart";
 import "package:guc_scheduling_app/controllers/auth_controller.dart";
+import "package:guc_scheduling_app/shared/constants.dart";
+import "package:guc_scheduling_app/shared/errors.dart";
 import "package:guc_scheduling_app/shared/helper.dart";
+import "package:guc_scheduling_app/widgets/buttons/auth_btn.dart";
 
 class Signup extends StatefulWidget {
   final Function toggleView;
@@ -21,6 +24,16 @@ class _SignupState extends State<Signup> {
   bool isTa = false;
   bool _isInstructor = false;
   String error = '';
+
+  void signup() async {
+    if (_formKey.currentState!.validate()) {
+      dynamic result = await _auth.signup(controllerEmail.text.trim(),
+          controllerPassword.text, controllerName.text, _selectedRole == 2);
+      if (result != null) {
+        setState(() => error = result);
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -68,15 +81,14 @@ class _SignupState extends State<Signup> {
             child: Column(
               children: <Widget>[
                 const SizedBox(height: 80.0),
-                const Text(
-                  'GUC Notifications',
-                  style: TextStyle(fontSize: 36),
+                Text(
+                  appName,
+                  style: const TextStyle(fontSize: 36),
                 ),
                 const SizedBox(height: 40.0),
                 TextFormField(
                   decoration: const InputDecoration(hintText: 'Email'),
-                  validator: (val) =>
-                      !isValidMail(val!) ? 'Enter a valid email' : null,
+                  validator: (val) => !isValidMail(val!) ? Errors.email : null,
                   controller: controllerEmail,
                   onChanged: (value) {
                     if (isInstructor(value)) {
@@ -89,25 +101,23 @@ class _SignupState extends State<Signup> {
                 const SizedBox(height: 20.0),
                 TextFormField(
                   decoration: const InputDecoration(hintText: 'Name'),
-                  validator: (val) =>
-                      val!.isEmpty ? 'Enter a valid name' : null,
+                  validator: (val) => val!.isEmpty ? Errors.required : null,
                   controller: controllerName,
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
                   obscureText: true,
                   decoration: const InputDecoration(hintText: 'Password'),
-                  validator: (val) =>
-                      val!.length < 6 ? 'Enter a password 6+ chars long' : null,
+                  validator: (val) => val!.length < 6 ? Errors.password : null,
                   controller: controllerPassword,
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
                   obscureText: true,
                   decoration:
-                      const InputDecoration(hintText: 'Confirm Password'),
+                      const InputDecoration(hintText: 'Confirm password'),
                   validator: (val) => val != controllerPassword.text
-                      ? 'This password does not match the password you have entered'
+                      ? Errors.confirmPassword
                       : null,
                   controller: controllerConfirmPassword,
                 ),
@@ -120,28 +130,7 @@ class _SignupState extends State<Signup> {
                         ],
                       )
                     : const SizedBox(height: 40.0),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(50.0),
-                        textStyle: const TextStyle(fontSize: 22),
-                        backgroundColor:
-                            const Color.fromARGB(255, 191, 26, 47)),
-                    child: const Text(
-                      'Sign Up',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        dynamic result = await _auth.signup(
-                            controllerEmail.text.trim(),
-                            controllerPassword.text,
-                            controllerName.text,
-                            _selectedRole == 2);
-                        if (result == null) {
-                          setState(() => error = 'Enter a valid email');
-                        }
-                      }
-                    }),
+                AuthBtn(onPressed: signup, text: 'Sign up'),
                 const SizedBox(
                   height: 12.0,
                 ),
@@ -166,7 +155,7 @@ class _SignupState extends State<Signup> {
                     onPressed: () {
                       widget.toggleView();
                     },
-                    child: const Text('Log In'))
+                    child: const Text('Log in'))
               ],
             ),
           )),
