@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/enrollment_controller.dart';
 import 'package:guc_scheduling_app/screens/home/home.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/widgets/buttons/floating_btn.dart';
 
 class InstructorEnroll extends StatelessWidget {
   final String courseId;
@@ -17,6 +18,19 @@ class InstructorEnroll extends StatelessWidget {
       required this.semester,
       required this.year,
       required this.courseId});
+
+  void enroll(context) async {
+    final EnrollmentController enrollmentController = EnrollmentController();
+    await enrollmentController.instructorEnroll(courseId);
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Card(child: Home()),
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,22 +64,7 @@ class InstructorEnroll extends StatelessWidget {
             ],
           ),
         )),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            final EnrollmentController enrollmentController =
-                EnrollmentController();
-            await enrollmentController.instructorEnroll(courseId);
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Card(child: Home()),
-                ));
-          },
-          backgroundColor: const Color.fromARGB(255, 50, 55, 59),
-          label: const Text('Enroll'),
-        ));
+        floatingActionButton:
+            FloatingBtn(onPressed: () => enroll(context), text: 'Enroll'));
   }
 }

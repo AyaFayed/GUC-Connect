@@ -7,4 +7,5 @@ class Errors {
       "This password doesn't match the password you entered";
   static String required = 'This field is required';
   static String login = 'Incorrect email or password';
+  static String studentEnroll = 'Select a valid group and tutorial';
 }

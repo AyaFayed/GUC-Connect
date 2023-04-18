@@ -7,6 +7,8 @@ import 'package:guc_scheduling_app/models/divisions/group_model.dart';
 import 'package:guc_scheduling_app/models/divisions/tutorial_model.dart';
 import 'package:guc_scheduling_app/screens/home/home.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/widgets/buttons/floating_btn.dart';
 
 class StudentEnroll extends StatefulWidget {
   final String courseId;
@@ -37,6 +39,26 @@ class _StudentEnrollState extends State<StudentEnroll> {
 
   List<DropdownMenuEntry>? groups;
   List<DropdownMenuEntry>? tutorials;
+
+  void enroll() async {
+    if (selectedGroupId.isEmpty || selectedTutorialId.isEmpty) {
+      setState(() {
+        error = Errors.studentEnroll;
+      });
+      return;
+    }
+    final EnrollmentController enrollmentController = EnrollmentController();
+    await enrollmentController.studentEnroll(
+        widget.courseId, selectedGroupId, selectedTutorialId);
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Card(child: Home()),
+        ));
+  }
 
   @override
   void initState() {
@@ -121,29 +143,6 @@ class _StudentEnrollState extends State<StudentEnroll> {
             ],
           ),
         )),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            if (selectedGroupId.isEmpty || selectedTutorialId.isEmpty) {
-              setState(() {
-                error = 'Select a valid group and tutorial';
-              });
-              return;
-            }
-            final EnrollmentController enrollmentController =
-                EnrollmentController();
-            await enrollmentController.studentEnroll(
-                widget.courseId, selectedGroupId, selectedTutorialId);
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Card(child: Home()),
-                ));
-          },
-          backgroundColor: const Color.fromARGB(255, 50, 55, 59),
-          label: const Text('Enroll'),
-        ));
+        floatingActionButton: FloatingBtn(onPressed: enroll, text: 'Enroll'));
   }
 }
