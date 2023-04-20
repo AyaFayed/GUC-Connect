@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/enrollment_controller.dart';
 import 'package:guc_scheduling_app/screens/home/home.dart';
@@ -19,17 +17,19 @@ class InstructorEnroll extends StatelessWidget {
       required this.year,
       required this.courseId});
 
-  void enroll(context) async {
+  void enroll(BuildContext context) async {
     final EnrollmentController enrollmentController = EnrollmentController();
     await enrollmentController.instructorEnroll(courseId);
-    Navigator.pop(context);
-    Navigator.pop(context);
-    Navigator.pop(context);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Card(child: Home()),
-        ));
+    if (context.mounted) {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Card(child: Home()),
+          ));
+    }
   }
 
   @override

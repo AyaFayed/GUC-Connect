@@ -56,6 +56,9 @@ class _AddEventState extends State<AddEvent> {
             ),
             const SizedBox(height: 20.0),
             TextFormField(
+              keyboardType: TextInputType.multiline,
+              minLines: 1,
+              maxLines: 7,
               decoration: const InputDecoration(hintText: 'Description'),
               validator: (val) => val!.isEmpty ? Errors.required : null,
               controller: widget.controllerDescription,

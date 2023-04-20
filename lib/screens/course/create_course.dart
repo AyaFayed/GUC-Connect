@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:guc_scheduling_app/controllers/course_controller.dart';
+import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
-import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
+import 'package:quickalert/quickalert.dart';
 
 class CreateCourse extends StatefulWidget {
   const CreateCourse({super.key});
@@ -21,15 +22,40 @@ class _CreateCourseState extends State<CreateCourse> {
   final controllerName = TextEditingController();
   final controllerYear = TextEditingController();
   Semester semester = Semester.winter;
-  String error = '';
 
   void createCourse() async {
-    setState(() => error = '');
     if (_formKey.currentState!.validate()) {
-      await _courseController.createCourse(
-          controllerName.text.trim(), semester, int.parse(controllerYear.text));
-      controllerName.clear();
-      controllerYear.clear();
+      try {
+        dynamic result = await _courseController.createCourse(
+            controllerName.text.trim(),
+            semester,
+            int.parse(controllerYear.text));
+        controllerName.clear();
+        controllerYear.clear();
+        if (context.mounted) {
+          if (result == null) {
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.success,
+              text: Confirmations.creationSuccess('course'),
+            );
+          } else {
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              text: result.toString(),
+            );
+          }
+        }
+      } catch (e) {
+        if (context.mounted) {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            text: Errors.backend,
+          );
+        }
+      }
     }
   }
 
@@ -101,13 +127,6 @@ class _CreateCourseState extends State<CreateCourse> {
             ),
             const SizedBox(height: 40.0),
             LargeBtn(onPressed: createCourse, text: 'Create course'),
-            const SizedBox(
-              height: 12.0,
-            ),
-            Text(
-              error,
-              style: TextStyle(color: AppColors.error, fontSize: 14.0),
-            ),
           ],
         ),
       ),

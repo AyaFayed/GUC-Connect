@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/division_controller.dart';
 import 'package:guc_scheduling_app/controllers/enrollment_controller.dart';
@@ -51,14 +49,16 @@ class _StudentEnrollState extends State<StudentEnroll> {
     final EnrollmentController enrollmentController = EnrollmentController();
     await enrollmentController.studentEnroll(
         widget.courseId, selectedGroupId, selectedTutorialId);
-    Navigator.pop(context);
-    Navigator.pop(context);
-    Navigator.pop(context);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Card(child: Home()),
-        ));
+    if (context.mounted) {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Card(child: Home()),
+          ));
+    }
   }
 
   @override

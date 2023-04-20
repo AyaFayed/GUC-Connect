@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:guc_scheduling_app/controllers/division_controller.dart';
 import 'package:guc_scheduling_app/models/divisions/division_model.dart';
+import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
-import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/add_lectutre.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/buttons/small_btn.dart';
+import 'package:quickalert/quickalert.dart';
 
 class AddTutorial extends StatefulWidget {
   final String courseId;
@@ -30,12 +31,47 @@ class _AddTutorialState extends State<AddTutorial> {
     )
   ];
 
-  String error = '';
-
   void addTutorial() async {
     if (_formKey.currentState!.validate()) {
-      await _divisionController.createTutorial(
-          widget.courseId, int.parse(controllerTutorialNumber.text), lectures);
+      try {
+        dynamic result = await _divisionController.createTutorial(
+            widget.courseId,
+            int.parse(controllerTutorialNumber.text),
+            lectures);
+        controllerTutorialNumber.clear();
+        setState(() {
+          lecture = Lecture(day: Day.monday, slot: Slot.first);
+          lectures = [lecture];
+          addLecture = [
+            AddLecture(
+              lecture: lecture,
+            )
+          ];
+        });
+        if (context.mounted) {
+          if (result == null) {
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.success,
+              text: Confirmations.addSuccess('tutorial'),
+            );
+          } else {
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              text: result.toString(),
+            );
+          }
+        }
+      } catch (e) {
+        if (context.mounted) {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            text: Errors.backend,
+          );
+        }
+      }
     }
   }
 
@@ -92,13 +128,6 @@ class _AddTutorialState extends State<AddTutorial> {
                   : const SizedBox(height: 0.0),
               const SizedBox(height: 30.0),
               LargeBtn(onPressed: addTutorial, text: 'Add tutorial'),
-              const SizedBox(
-                height: 12.0,
-              ),
-              Text(
-                error,
-                style: TextStyle(color: AppColors.error, fontSize: 14.0),
-              ),
             ],
           ),
         ));

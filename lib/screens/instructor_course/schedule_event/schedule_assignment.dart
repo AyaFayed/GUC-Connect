@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/assignment_controller.dart';
+import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/date_time_selector.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/add_event.dart';
+import 'package:quickalert/quickalert.dart';
 
 class ScheduleAssignment extends StatefulWidget {
   final String courseId;
@@ -35,14 +37,33 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
           error = Errors.required;
         });
       } else {
-        await _assignmentController.scheduleAssignment(
-          widget.courseId,
-          controllerTitle.text,
-          controllerDescription.text,
-          files,
-          selectedGroupIds,
-          startDateTime ?? DateTime.now(),
-        );
+        try {
+          await _assignmentController.scheduleAssignment(
+            widget.courseId,
+            controllerTitle.text,
+            controllerDescription.text,
+            files,
+            selectedGroupIds,
+            startDateTime ?? DateTime.now(),
+          );
+          controllerTitle.clear();
+          controllerDescription.clear();
+          if (context.mounted) {
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.success,
+              text: Confirmations.addSuccess('assignment'),
+            );
+          }
+        } catch (e) {
+          if (context.mounted) {
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              text: Errors.backend,
+            );
+          }
+        }
       }
     } else if (startDateTime == null) {
       setState(() {
