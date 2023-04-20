@@ -14,5 +14,5 @@ class Errors {
   static String duration = 'Enter a valid duration';
   static String backend = 'Something went wrong';
   static String scheduling(int conflicts) =>
-      '$conflicts student(s) has conflicts with this timing';
+      '$conflicts student(s) has conflicts with this timing.';
 }

@@ -15,7 +15,7 @@ class QuizController {
   final ScheduleEventsController _scheduleEventsController =
       ScheduleEventsController();
 
-  Future<int> scheduleQuiz(
+  Future<int> canScheduleQuiz(
       String courseId,
       String title,
       String description,
@@ -30,6 +30,20 @@ class QuizController {
       return conflicts;
     }
 
+    await scheduleQuiz(
+        courseId, title, description, files, groupIds, start, end);
+
+    return 0;
+  }
+
+  Future scheduleQuiz(
+      String courseId,
+      String title,
+      String description,
+      List<String> files,
+      List<String> groupIds,
+      DateTime start,
+      DateTime end) async {
     UserType userType = await _user.getCurrentUserType();
 
     if (userType == UserType.professor) {
@@ -56,7 +70,6 @@ class QuizController {
       await _helper.addEventInDivisions(
           docQuiz.id, EventType.quizzes, DivisionType.groups, groupIds);
     }
-    return conflicts;
   }
 
   Future<List<Quiz>> getGroupQuizzes(String groupId) async {
