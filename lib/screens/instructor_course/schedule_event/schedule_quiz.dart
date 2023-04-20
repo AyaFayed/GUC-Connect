@@ -55,8 +55,7 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
               QuickAlert.show(
                 context: context,
                 type: QuickAlertType.confirm,
-                text:
-                    '${Errors.scheduling(conflicts)} Are you sure you want to complete scheduling the quiz?',
+                text: Confirmations.scheduleWarning('quiz', conflicts),
                 confirmBtnText: 'Complete',
                 cancelBtnText: 'Cancel',
                 onConfirmBtnTap: () async {

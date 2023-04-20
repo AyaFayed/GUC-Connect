@@ -48,6 +48,9 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
           );
           controllerTitle.clear();
           controllerDescription.clear();
+          setState(() {
+            startDateTime = null;
+          });
           if (context.mounted) {
             QuickAlert.show(
               context: context,

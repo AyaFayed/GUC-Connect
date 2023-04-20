@@ -18,7 +18,7 @@ class CompensationController {
   final ScheduleEventsController _scheduleEventsController =
       ScheduleEventsController();
 
-  Future<int> scheduleCompensationLecture(
+  Future<int> canScheduleCompensationLecture(
       String courseId,
       String title,
       String description,
@@ -34,6 +34,20 @@ class CompensationController {
       return conflicts;
     }
 
+    await scheduleCompensationLecture(
+        courseId, title, description, files, groupIds, start, end);
+
+    return 0;
+  }
+
+  Future scheduleCompensationLecture(
+      String courseId,
+      String title,
+      String description,
+      List<String> files,
+      List<String> groupIds,
+      DateTime start,
+      DateTime end) async {
     UserType userType = await _user.getCurrentUserType();
     if (userType == UserType.professor) {
       final doccompensationLecture = Database.compensationLectures.doc();
@@ -59,10 +73,9 @@ class CompensationController {
       await _helper.addEventInDivisions(doccompensationLecture.id,
           EventType.compensationLectures, DivisionType.groups, groupIds);
     }
-    return conflicts;
   }
 
-  Future<int> scheduleCompensationTutorial(
+  Future<int> canScheduleCompensationTutorial(
       String courseId,
       String title,
       String description,
@@ -78,6 +91,20 @@ class CompensationController {
       return conflicts;
     }
 
+    await scheduleCompensationTutorial(
+        courseId, title, description, files, tutorialIds, start, end);
+
+    return 0;
+  }
+
+  Future scheduleCompensationTutorial(
+      String courseId,
+      String title,
+      String description,
+      List<String> files,
+      List<String> tutorialIds,
+      DateTime start,
+      DateTime end) async {
     UserType userType = await _user.getCurrentUserType();
 
     if (userType == UserType.ta) {
@@ -104,7 +131,6 @@ class CompensationController {
       await _helper.addEventInDivisions(doccompensationTutorial.id,
           EventType.compensationTutorials, DivisionType.tutorials, tutorialIds);
     }
-    return conflicts;
   }
 
   Future<List<CompensationLecture>> getGroupCompensationLectures(

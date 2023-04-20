@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/compensation_controller.dart';
+import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/date_time_selector.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/add_event.dart';
+import 'package:quickalert/quickalert.dart';
 
 class ScheduleCompensationTutorial extends StatefulWidget {
   final String courseId;
@@ -40,22 +42,79 @@ class _ScheduleCompensationTutorialState
           error = Errors.required;
         });
       } else {
-        int conflicts =
-            await _compensationController.scheduleCompensationTutorial(
-                widget.courseId,
-                controllerTitle.text,
-                controllerDescription.text,
-                files,
-                selectedTutorialIds,
-                startDateTime ?? DateTime.now(),
-                startDateTime?.add(Duration(
-                        minutes: int.parse(controllerDuration.text))) ??
-                    DateTime.now());
-
-        if (conflicts > 0) {
-          setState(() {
-            error = Errors.scheduling(conflicts);
-          });
+        try {
+          int conflicts =
+              await _compensationController.canScheduleCompensationTutorial(
+                  widget.courseId,
+                  controllerTitle.text,
+                  controllerDescription.text,
+                  files,
+                  selectedTutorialIds,
+                  startDateTime ?? DateTime.now(),
+                  startDateTime?.add(Duration(
+                          minutes: int.parse(controllerDuration.text))) ??
+                      DateTime.now());
+          if (context.mounted) {
+            if (conflicts > 0) {
+              QuickAlert.show(
+                context: context,
+                type: QuickAlertType.confirm,
+                text: Confirmations.scheduleWarning('tutorial', conflicts),
+                confirmBtnText: 'Complete',
+                cancelBtnText: 'Cancel',
+                onConfirmBtnTap: () async {
+                  await _compensationController.scheduleCompensationTutorial(
+                      widget.courseId,
+                      controllerTitle.text,
+                      controllerDescription.text,
+                      files,
+                      selectedTutorialIds,
+                      startDateTime ?? DateTime.now(),
+                      startDateTime?.add(Duration(
+                              minutes: int.parse(controllerDuration.text))) ??
+                          DateTime.now());
+                  controllerDescription.clear();
+                  controllerDuration.clear();
+                  controllerTitle.clear();
+                  setState(() {
+                    startDateTime = null;
+                  });
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.success,
+                      confirmBtnColor: AppColors.confirm,
+                      text: Confirmations.scheduleSuccess('tutorial'),
+                    );
+                  }
+                },
+                confirmBtnColor: AppColors.error,
+              );
+            } else {
+              controllerDescription.clear();
+              controllerDuration.clear();
+              controllerTitle.clear();
+              setState(() {
+                startDateTime = null;
+              });
+              QuickAlert.show(
+                context: context,
+                type: QuickAlertType.success,
+                confirmBtnColor: AppColors.confirm,
+                text: Confirmations.scheduleSuccess('tutorial'),
+              );
+            }
+          }
+        } catch (e) {
+          if (context.mounted) {
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              confirmBtnColor: AppColors.confirm,
+              text: Errors.backend,
+            );
+          }
         }
       }
     } else if (startDateTime == null) {
