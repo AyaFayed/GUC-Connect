@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/screens/course/course_details.dart';
 import 'package:guc_scheduling_app/screens/student_course/student_course.dart';

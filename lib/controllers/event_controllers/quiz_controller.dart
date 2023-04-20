@@ -7,7 +7,6 @@ import 'package:guc_scheduling_app/models/divisions/group_model.dart';
 import 'package:guc_scheduling_app/models/events/quiz_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
-import 'package:guc_scheduling_app/shared/helper.dart';
 
 class QuizController {
   final FirebaseAuth _auth = FirebaseAuth.instance;

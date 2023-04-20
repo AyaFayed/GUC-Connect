@@ -9,7 +9,6 @@ import 'package:guc_scheduling_app/models/events/compensation/compensation_lectu
 import 'package:guc_scheduling_app/models/events/compensation/compensation_tutorial_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
-import 'package:guc_scheduling_app/shared/helper.dart';
 
 class CompensationController {
   final FirebaseAuth _auth = FirebaseAuth.instance;

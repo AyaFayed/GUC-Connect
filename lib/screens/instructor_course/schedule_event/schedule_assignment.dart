@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/assignment_controller.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
