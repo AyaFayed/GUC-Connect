@@ -35,7 +35,7 @@ class Database {
 
   static Future<Map<String, dynamic>?> getDocumentData(
       CollectionReference<Map<String, dynamic>> docRef, String? docId) async {
-    final doc = Database.users.doc(docId);
+    final doc = docRef.doc(docId);
     final snapshot = await doc.get();
 
     if (snapshot.exists) {

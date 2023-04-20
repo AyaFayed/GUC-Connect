@@ -4,6 +4,7 @@ class AppColors {
   static Color primary = const Color.fromARGB(255, 191, 26, 47);
   static Color secondary = const Color.fromARGB(255, 240, 173, 41);
   static Color dark = const Color.fromARGB(255, 50, 55, 59);
+  static Color confirm = const Color.fromARGB(255, 50, 55, 59);
   static Color light = Colors.white;
   static Color error = Colors.red;
   static Color selected = Colors.black;

@@ -5,6 +5,7 @@ import 'package:guc_scheduling_app/models/divisions/division_model.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/add_lectutre.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/buttons/small_btn.dart';
@@ -53,12 +54,14 @@ class _AddTutorialState extends State<AddTutorial> {
             QuickAlert.show(
               context: context,
               type: QuickAlertType.success,
+              confirmBtnColor: AppColors.confirm,
               text: Confirmations.addSuccess('tutorial'),
             );
           } else {
             QuickAlert.show(
               context: context,
               type: QuickAlertType.error,
+              confirmBtnColor: AppColors.confirm,
               text: result.toString(),
             );
           }
@@ -68,6 +71,7 @@ class _AddTutorialState extends State<AddTutorial> {
           QuickAlert.show(
             context: context,
             type: QuickAlertType.error,
+            confirmBtnColor: AppColors.confirm,
             text: Errors.backend,
           );
         }

@@ -4,6 +4,7 @@ import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/add_event.dart';
 import 'package:quickalert/quickalert.dart';
@@ -47,6 +48,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
           QuickAlert.show(
             context: context,
             type: QuickAlertType.success,
+            confirmBtnColor: AppColors.confirm,
             text: Confirmations.addSuccess('announcement'),
           );
         }
@@ -55,6 +57,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
           QuickAlert.show(
             context: context,
             type: QuickAlertType.error,
+            confirmBtnColor: AppColors.confirm,
             text: Errors.backend,
           );
         }

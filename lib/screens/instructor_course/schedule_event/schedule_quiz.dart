@@ -54,10 +54,10 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
             if (conflicts > 0) {
               QuickAlert.show(
                 context: context,
-                type: QuickAlertType.warning,
+                type: QuickAlertType.confirm,
                 text:
                     '${Errors.scheduling(conflicts)} Are you sure you want to complete scheduling the quiz?',
-                confirmBtnText: 'Schedule quiz',
+                confirmBtnText: 'Complete',
                 cancelBtnText: 'Cancel',
                 onConfirmBtnTap: () async {
                   await _quizController.scheduleQuiz(
@@ -70,10 +70,18 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
                       startDateTime?.add(Duration(
                               minutes: int.parse(controllerDuration.text))) ??
                           DateTime.now());
+                  controllerDescription.clear();
+                  controllerDuration.clear();
+                  controllerTitle.clear();
+                  setState(() {
+                    startDateTime = null;
+                  });
                   if (context.mounted) {
+                    Navigator.pop(context);
                     QuickAlert.show(
                       context: context,
                       type: QuickAlertType.success,
+                      confirmBtnColor: AppColors.confirm,
                       text: Confirmations.scheduleSuccess('quiz'),
                     );
                   }
@@ -90,6 +98,7 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
               QuickAlert.show(
                 context: context,
                 type: QuickAlertType.success,
+                confirmBtnColor: AppColors.confirm,
                 text: Confirmations.scheduleSuccess('quiz'),
               );
             }
@@ -99,6 +108,7 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
             QuickAlert.show(
               context: context,
               type: QuickAlertType.error,
+              confirmBtnColor: AppColors.confirm,
               text: Errors.backend,
             );
           }
