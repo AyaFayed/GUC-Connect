@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/models/events/announcement_model.dart';
 import 'package:guc_scheduling_app/models/events/compensation/compensation_lecture_model.dart';
 import 'package:guc_scheduling_app/models/user/professor_model.dart';
 import 'package:guc_scheduling_app/models/user/ta_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
-import 'package:guc_scheduling_app/shared/helper.dart';
 
 import '../../models/events/assignment_model.dart';
 import '../../models/events/compensation/compensation_tutorial_model.dart';
@@ -76,26 +76,24 @@ class EventsControllerHelper {
 
   Future addEventToInstructor(
       String courseId, String eventId, EventType eventType) async {
-    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
-    final userSnapshot = await docUser.get();
+    final docUser = Database.users.doc(_auth.currentUser?.uid);
 
-    if (userSnapshot.exists) {
-      final user = userSnapshot.data();
-      if (getUserTypeFromString(user!['type']) == UserType.professor) {
-        Professor userData = Professor.fromJson(user);
+    Professor? professor =
+        await Database.getProfessor(_auth.currentUser?.uid ?? '');
 
-        List<ProfessorCourse> courses = userData.courses;
-        for (ProfessorCourse course in courses) {
-          if (course.id == courseId) {
-            getProfessorEventsList(course, eventType).add(eventId);
-          }
+    if (professor != null) {
+      List<ProfessorCourse> courses = professor.courses;
+      for (ProfessorCourse course in courses) {
+        if (course.id == courseId) {
+          getProfessorEventsList(course, eventType).add(eventId);
         }
-        await docUser
-            .update({'courses': courses.map((course) => course.toJson())});
-      } else {
-        TA userData = TA.fromJson(user);
-
-        List<TACourse> courses = userData.courses;
+      }
+      await docUser
+          .update({'courses': courses.map((course) => course.toJson())});
+    } else {
+      TA? ta = await Database.getTa(_auth.currentUser?.uid ?? '');
+      if (ta != null) {
+        List<TACourse> courses = ta.courses;
         for (TACourse course in courses) {
           if (course.id == courseId) {
             getTAEventsList(course, eventType).add(eventId);
@@ -126,33 +124,29 @@ class EventsControllerHelper {
   }
 
   Future getEventsFromList(List<String> eventIds, EventType eventType) async {
-    List events = await Future.wait(eventIds.map((String eventId) async {
-      return await getEventFromId(eventId, eventType);
+    List events = await Future.wait(eventIds.map((String eventId) {
+      return getEventFromId(eventId, eventType);
     }));
 
     return events;
   }
 
   Future getEventsofInstructor(String courseId, EventType eventType) async {
-    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
-    final userSnapshot = await docUser.get();
+    Professor? professor =
+        await Database.getProfessor(_auth.currentUser?.uid ?? '');
 
-    if (userSnapshot.exists) {
-      final user = userSnapshot.data();
-      if (getUserTypeFromString(user!['type']) == UserType.professor) {
-        Professor userData = Professor.fromJson(user);
-
-        List<ProfessorCourse> courses = userData.courses;
-        for (ProfessorCourse course in courses) {
-          if (course.id == courseId) {
-            return await getEventsFromList(
-                getProfessorEventsList(course, eventType), eventType);
-          }
+    if (professor != null) {
+      List<ProfessorCourse> courses = professor.courses;
+      for (ProfessorCourse course in courses) {
+        if (course.id == courseId) {
+          return await getEventsFromList(
+              getProfessorEventsList(course, eventType), eventType);
         }
-      } else {
-        TA userData = TA.fromJson(user);
-
-        List<TACourse> courses = userData.courses;
+      }
+    } else {
+      TA? ta = await Database.getTa(_auth.currentUser?.uid ?? '');
+      if (ta != null) {
+        List<TACourse> courses = ta.courses;
         for (TACourse course in courses) {
           if (course.id == courseId) {
             return await getEventsFromList(

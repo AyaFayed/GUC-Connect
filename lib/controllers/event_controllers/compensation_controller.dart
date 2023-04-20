@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:guc_scheduling_app/controllers/division_controller.dart';
+import 'package:guc_scheduling_app/controllers/user_controller.dart';
+import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/event_controllers_helper.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/schedule_event_controller.dart';
 import 'package:guc_scheduling_app/models/divisions/group_model.dart';
@@ -12,10 +12,10 @@ import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 
 class CompensationController {
-  final FirebaseFirestore _database = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final DivisionController _divisionController = DivisionController();
   final EventsControllerHelper _helper = EventsControllerHelper();
+  final UserController _user = UserController();
+
   final ScheduleEventsController _scheduleEventsController =
       ScheduleEventsController();
 
@@ -27,8 +27,7 @@ class CompensationController {
       List<String> groupIds,
       DateTime start,
       DateTime end) async {
-    List<Group> groups =
-        await _divisionController.getGroupListFromIds(groupIds);
+    List<Group> groups = await Database.getGroupListFromIds(groupIds);
 
     int conflicts =
         await _scheduleEventsController.canScheduleGroup(groups, start, end);
@@ -36,36 +35,30 @@ class CompensationController {
       return conflicts;
     }
 
-    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
-    final userSnapshot = await docUser.get();
+    UserType userType = await _user.getCurrentUserType();
+    if (userType == UserType.professor) {
+      final doccompensationLecture = Database.compensationLectures.doc();
 
-    if (userSnapshot.exists) {
-      final user = userSnapshot.data();
-      if (getUserTypeFromString(user!['type']) == UserType.professor) {
-        final doccompensationLecture =
-            _database.collection('compensationLectures').doc();
+      final compensationLecture = CompensationLecture(
+          id: doccompensationLecture.id,
+          creator: _auth.currentUser?.uid ?? '',
+          course: courseId,
+          title: title,
+          description: description,
+          files: files,
+          groups: groupIds,
+          start: start,
+          end: end);
 
-        final compensationLecture = CompensationLecture(
-            id: doccompensationLecture.id,
-            creator: _auth.currentUser?.uid ?? '',
-            course: courseId,
-            title: title,
-            description: description,
-            files: files,
-            groups: groupIds,
-            start: start,
-            end: end);
+      final json = compensationLecture.toJson();
 
-        final json = compensationLecture.toJson();
+      await doccompensationLecture.set(json);
 
-        await doccompensationLecture.set(json);
+      await _helper.addEventToInstructor(
+          courseId, doccompensationLecture.id, EventType.compensationLectures);
 
-        await _helper.addEventToInstructor(courseId, doccompensationLecture.id,
-            EventType.compensationLectures);
-
-        await _helper.addEventInDivisions(doccompensationLecture.id,
-            EventType.compensationLectures, DivisionType.groups, groupIds);
-      }
+      await _helper.addEventInDivisions(doccompensationLecture.id,
+          EventType.compensationLectures, DivisionType.groups, groupIds);
     }
     return conflicts;
   }
@@ -79,59 +72,47 @@ class CompensationController {
       DateTime start,
       DateTime end) async {
     List<Tutorial> tutorials =
-        await _divisionController.getTutorialListFromIds(tutorialIds);
+        await Database.getTutorialListFromIds(tutorialIds);
     int conflicts = await _scheduleEventsController.canScheduleTutorial(
         tutorials, start, end);
     if (conflicts > 0) {
       return conflicts;
     }
 
-    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
-    final userSnapshot = await docUser.get();
+    UserType userType = await _user.getCurrentUserType();
 
-    if (userSnapshot.exists) {
-      final user = userSnapshot.data();
-      if (getUserTypeFromString(user!['type']) == UserType.ta) {
-        final doccompensationTutorial =
-            _database.collection('compensationTutorials').doc();
+    if (userType == UserType.ta) {
+      final doccompensationTutorial = Database.compensationTutorials.doc();
 
-        final compensationTutorial = CompensationTutorial(
-            id: doccompensationTutorial.id,
-            creator: _auth.currentUser?.uid ?? '',
-            course: courseId,
-            title: title,
-            description: description,
-            files: files,
-            tutorials: tutorialIds,
-            start: start,
-            end: end);
+      final compensationTutorial = CompensationTutorial(
+          id: doccompensationTutorial.id,
+          creator: _auth.currentUser?.uid ?? '',
+          course: courseId,
+          title: title,
+          description: description,
+          files: files,
+          tutorials: tutorialIds,
+          start: start,
+          end: end);
 
-        final json = compensationTutorial.toJson();
+      final json = compensationTutorial.toJson();
 
-        await doccompensationTutorial.set(json);
+      await doccompensationTutorial.set(json);
 
-        await _helper.addEventToInstructor(courseId, doccompensationTutorial.id,
-            EventType.compensationTutorials);
+      await _helper.addEventToInstructor(courseId, doccompensationTutorial.id,
+          EventType.compensationTutorials);
 
-        await _helper.addEventInDivisions(
-            doccompensationTutorial.id,
-            EventType.compensationTutorials,
-            DivisionType.tutorials,
-            tutorialIds);
-      }
+      await _helper.addEventInDivisions(doccompensationTutorial.id,
+          EventType.compensationTutorials, DivisionType.tutorials, tutorialIds);
     }
     return conflicts;
   }
 
   Future<List<CompensationLecture>> getGroupCompensationLectures(
       String groupId) async {
-    final docGroup = _database.collection('groups').doc(groupId);
-    final groupSnapshot = await docGroup.get();
+    Group? group = await Database.getGroup(groupId);
 
-    if (groupSnapshot.exists) {
-      final groupData = groupSnapshot.data();
-      Group group = Group.fromJson(groupData!);
-
+    if (group != null) {
       return (await _helper.getEventsFromList(
                   group.compensationLectures, EventType.compensationLectures)
               as List<dynamic>)
@@ -143,12 +124,8 @@ class CompensationController {
 
   Future<List<CompensationLecture>> getCompensationLectures(
       String courseId) async {
-    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
-    final userSnapshot = await docUser.get();
-
-    if (userSnapshot.exists) {
-      final userData = userSnapshot.data();
-      Student student = Student.fromJson(userData!);
+    Student? student = await Database.getStudent(_auth.currentUser?.uid ?? '');
+    if (student != null) {
       for (StudentCourse course in student.courses) {
         if (course.id == courseId) {
           return await getGroupCompensationLectures(course.group);
@@ -160,13 +137,9 @@ class CompensationController {
 
   Future<List<CompensationTutorial>> getTutorialCompensationTutorials(
       String tutorialId) async {
-    final docTutorial = _database.collection('tutorials').doc(tutorialId);
-    final tutorialSnapshot = await docTutorial.get();
+    Tutorial? tutorial = await Database.getTutorial(tutorialId);
 
-    if (tutorialSnapshot.exists) {
-      final tutorialData = tutorialSnapshot.data();
-      Tutorial tutorial = Tutorial.fromJson(tutorialData!);
-
+    if (tutorial != null) {
       return (await _helper.getEventsFromList(tutorial.compensationTutorials,
               EventType.compensationTutorials) as List<dynamic>)
           .cast<CompensationTutorial>();
@@ -177,12 +150,8 @@ class CompensationController {
 
   Future<List<CompensationTutorial>> getCompensationTutorials(
       String courseId) async {
-    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
-    final userSnapshot = await docUser.get();
-
-    if (userSnapshot.exists) {
-      final userData = userSnapshot.data();
-      Student student = Student.fromJson(userData!);
+    Student? student = await Database.getStudent(_auth.currentUser?.uid ?? '');
+    if (student != null) {
       for (StudentCourse course in student.courses) {
         if (course.id == courseId) {
           return await getTutorialCompensationTutorials(course.tutorial);

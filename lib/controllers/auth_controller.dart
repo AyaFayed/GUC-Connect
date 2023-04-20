@@ -5,7 +5,7 @@ import 'package:guc_scheduling_app/shared/helper.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final UserController _database = UserController();
+  final UserController _user = UserController();
 
   // sign up
   Future signup(String email, String password, String name, bool isTA) async {
@@ -22,7 +22,7 @@ class AuthService {
                   ? UserType.ta
                   : UserType.professor;
 
-      await _database.createUser(user?.uid, name, userType);
+      await _user.createUser(user?.uid, name, userType);
 
       return null;
     } catch (e) {

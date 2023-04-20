@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/event_controllers_helper.dart';
+import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/models/divisions/group_model.dart';
 import 'package:guc_scheduling_app/models/divisions/tutorial_model.dart';
 import 'package:guc_scheduling_app/models/events/compensation/compensation_lecture_model.dart';
@@ -9,7 +9,6 @@ import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 
 class ScheduleEventsController {
-  final FirebaseFirestore _database = FirebaseFirestore.instance;
   final EventsControllerHelper _helper = EventsControllerHelper();
 
   Future<bool> isConflictingWithQuiz(
@@ -81,12 +80,9 @@ class ScheduleEventsController {
     for (Group group in groups) {
       List<String> studentIds = group.students;
       for (String studentId in studentIds) {
-        final docUser = _database.collection('users').doc(studentId);
-        final userSnapshot = await docUser.get();
+        Student? student = await Database.getStudent(studentId);
 
-        if (userSnapshot.exists) {
-          final user = userSnapshot.data();
-          Student student = Student.fromJson(user!);
+        if (student != null) {
           bool isConflicting =
               await isConflictingForStudent(student, start, end);
           if (isConflicting) {
@@ -104,12 +100,9 @@ class ScheduleEventsController {
     for (Tutorial tutorial in tutorials) {
       List<String> studentIds = tutorial.students;
       for (String studentId in studentIds) {
-        final docUser = _database.collection('users').doc(studentId);
-        final userSnapshot = await docUser.get();
+        Student? student = await Database.getStudent(studentId);
 
-        if (userSnapshot.exists) {
-          final user = userSnapshot.data();
-          Student student = Student.fromJson(user!);
+        if (student != null) {
           bool isConflicting =
               await isConflictingForStudent(student, start, end);
           if (isConflicting) {
@@ -124,11 +117,8 @@ class ScheduleEventsController {
   Future<bool> isConflictingForStudent(
       Student student, DateTime start, DateTime end) async {
     for (StudentCourse course in student.courses) {
-      final docGroup = _database.collection('groups').doc(course.group);
-      final groupSnapshot = await docGroup.get();
-      if (groupSnapshot.exists) {
-        final courseGroupData = groupSnapshot.data();
-        Group courseGroup = Group.fromJson(courseGroupData!);
+      Group? courseGroup = await Database.getGroup(course.group);
+      if (courseGroup != null) {
         bool quizConflict =
             await isConflictingWithQuiz(courseGroup.quizzes, start, end);
         bool compensationLectureConflict =
@@ -137,12 +127,9 @@ class ScheduleEventsController {
         if (quizConflict || compensationLectureConflict) {
           return true;
         } else {
-          final docTutorial =
-              _database.collection('tutorials').doc(course.tutorial);
-          final tutorialSnapshot = await docTutorial.get();
-          if (tutorialSnapshot.exists) {
-            final courseTutorialData = tutorialSnapshot.data();
-            Tutorial courseTutorial = Tutorial.fromJson(courseTutorialData!);
+          Tutorial? courseTutorial =
+              await Database.getTutorial(course.tutorial);
+          if (courseTutorial != null) {
             bool compensationTutorialConflict =
                 await isConflictingWithCompensationTutorial(
                     courseTutorial.compensationTutorials, start, end);

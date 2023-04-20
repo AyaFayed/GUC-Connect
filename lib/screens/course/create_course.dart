@@ -18,17 +18,18 @@ class _CreateCourseState extends State<CreateCourse> {
 
   final _formKey = GlobalKey<FormState>();
 
-  // text field state
-  String name = '';
+  final controllerName = TextEditingController();
+  final controllerYear = TextEditingController();
   Semester semester = Semester.winter;
-  String year = '';
   String error = '';
 
   void createCourse() async {
     setState(() => error = '');
     if (_formKey.currentState!.validate()) {
       await _courseController.createCourse(
-          name.trim(), semester, int.parse(year));
+          controllerName.text.trim(), semester, int.parse(controllerYear.text));
+      controllerName.clear();
+      controllerYear.clear();
     }
   }
 
@@ -37,6 +38,13 @@ class _CreateCourseState extends State<CreateCourse> {
     Semester.spring,
     Semester.summer
   ];
+
+  @override
+  void dispose() {
+    controllerName.dispose();
+    controllerYear.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +59,7 @@ class _CreateCourseState extends State<CreateCourse> {
               decoration: const InputDecoration(
                   hintText: 'Name e.g.(CSEN 702 Microprocessors)'),
               validator: (val) => val!.isEmpty ? Errors.required : null,
-              onChanged: (val) {
-                setState(() => name = val);
-              },
+              controller: controllerName,
             ),
             const SizedBox(height: 20.0),
             Row(
@@ -91,9 +97,7 @@ class _CreateCourseState extends State<CreateCourse> {
               ],
               decoration: const InputDecoration(hintText: 'Year'),
               validator: (val) => val!.isEmpty ? Errors.required : null,
-              onChanged: (val) {
-                setState(() => year = val);
-              },
+              controller: controllerYear,
             ),
             const SizedBox(height: 40.0),
             LargeBtn(onPressed: createCourse, text: 'Create course'),

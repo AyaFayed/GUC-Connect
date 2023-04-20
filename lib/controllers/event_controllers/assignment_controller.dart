@@ -1,58 +1,50 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:guc_scheduling_app/controllers/user_controller.dart';
+import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/event_controllers_helper.dart';
 import 'package:guc_scheduling_app/models/divisions/group_model.dart';
 import 'package:guc_scheduling_app/models/events/assignment_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
-import 'package:guc_scheduling_app/shared/helper.dart';
 
 class AssignmentController {
-  final FirebaseFirestore _database = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final EventsControllerHelper _helper = EventsControllerHelper();
+  final UserController _user = UserController();
 
   Future scheduleAssignment(String courseId, String title, String description,
       List<String> files, List<String> groupIds, DateTime deadline) async {
-    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
-    final userSnapshot = await docUser.get();
+    UserType userType = await _user.getCurrentUserType();
 
-    if (userSnapshot.exists) {
-      final user = userSnapshot.data();
-      if (getUserTypeFromString(user!['type']) == UserType.professor) {
-        final docAssignment = _database.collection('assignments').doc();
+    if (userType == UserType.professor) {
+      final docAssignment = Database.assignments.doc();
 
-        final quiz = Assignment(
-            id: docAssignment.id,
-            creator: _auth.currentUser?.uid ?? '',
-            course: courseId,
-            title: title,
-            description: description,
-            files: files,
-            groups: groupIds,
-            deadline: deadline);
+      final quiz = Assignment(
+          id: docAssignment.id,
+          creator: _auth.currentUser?.uid ?? '',
+          course: courseId,
+          title: title,
+          description: description,
+          files: files,
+          groups: groupIds,
+          deadline: deadline);
 
-        final json = quiz.toJson();
+      final json = quiz.toJson();
 
-        await docAssignment.set(json);
+      await docAssignment.set(json);
 
-        await _helper.addEventToInstructor(
-            courseId, docAssignment.id, EventType.assignments);
+      await _helper.addEventToInstructor(
+          courseId, docAssignment.id, EventType.assignments);
 
-        await _helper.addEventInDivisions(docAssignment.id,
-            EventType.assignments, DivisionType.groups, groupIds);
-      }
+      await _helper.addEventInDivisions(docAssignment.id, EventType.assignments,
+          DivisionType.groups, groupIds);
     }
   }
 
   Future<List<Assignment>> getGroupAssignments(String groupId) async {
-    final docGroup = _database.collection('groups').doc(groupId);
-    final groupSnapshot = await docGroup.get();
+    Group? group = await Database.getGroup(groupId);
 
-    if (groupSnapshot.exists) {
-      final groupData = groupSnapshot.data();
-      Group group = Group.fromJson(groupData!);
-
+    if (group != null) {
       return (await _helper.getEventsFromList(
               group.assignments, EventType.assignments) as List<dynamic>)
           .cast<Assignment>();
@@ -62,12 +54,8 @@ class AssignmentController {
   }
 
   Future<List<Assignment>> getAssignments(String courseId) async {
-    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
-    final userSnapshot = await docUser.get();
-
-    if (userSnapshot.exists) {
-      final userData = userSnapshot.data();
-      Student student = Student.fromJson(userData!);
+    Student? student = await Database.getStudent(_auth.currentUser?.uid ?? '');
+    if (student != null) {
       for (StudentCourse course in student.courses) {
         if (course.id == courseId) {
           return await getGroupAssignments(course.group);

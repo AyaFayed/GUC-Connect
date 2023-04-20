@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:guc_scheduling_app/controllers/division_controller.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/event_controllers_helper.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/schedule_event_controller.dart';
+import 'package:guc_scheduling_app/controllers/user_controller.dart';
+import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/models/divisions/group_model.dart';
 import 'package:guc_scheduling_app/models/events/quiz_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
@@ -10,9 +10,8 @@ import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 
 class QuizController {
-  final FirebaseFirestore _database = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final DivisionController _divisionController = DivisionController();
+  final UserController _user = UserController();
   final EventsControllerHelper _helper = EventsControllerHelper();
   final ScheduleEventsController _scheduleEventsController =
       ScheduleEventsController();
@@ -25,55 +24,46 @@ class QuizController {
       List<String> groupIds,
       DateTime start,
       DateTime end) async {
-    List<Group> groups =
-        await _divisionController.getGroupListFromIds(groupIds);
+    List<Group> groups = await Database.getGroupListFromIds(groupIds);
     int conflicts =
         await _scheduleEventsController.canScheduleGroup(groups, start, end);
     if (conflicts > 0) {
       return conflicts;
     }
 
-    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
-    final userSnapshot = await docUser.get();
+    UserType userType = await _user.getCurrentUserType();
 
-    if (userSnapshot.exists) {
-      final user = userSnapshot.data();
-      if (getUserTypeFromString(user!['type']) == UserType.professor) {
-        final docQuiz = _database.collection('quizzes').doc();
+    if (userType == UserType.professor) {
+      final docQuiz = Database.quizzes.doc();
 
-        final quiz = Quiz(
-            id: docQuiz.id,
-            creator: _auth.currentUser?.uid ?? '',
-            course: courseId,
-            title: title,
-            description: description,
-            files: files,
-            groups: groupIds,
-            start: start,
-            end: end);
+      final quiz = Quiz(
+          id: docQuiz.id,
+          creator: _auth.currentUser?.uid ?? '',
+          course: courseId,
+          title: title,
+          description: description,
+          files: files,
+          groups: groupIds,
+          start: start,
+          end: end);
 
-        final json = quiz.toJson();
+      final json = quiz.toJson();
 
-        await docQuiz.set(json);
+      await docQuiz.set(json);
 
-        await _helper.addEventToInstructor(
-            courseId, docQuiz.id, EventType.quizzes);
+      await _helper.addEventToInstructor(
+          courseId, docQuiz.id, EventType.quizzes);
 
-        await _helper.addEventInDivisions(
-            docQuiz.id, EventType.quizzes, DivisionType.groups, groupIds);
-      }
+      await _helper.addEventInDivisions(
+          docQuiz.id, EventType.quizzes, DivisionType.groups, groupIds);
     }
     return conflicts;
   }
 
   Future<List<Quiz>> getGroupQuizzes(String groupId) async {
-    final docGroup = _database.collection('groups').doc(groupId);
-    final groupSnapshot = await docGroup.get();
+    Group? group = await Database.getGroup(groupId);
 
-    if (groupSnapshot.exists) {
-      final groupData = groupSnapshot.data();
-      Group group = Group.fromJson(groupData!);
-
+    if (group != null) {
       return (await _helper.getEventsFromList(group.quizzes, EventType.quizzes)
               as List<dynamic>)
           .cast<Quiz>();
@@ -83,12 +73,8 @@ class QuizController {
   }
 
   Future<List<Quiz>> getQuizzes(String courseId) async {
-    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
-    final userSnapshot = await docUser.get();
-
-    if (userSnapshot.exists) {
-      final userData = userSnapshot.data();
-      Student student = Student.fromJson(userData!);
+    Student? student = await Database.getStudent(_auth.currentUser?.uid ?? '');
+    if (student != null) {
       for (StudentCourse course in student.courses) {
         if (course.id == courseId) {
           return await getGroupQuizzes(course.group);

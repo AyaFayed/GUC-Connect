@@ -1,64 +1,55 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/event_controllers_helper.dart';
+import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/models/divisions/group_model.dart';
 import 'package:guc_scheduling_app/models/divisions/tutorial_model.dart';
 import 'package:guc_scheduling_app/models/events/announcement_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
-import 'package:guc_scheduling_app/shared/helper.dart';
 
 class AnnouncementController {
-  final FirebaseFirestore _database = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final EventsControllerHelper _helper = EventsControllerHelper();
+  final UserController _user = UserController();
 
   Future createAnnouncement(String courseId, String title, String description,
       List<String> files, List<String> groups, List<String> tutorials) async {
-    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
-    final userSnapshot = await docUser.get();
+    UserType userType = await _user.getCurrentUserType();
 
-    if (userSnapshot.exists) {
-      final user = userSnapshot.data();
-      if (getUserTypeFromString(user!['type']) == UserType.ta ||
-          getUserTypeFromString(user['type']) == UserType.professor) {
-        final docAnnouncement = _database.collection('announcements').doc();
+    if (userType == UserType.ta || userType == UserType.professor) {
+      final docAnnouncement = Database.announcements.doc();
 
-        final announcement = Announcement(
-            id: docAnnouncement.id,
-            creator: _auth.currentUser?.uid ?? '',
-            course: courseId,
-            title: title,
-            description: description,
-            files: files,
-            groups: groups,
-            tutorials: tutorials,
-            createdAt: DateTime.now());
+      final announcement = Announcement(
+          id: docAnnouncement.id,
+          creator: _auth.currentUser?.uid ?? '',
+          course: courseId,
+          title: title,
+          description: description,
+          files: files,
+          groups: groups,
+          tutorials: tutorials,
+          createdAt: DateTime.now());
 
-        final json = announcement.toJson();
+      final json = announcement.toJson();
 
-        await docAnnouncement.set(json);
+      await docAnnouncement.set(json);
 
-        await _helper.addEventToInstructor(
-            courseId, docAnnouncement.id, EventType.announcements);
+      await _helper.addEventToInstructor(
+          courseId, docAnnouncement.id, EventType.announcements);
 
-        await _helper.addEventInDivisions(docAnnouncement.id,
-            EventType.announcements, DivisionType.groups, groups);
+      await _helper.addEventInDivisions(docAnnouncement.id,
+          EventType.announcements, DivisionType.groups, groups);
 
-        await _helper.addEventInDivisions(docAnnouncement.id,
-            EventType.announcements, DivisionType.tutorials, tutorials);
-      }
+      await _helper.addEventInDivisions(docAnnouncement.id,
+          EventType.announcements, DivisionType.tutorials, tutorials);
     }
   }
 
   Future<List<Announcement>> getGroupAnnouncements(String groupId) async {
-    final docGroup = _database.collection('groups').doc(groupId);
-    final groupSnapshot = await docGroup.get();
+    Group? group = await Database.getGroup(groupId);
 
-    if (groupSnapshot.exists) {
-      final groupData = groupSnapshot.data();
-      Group group = Group.fromJson(groupData!);
-
+    if (group != null) {
       return (await _helper.getEventsFromList(
               group.announcements, EventType.announcements) as List<dynamic>)
           .cast<Announcement>();
@@ -68,13 +59,9 @@ class AnnouncementController {
   }
 
   Future<List<Announcement>> getTutorialAnnouncements(String tutorialId) async {
-    final docTutorial = _database.collection('tutorials').doc(tutorialId);
-    final tutorialSnapshot = await docTutorial.get();
+    Tutorial? tutorial = await Database.getTutorial(tutorialId);
 
-    if (tutorialSnapshot.exists) {
-      final tutorialData = tutorialSnapshot.data();
-      Tutorial tutorial = Tutorial.fromJson(tutorialData!);
-
+    if (tutorial != null) {
       return (await _helper.getEventsFromList(
               tutorial.announcements, EventType.announcements) as List<dynamic>)
           .cast<Announcement>();
@@ -85,12 +72,8 @@ class AnnouncementController {
 
 // my group and my tutorial
   Future<List<Announcement>> getCourseAnnouncements(String courseId) async {
-    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
-    final userSnapshot = await docUser.get();
-
-    if (userSnapshot.exists) {
-      final userData = userSnapshot.data();
-      Student student = Student.fromJson(userData!);
+    Student? student = await Database.getStudent(_auth.currentUser?.uid ?? '');
+    if (student != null) {
       for (StudentCourse course in student.courses) {
         if (courseId == course.id) {
           List<Announcement> groupAnnouncements =

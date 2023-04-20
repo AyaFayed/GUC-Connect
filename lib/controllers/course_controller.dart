@@ -1,19 +1,27 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:guc_scheduling_app/controllers/user_controller.dart';
+import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/models/user/professor_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/models/user/ta_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
-import 'package:guc_scheduling_app/shared/helper.dart';
 
 class CourseController {
-  final FirebaseFirestore _database = FirebaseFirestore.instance;
+  final UserController _user = UserController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // course creation:
   Future createCourse(String name, Semester semester, int year) async {
-    final docCourse = _database.collection('courses').doc();
+    List<Course> allCourses = await Database.getAllCourses();
+    for (Course course in allCourses) {
+      if (course.name == name &&
+          course.semester == semester &&
+          course.year == year) {
+        return 'This course already exists.';
+      }
+    }
+    final docCourse = Database.courses.doc();
 
     final course = Course(
       id: docCourse.id,
@@ -29,18 +37,17 @@ class CourseController {
     final json = course.toJson();
 
     await docCourse.set(json);
+
+    return null;
   }
 
-  Stream<List<Course>> getAllCourses() =>
-      _database.collection('courses').snapshots().map((snapshot) =>
-          snapshot.docs.map((doc) => Course.fromJson(doc.data())).toList());
+  Future<List<Course>> getAllCourses() async {
+    List<Course> allCourses = await Database.getAllCourses();
+    return allCourses;
+  }
 
   Future<List<Course>> getEnrollCourses() async {
-    QuerySnapshot querySnapshot = await _database.collection('courses').get();
-
-    List<Course> allCourses = querySnapshot.docs
-        .map((doc) => Course.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
+    List<Course> allCourses = await Database.getAllCourses();
 
     List<Course> myCourses = await getMyCourses();
 
@@ -57,50 +64,31 @@ class CourseController {
   }
 
   Future<List<Course>> getMyCourses() async {
-    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
-    final userSnapshot = await docUser.get();
+    UserType userType = await _user.getCurrentUserType();
 
-    if (userSnapshot.exists) {
-      final user = userSnapshot.data();
-      switch (getUserTypeFromString(user!['type'])) {
-        case UserType.professor:
-          Professor userData = Professor.fromJson(user);
-          List<String> courseIds =
-              userData.courses.map((course) => course.id).toList();
-          final courses =
-              await Future.wait(courseIds.map((String courseId) async {
-            final docCourse = _database.collection('courses').doc(courseId);
-            final courseSnapshot = await docCourse.get();
-            return Course.fromJson(courseSnapshot.data()!);
-          }));
-          return courses;
-        case UserType.student:
-          Student userData = Student.fromJson(user);
-          List<String> courseIds =
-              userData.courses.map((course) => course.id).toList();
-          final courses =
-              await Future.wait(courseIds.map((String courseId) async {
-            final docCourse = _database.collection('courses').doc(courseId);
-            final courseSnapshot = await docCourse.get();
-            return Course.fromJson(courseSnapshot.data()!);
-          }));
-          return courses;
-        case UserType.ta:
-          TA userData = TA.fromJson(user);
-          List<String> courseIds =
-              userData.courses.map((course) => course.id).toList();
-          final courses =
-              await Future.wait(courseIds.map((String courseId) async {
-            final docCourse = _database.collection('courses').doc(courseId);
-            final courseSnapshot = await docCourse.get();
-            return Course.fromJson(courseSnapshot.data()!);
-          }));
-          return courses;
-        default:
-          return [];
-      }
-    } else {
-      return [];
+    switch (userType) {
+      case UserType.professor:
+        Professor? professor =
+            await Database.getProfessor(_auth.currentUser?.uid ?? '');
+        List<String> courseIds =
+            professor?.courses.map((course) => course.id).toList() ?? [];
+        List<Course> courses = await Database.getCourseListFromIds(courseIds);
+        return courses;
+      case UserType.student:
+        Student? student =
+            await Database.getStudent(_auth.currentUser?.uid ?? '');
+        List<String> courseIds =
+            student?.courses.map((course) => course.id).toList() ?? [];
+        List<Course> courses = await Database.getCourseListFromIds(courseIds);
+        return courses;
+      case UserType.ta:
+        TA? ta = await Database.getTa(_auth.currentUser?.uid ?? '');
+        List<String> courseIds =
+            ta?.courses.map((course) => course.id).toList() ?? [];
+        List<Course> courses = await Database.getCourseListFromIds(courseIds);
+        return courses;
+      default:
+        return [];
     }
   }
 }

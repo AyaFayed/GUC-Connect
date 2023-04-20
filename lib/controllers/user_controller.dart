@@ -1,20 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/models/user/professor_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/models/user/ta_model.dart';
 import 'package:guc_scheduling_app/models/user/user_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
-import 'package:guc_scheduling_app/shared/helper.dart';
 
 class UserController {
-  final FirebaseFirestore _database = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // user creation:
   Future createUser(String? uid, String name, UserType type) async {
     // type : student , ta , professor , admin
-    final docUser = _database.collection('users').doc(uid);
+    final docUser = Database.users.doc(uid);
 
     // ignore: prefer_typing_uninitialized_variables
     final user;
@@ -46,41 +44,39 @@ class UserController {
   }
 
   Future<UserType> getCurrentUserType() async {
-    final docUser = _database.collection('users').doc(_auth.currentUser?.uid);
-    final userSnapshot = await docUser.get();
+    final userDoc = await getCurrentUser();
 
-    if (userSnapshot.exists) {
-      final user = userSnapshot.data();
-      final type = getUserTypeFromString(user!['type']);
-      return type;
+    if (userDoc != null) {
+      final user = UserModel.fromJson(userDoc);
+      return user.type;
     } else {
       return UserType.student;
     }
   }
 
   Future<UserType> getUserType(String uid) async {
-    final docUser = _database.collection('users').doc(uid);
-    final userSnapshot = await docUser.get();
+    UserModel? user = await Database.getUser(uid);
 
-    if (userSnapshot.exists) {
-      final user = userSnapshot.data();
-      final type = getUserTypeFromString(user!['type']);
-      return type;
+    if (user != null) {
+      return user.type;
     } else {
       return UserType.student;
     }
   }
 
   Future<String> getUserName(String uid) async {
-    final docUser = _database.collection('users').doc(uid);
-    final userSnapshot = await docUser.get();
+    UserModel? user = await Database.getUser(uid);
 
-    if (userSnapshot.exists) {
-      final userData = userSnapshot.data();
-      final user = UserModel.fromJson(userData!);
+    if (user != null) {
       return user.name;
     } else {
       return '';
     }
+  }
+
+  Future<Map<String, dynamic>?> getCurrentUser() async {
+    final userDoc =
+        await Database.getDocumentData(Database.users, _auth.currentUser?.uid);
+    return userDoc;
   }
 }
