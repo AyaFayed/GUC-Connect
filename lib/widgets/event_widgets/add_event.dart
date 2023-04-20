@@ -50,7 +50,7 @@ class _AddEventState extends State<AddEvent> {
         ? const CircularProgressIndicator()
         : Column(children: <Widget>[
             TextFormField(
-              decoration: const InputDecoration(hintText: 'Title'),
+              decoration: const InputDecoration(labelText: 'Title'),
               validator: (val) => val!.isEmpty ? Errors.required : null,
               controller: widget.controllerTitle,
             ),
@@ -59,7 +59,7 @@ class _AddEventState extends State<AddEvent> {
               keyboardType: TextInputType.multiline,
               minLines: 1,
               maxLines: 7,
-              decoration: const InputDecoration(hintText: 'Description'),
+              decoration: const InputDecoration(labelText: 'Description'),
               validator: (val) => val!.isEmpty ? Errors.required : null,
               controller: widget.controllerDescription,
             ),

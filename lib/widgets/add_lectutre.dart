@@ -41,7 +41,7 @@ class _AddLectureState extends State<AddLecture> {
       children: <Widget>[
         const SizedBox(height: 20.0),
         DropdownButtonFormField(
-            decoration: const InputDecoration(hintText: 'Lecture Day'),
+            decoration: const InputDecoration(labelText: 'Lecture Day'),
             validator: (val) => val == null ? Errors.required : null,
             items: daysOfWeek,
             onChanged: (val) => setState(() {
@@ -50,7 +50,7 @@ class _AddLectureState extends State<AddLecture> {
                 })),
         const SizedBox(height: 20.0),
         DropdownButtonFormField(
-            decoration: const InputDecoration(hintText: 'Lecture slot'),
+            decoration: const InputDecoration(labelText: 'Lecture slot'),
             validator: (val) => val == null ? Errors.required : null,
             items: slots,
             onChanged: (val) => setState(() {

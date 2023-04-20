@@ -162,7 +162,7 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
                   FilteringTextInputFormatter.digitsOnly
                 ],
                 decoration:
-                    const InputDecoration(hintText: 'Duration in minutes'),
+                    const InputDecoration(labelText: 'Duration in minutes'),
                 validator: (val) => val!.isEmpty ? Errors.duration : null,
                 controller: controllerDuration,
               ),

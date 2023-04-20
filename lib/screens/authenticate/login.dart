@@ -56,14 +56,14 @@ class _LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 60.0),
                 TextFormField(
-                  decoration: const InputDecoration(hintText: 'Email'),
+                  decoration: const InputDecoration(labelText: 'Email'),
                   validator: (val) => val!.isEmpty ? Errors.required : null,
                   controller: controllerEmail,
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
                   obscureText: true,
-                  decoration: const InputDecoration(hintText: 'Password'),
+                  decoration: const InputDecoration(labelText: 'Password'),
                   validator: (val) => val!.isEmpty ? Errors.required : null,
                   controller: controllerPassword,
                 ),

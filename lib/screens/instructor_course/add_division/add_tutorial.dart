@@ -99,7 +99,7 @@ class _AddTutorialState extends State<AddTutorial> {
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly
                 ],
-                decoration: const InputDecoration(hintText: 'Tutorial number'),
+                decoration: const InputDecoration(labelText: 'Tutorial number'),
                 validator: (val) => val!.isEmpty ? Errors.required : null,
                 controller: controllerTutorialNumber,
               ),

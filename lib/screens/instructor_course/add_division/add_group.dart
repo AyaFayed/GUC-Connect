@@ -97,7 +97,7 @@ class _AddGroupState extends State<AddGroup> {
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly
                 ],
-                decoration: const InputDecoration(hintText: 'Group number'),
+                decoration: const InputDecoration(labelText: 'Group number'),
                 validator: (val) => val!.isEmpty ? Errors.required : null,
                 controller: controllerGroupNumber,
               ),

@@ -87,7 +87,8 @@ class _CreateCourseState extends State<CreateCourse> {
             const SizedBox(height: 40.0),
             TextFormField(
               decoration: const InputDecoration(
-                  hintText: 'Name e.g.(CSEN 702 Microprocessors)'),
+                  hintText: 'Name e.g.(CSEN 702 Microprocessors)',
+                  labelText: 'Name'),
               validator: (val) => val!.isEmpty ? Errors.required : null,
               controller: controllerName,
             ),
@@ -125,7 +126,7 @@ class _CreateCourseState extends State<CreateCourse> {
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly
               ],
-              decoration: const InputDecoration(hintText: 'Year'),
+              decoration: const InputDecoration(labelText: 'Year'),
               validator: (val) => val!.isEmpty ? Errors.required : null,
               controller: controllerYear,
             ),

@@ -90,7 +90,7 @@ class _SignupState extends State<Signup> {
                 ),
                 const SizedBox(height: 40.0),
                 TextFormField(
-                  decoration: const InputDecoration(hintText: 'Email'),
+                  decoration: const InputDecoration(labelText: 'Email'),
                   validator: (val) => !isValidMail(val!) ? Errors.email : null,
                   controller: controllerEmail,
                   onChanged: (value) {
@@ -103,14 +103,14 @@ class _SignupState extends State<Signup> {
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
-                  decoration: const InputDecoration(hintText: 'Name'),
+                  decoration: const InputDecoration(labelText: 'Name'),
                   validator: (val) => val!.isEmpty ? Errors.required : null,
                   controller: controllerName,
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
                   obscureText: true,
-                  decoration: const InputDecoration(hintText: 'Password'),
+                  decoration: const InputDecoration(labelText: 'Password'),
                   validator: (val) => val!.length < 6 ? Errors.password : null,
                   controller: controllerPassword,
                 ),
@@ -118,7 +118,7 @@ class _SignupState extends State<Signup> {
                 TextFormField(
                   obscureText: true,
                   decoration:
-                      const InputDecoration(hintText: 'Confirm password'),
+                      const InputDecoration(labelText: 'Confirm password'),
                   validator: (val) => val != controllerPassword.text
                       ? Errors.confirmPassword
                       : null,
