@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 
@@ -35,7 +36,7 @@ class _SelectState extends State<DateTimeSelector> {
         label: Text(
           widget.dateTime == null
               ? Errors.dateTime
-              : widget.dateTime.toString(),
+              : formatDate(widget.dateTime ?? DateTime.now()),
           style: TextStyle(color: AppColors.dark, fontSize: Sizes.small),
         ));
   }
