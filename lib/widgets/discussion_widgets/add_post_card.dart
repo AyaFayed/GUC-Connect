@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/controllers/discussion_controller.dart';
 import 'package:guc_scheduling_app/models/discussion/post_model.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/small_btn.dart';
@@ -15,6 +16,7 @@ class AddPost extends StatefulWidget {
 class _AddPostState extends State<AddPost> {
   final controllerPost = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final DiscussionController _discussionController = DiscussionController();
 
   Future<void> addPost() async {}
 

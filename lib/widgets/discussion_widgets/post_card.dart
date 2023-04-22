@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/controllers/discussion_controller.dart';
 import 'package:guc_scheduling_app/models/discussion/post_model.dart';
 
 class PostCard extends StatefulWidget {
@@ -11,6 +12,8 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
+  final DiscussionController _discussionController = DiscussionController();
+
   @override
   Widget build(BuildContext context) {
     return Container();

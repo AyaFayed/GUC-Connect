@@ -38,7 +38,7 @@ class DiscussionController {
     }
   }
 
-  Future addReplyToPost(String content, String postId) async {
+  Future<Reply?> addReplyToPost(String content, String postId) async {
     Reply reply = Reply(
         content: content,
         author: _auth.currentUser?.uid ?? '',
@@ -49,7 +49,11 @@ class DiscussionController {
       List<Reply> replies = post.replies;
       replies.add(reply);
       await Database.posts.doc(postId).update({'replies': replies});
+
+      return reply;
     }
+
+    return null;
   }
 
   Future deletePost(String postId, String courseId) async {
@@ -97,6 +101,7 @@ class DiscussionController {
 
     if (course != null) {
       List<Post> posts = await Database.getPostListFromIds(course.posts);
+      posts.sort(((Post a, Post b) => b.createdAt.compareTo(a.createdAt)));
       return posts;
     }
 
