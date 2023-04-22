@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/small_btn.dart';
 import 'package:guc_scheduling_app/widgets/groups_dropdown.dart';
 import 'package:guc_scheduling_app/widgets/tutorials_dropdown.dart';
+import 'package:path/path.dart';
 
 class AddEvent extends StatefulWidget {
   final String courseId;
@@ -32,6 +34,7 @@ class _AddEventState extends State<AddEvent> {
   final UserController _userController = UserController();
 
   UserType? _userType;
+  String fileName = 'No File Selected';
 
   void pickFile() async {
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
@@ -42,6 +45,7 @@ class _AddEventState extends State<AddEvent> {
     setState(() {
       widget.file.clear();
       widget.file.add(File(path));
+      fileName = basename(path);
     });
   }
 
@@ -87,7 +91,13 @@ class _AddEventState extends State<AddEvent> {
                     courseId: widget.courseId,
                     selectedTutorialIds: widget.selectedGroupIds),
             const SizedBox(height: 20.0),
-            SmallBtn(onPressed: pickFile, text: 'Add file')
+            SmallBtn(onPressed: pickFile, text: 'Add file'),
+            const SizedBox(height: 5),
+            Text(
+              fileName,
+              style: TextStyle(
+                  fontSize: Sizes.xsmall, fontWeight: FontWeight.w400),
+            ),
           ]);
   }
 }

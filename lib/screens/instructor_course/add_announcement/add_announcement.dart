@@ -113,7 +113,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
                         file: file,
                         selectedGroupIds: selectedGroupIds,
                         courseId: widget.courseId),
-                    const SizedBox(height: 60.0),
+                    const SizedBox(height: 40.0),
                     LargeBtn(
                         onPressed: addAnnouncement, text: 'Add announcement'),
                   ],
