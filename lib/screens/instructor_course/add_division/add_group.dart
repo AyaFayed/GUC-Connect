@@ -8,7 +8,7 @@ import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/add_lectutre.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
-import 'package:guc_scheduling_app/widgets/buttons/small_btn.dart';
+import 'package:guc_scheduling_app/widgets/buttons/small_icon_btn.dart';
 import 'package:quickalert/quickalert.dart';
 
 class AddGroup extends StatefulWidget {
@@ -104,7 +104,7 @@ class _AddGroupState extends State<AddGroup> {
               const SizedBox(height: 20.0),
               ...addLecture,
               const SizedBox(height: 20.0),
-              SmallBtn(
+              SmallIconBtn(
                   onPressed: () {
                     setState(() {
                       Lecture lecture =
@@ -117,7 +117,7 @@ class _AddGroupState extends State<AddGroup> {
                   },
                   text: 'Add lecture'),
               addLecture.length > 1
-                  ? SmallBtn(
+                  ? SmallIconBtn(
                       onPressed: () {
                         setState(() {
                           lectures.removeLast();

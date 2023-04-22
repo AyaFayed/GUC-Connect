@@ -6,7 +6,7 @@ import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
-import 'package:guc_scheduling_app/widgets/buttons/small_btn.dart';
+import 'package:guc_scheduling_app/widgets/buttons/small_icon_btn.dart';
 import 'package:guc_scheduling_app/widgets/groups_dropdown.dart';
 import 'package:guc_scheduling_app/widgets/tutorials_dropdown.dart';
 import 'package:path/path.dart';
@@ -91,7 +91,7 @@ class _AddEventState extends State<AddEvent> {
                     courseId: widget.courseId,
                     selectedTutorialIds: widget.selectedGroupIds),
             const SizedBox(height: 20.0),
-            SmallBtn(onPressed: pickFile, text: 'Add file'),
+            SmallIconBtn(onPressed: pickFile, text: 'Add file'),
             const SizedBox(height: 5),
             Text(
               fileName,
