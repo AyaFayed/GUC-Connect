@@ -31,7 +31,7 @@ class _EventDetailsState extends State<EventDetails> {
   bool _progress = false;
   String downloadConfirmation = '';
 
-  ReceivePort _port = ReceivePort();
+  final ReceivePort _port = ReceivePort();
 
   @override
   void initState() {
