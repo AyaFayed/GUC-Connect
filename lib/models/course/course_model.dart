@@ -10,6 +10,7 @@ class Course {
   List<String> tas;
   List<String> groups;
   List<String> tutorials;
+  List<String> posts;
 
   Course({
     required this.id,
@@ -20,6 +21,7 @@ class Course {
     required this.tas,
     required this.groups,
     required this.tutorials,
+    required this.posts,
   });
 
   Map<String, dynamic> toJson() => {
@@ -31,6 +33,7 @@ class Course {
         'tas': tas,
         'groups': groups,
         'tutorials': tutorials,
+        'posts': posts,
       };
 
   static Course fromJson(Map<String, dynamic> json) => Course(
@@ -42,5 +45,6 @@ class Course {
         tas: (json['tas'] as List<dynamic>).cast<String>(),
         groups: (json['groups'] as List<dynamic>).cast<String>(),
         tutorials: (json['tutorials'] as List<dynamic>).cast<String>(),
+        posts: (json['posts'] as List<dynamic>).cast<String>(),
       );
 }

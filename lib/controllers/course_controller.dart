@@ -32,6 +32,7 @@ class CourseController {
       tas: [],
       groups: [],
       tutorials: [],
+      posts: [],
     );
 
     final json = course.toJson();
