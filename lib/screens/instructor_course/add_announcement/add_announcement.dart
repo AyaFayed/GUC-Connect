@@ -33,7 +33,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
   UserType? _userType;
 
   List<String> selectedGroupIds = [];
-  File? file;
+  List<File> file = [];
   UploadTask? task;
 
   Future<void> addAnnouncement() async {
@@ -50,6 +50,10 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
         );
         controllerTitle.clear();
         controllerDescription.clear();
+        setState(() {
+          file = [];
+          task = null;
+        });
         if (context.mounted) {
           QuickAlert.show(
             context: context,

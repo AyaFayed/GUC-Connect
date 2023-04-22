@@ -13,7 +13,7 @@ class AddEvent extends StatefulWidget {
   final String courseId;
   final TextEditingController controllerTitle;
   final TextEditingController controllerDescription;
-  final File? file;
+  final List<File> file;
   final List<String> selectedGroupIds;
 
   const AddEvent(
@@ -33,8 +33,6 @@ class _AddEventState extends State<AddEvent> {
 
   UserType? _userType;
 
-  File? file;
-
   void pickFile() async {
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
     if (result == null) return;
@@ -42,7 +40,8 @@ class _AddEventState extends State<AddEvent> {
     final path = result.files.single.path!;
 
     setState(() {
-      file = File(path);
+      widget.file.clear();
+      widget.file.add(File(path));
     });
   }
 

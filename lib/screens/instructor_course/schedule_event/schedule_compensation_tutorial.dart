@@ -33,7 +33,7 @@ class _ScheduleCompensationTutorialState
 
   String error = '';
   List<String> selectedTutorialIds = [];
-  File? file;
+  List<File> file = [];
   UploadTask? task;
   DateTime? startDateTime;
 
@@ -55,7 +55,7 @@ class _ScheduleCompensationTutorialState
       controllerTitle.clear();
       setState(() {
         startDateTime = null;
-        file = null;
+        file = [];
         task = null;
       });
       if (context.mounted) {

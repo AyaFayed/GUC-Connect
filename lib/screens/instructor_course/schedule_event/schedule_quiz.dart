@@ -30,7 +30,7 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
 
   String error = '';
   List<String> selectedGroupIds = [];
-  File? file;
+  List<File> file = [];
   UploadTask? task;
   DateTime? startDateTime;
 
@@ -52,7 +52,7 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
       controllerTitle.clear();
       setState(() {
         startDateTime = null;
-        file = null;
+        file = [];
         task = null;
       });
       if (context.mounted) {

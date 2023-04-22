@@ -28,7 +28,7 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
 
   String error = '';
   List<String> selectedGroupIds = [];
-  File? file;
+  List<File> file = [];
   UploadTask? task;
   DateTime? startDateTime;
 
@@ -56,6 +56,8 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
           controllerDescription.clear();
           setState(() {
             startDateTime = null;
+            file = [];
+            task = null;
           });
           if (context.mounted) {
             QuickAlert.show(
