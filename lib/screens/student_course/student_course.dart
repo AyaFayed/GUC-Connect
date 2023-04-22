@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/screens/discussion/discussion.dart';
 import 'package:guc_scheduling_app/screens/student_course/announcements.dart';
 import 'package:guc_scheduling_app/screens/student_course/assessments/assessments.dart';
 import 'package:guc_scheduling_app/screens/student_course/compensations/compensations.dart';
@@ -34,6 +35,9 @@ class _StudentCourseState extends State<StudentCourse> {
       Announcements(
         courseId: widget.courseId,
         courseName: widget.courseName,
+      ),
+      Discussion(
+        courseId: widget.courseId,
       ),
     ];
   }
@@ -93,6 +97,10 @@ class _StudentCourseState extends State<StudentCourse> {
           BottomNavigationBarItem(
             icon: Icon(Icons.schedule),
             label: 'Compensations',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people_alt_outlined),
+            label: 'Discussion',
           ),
         ],
         currentIndex: _selectedIndex,

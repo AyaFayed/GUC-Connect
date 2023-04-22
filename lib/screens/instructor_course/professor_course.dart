@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/screens/discussion/discussion.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_announcement/add_announcement.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_division/add_group.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_event.dart';
@@ -32,7 +33,7 @@ class _ProfessorCourseState extends State<ProfessorCourse> {
       AddGroup(
         courseId: widget.courseId,
       ),
-      AddGroup(
+      Discussion(
         courseId: widget.courseId,
       ),
     ];
@@ -84,8 +85,8 @@ class _ProfessorCourseState extends State<ProfessorCourse> {
             label: 'Add group',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.more_horiz),
-            label: 'More options',
+            icon: Icon(Icons.people_alt_outlined),
+            label: 'Discussion',
           ),
         ],
         currentIndex: _selectedIndex,

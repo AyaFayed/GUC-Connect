@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/screens/discussion/discussion.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_announcement/add_announcement.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_division/add_tutorial.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_compensation_tutorial.dart';
@@ -31,7 +32,7 @@ class _TACourseState extends State<TACourse> {
       AddTutorial(
         courseId: widget.courseId,
       ),
-      AddTutorial(
+      Discussion(
         courseId: widget.courseId,
       ),
     ];
@@ -70,8 +71,8 @@ class _TACourseState extends State<TACourse> {
             label: 'Add tutorial',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.more_horiz),
-            label: 'More options',
+            icon: Icon(Icons.people_alt_outlined),
+            label: 'Discussion',
           ),
         ],
         currentIndex: _selectedIndex,
