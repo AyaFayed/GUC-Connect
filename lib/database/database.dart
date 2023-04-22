@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
+import 'package:guc_scheduling_app/models/discussion/post_model.dart';
 import 'package:guc_scheduling_app/models/divisions/group_model.dart';
 import 'package:guc_scheduling_app/models/divisions/tutorial_model.dart';
 import 'package:guc_scheduling_app/models/events/announcement_model.dart';
@@ -32,6 +33,8 @@ class Database {
       database.collection('compensationTutorials');
   static CollectionReference<Map<String, dynamic>> quizzes =
       database.collection('quizzes');
+  static CollectionReference<Map<String, dynamic>> posts =
+      database.collection('posts');
 
   static Future<Map<String, dynamic>?> getDocumentData(
       CollectionReference<Map<String, dynamic>> docRef, String? docId) async {
@@ -49,6 +52,15 @@ class Database {
     if (courseData != null) {
       Course course = Course.fromJson(courseData);
       return course;
+    }
+    return null;
+  }
+
+  static Future<Post?> getPost(String postId) async {
+    final postData = await getDocumentData(posts, postId);
+    if (postData != null) {
+      Post post = Post.fromJson(postData);
+      return post;
     }
     return null;
   }
@@ -229,5 +241,16 @@ class Database {
       }
     }
     return courses;
+  }
+
+  static Future<List<Post>> getPostListFromIds(List<String> ids) async {
+    List<Post> posts = [];
+    for (String postId in ids) {
+      Post? post = await getPost(postId);
+      if (post != null) {
+        posts.add(post);
+      }
+    }
+    return posts;
   }
 }
