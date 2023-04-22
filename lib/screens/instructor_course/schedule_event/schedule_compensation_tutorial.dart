@@ -79,7 +79,7 @@ class _ScheduleCompensationTutorialState
     }
   }
 
-  void scheduleCompensationTutorial() async {
+  Future<void> scheduleCompensationTutorial() async {
     setState(() {
       error = '';
     });

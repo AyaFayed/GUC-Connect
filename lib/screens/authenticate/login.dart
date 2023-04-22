@@ -22,7 +22,7 @@ class _LoginState extends State<Login> {
 
   String error = '';
 
-  void login() async {
+  Future<void> login() async {
     if (_formKey.currentState!.validate()) {
       dynamic result = await _auth.login(
           controllerEmail.text.trim(), controllerPassword.text);

@@ -79,7 +79,7 @@ class _ScheduleCompensationLectureState
     }
   }
 
-  void scheduleCompensationLecture() async {
+  Future<void> scheduleCompensationLecture() async {
     setState(() {
       error = '';
     });

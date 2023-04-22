@@ -27,7 +27,7 @@ class _SignupState extends State<Signup> {
   bool _isInstructor = false;
   String error = '';
 
-  void signup() async {
+  Future<void> signup() async {
     if (_formKey.currentState!.validate()) {
       dynamic result = await _auth.signup(controllerEmail.text.trim(),
           controllerPassword.text, controllerName.text, _selectedRole == 2);

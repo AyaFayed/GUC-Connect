@@ -76,7 +76,7 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
     }
   }
 
-  void scheduleQuiz() async {
+  Future<void> scheduleQuiz() async {
     setState(() {
       error = '';
     });

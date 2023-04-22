@@ -17,7 +17,7 @@ class InstructorEnroll extends StatelessWidget {
       required this.year,
       required this.courseId});
 
-  void enroll(BuildContext context) async {
+  Future<void> enroll(BuildContext context) async {
     final EnrollmentController enrollmentController = EnrollmentController();
     await enrollmentController.instructorEnroll(courseId);
     if (context.mounted) {

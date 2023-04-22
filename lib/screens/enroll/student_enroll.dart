@@ -39,7 +39,7 @@ class _StudentEnrollState extends State<StudentEnroll> {
   List<DropdownMenuEntry>? groups;
   List<DropdownMenuEntry>? tutorials;
 
-  void enroll() async {
+  Future<void> enroll() async {
     if (selectedGroupId.isEmpty || selectedTutorialId.isEmpty) {
       setState(() {
         error = Errors.studentEnroll;

@@ -32,7 +32,7 @@ class _AddGroupState extends State<AddGroup> {
     )
   ];
 
-  void addGroup() async {
+  Future<void> addGroup() async {
     if (_formKey.currentState!.validate()) {
       try {
         dynamic result = await _divisionController.createGroup(

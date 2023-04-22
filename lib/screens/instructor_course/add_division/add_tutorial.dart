@@ -32,7 +32,7 @@ class _AddTutorialState extends State<AddTutorial> {
     )
   ];
 
-  void addTutorial() async {
+  Future<void> addTutorial() async {
     if (_formKey.currentState!.validate()) {
       try {
         dynamic result = await _divisionController.createTutorial(

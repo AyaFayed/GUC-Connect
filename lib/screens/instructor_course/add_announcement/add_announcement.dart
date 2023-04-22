@@ -36,7 +36,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
   File? file;
   UploadTask? task;
 
-  void addAnnouncement() async {
+  Future<void> addAnnouncement() async {
     if (_formKey.currentState!.validate()) {
       try {
         String? fileUrl = await uploadFile(file, task);

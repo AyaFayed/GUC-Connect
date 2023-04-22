@@ -32,7 +32,7 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
   UploadTask? task;
   DateTime? startDateTime;
 
-  void scheduleAssignment() async {
+  Future<void> scheduleAssignment() async {
     setState(() {
       error = '';
     });

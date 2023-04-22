@@ -24,7 +24,7 @@ class _CreateCourseState extends State<CreateCourse> {
   final controllerYear = TextEditingController();
   Semester semester = Semester.winter;
 
-  void createCourse() async {
+  Future<void> createCourse() async {
     if (_formKey.currentState!.validate()) {
       try {
         dynamic result = await _courseController.createCourse(
