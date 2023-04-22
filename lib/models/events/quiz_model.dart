@@ -11,7 +11,7 @@ class Quiz extends Event {
       required super.course,
       required super.title,
       required super.description,
-      required super.files,
+      required super.file,
       required this.groups,
       required this.start,
       required this.end});
@@ -30,7 +30,7 @@ class Quiz extends Event {
       course: json['course'],
       title: json['title'],
       description: json['description'],
-      files: (json['files'] as List<dynamic>).cast<String>(),
+      file: json['file'],
       groups: (json['groups'] as List<dynamic>).cast<String>(),
       start: DateTime.fromMillisecondsSinceEpoch(json['start']),
       end: DateTime.fromMillisecondsSinceEpoch(json['end']));

@@ -11,7 +11,7 @@ class Announcement extends Event {
       required super.course,
       required super.title,
       required super.description,
-      required super.files,
+      required super.file,
       required this.groups,
       required this.tutorials,
       required this.createdAt});
@@ -32,6 +32,6 @@ class Announcement extends Event {
       description: json['description'],
       groups: (json['groups'] as List<dynamic>).cast<String>(),
       tutorials: (json['tutorials'] as List<dynamic>).cast<String>(),
-      files: (json['files'] as List<dynamic>).cast<String>(),
+      file: json['file'],
       createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt']));
 }

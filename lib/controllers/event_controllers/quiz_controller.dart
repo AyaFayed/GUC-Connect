@@ -16,34 +16,15 @@ class QuizController {
       ScheduleEventsController();
 
   Future<int> canScheduleQuiz(
-      String courseId,
-      String title,
-      String description,
-      List<String> files,
-      List<String> groupIds,
-      DateTime start,
-      DateTime end) async {
+      List<String> groupIds, DateTime start, DateTime end) async {
     List<Group> groups = await Database.getGroupListFromIds(groupIds);
     int conflicts =
         await _scheduleEventsController.canScheduleGroup(groups, start, end);
-    if (conflicts > 0) {
-      return conflicts;
-    }
-
-    await scheduleQuiz(
-        courseId, title, description, files, groupIds, start, end);
-
-    return 0;
+    return conflicts;
   }
 
-  Future scheduleQuiz(
-      String courseId,
-      String title,
-      String description,
-      List<String> files,
-      List<String> groupIds,
-      DateTime start,
-      DateTime end) async {
+  Future scheduleQuiz(String courseId, String title, String description,
+      String? file, List<String> groupIds, DateTime start, DateTime end) async {
     UserType userType = await _user.getCurrentUserType();
 
     if (userType == UserType.professor) {
@@ -55,7 +36,7 @@ class QuizController {
           course: courseId,
           title: title,
           description: description,
-          files: files,
+          file: file,
           groups: groupIds,
           start: start,
           end: end);

@@ -14,7 +14,7 @@ class AnnouncementController {
   final UserController _user = UserController();
 
   Future createAnnouncement(String courseId, String title, String description,
-      List<String> files, List<String> groups, List<String> tutorials) async {
+      String? file, List<String> groups, List<String> tutorials) async {
     UserType userType = await _user.getCurrentUserType();
 
     if (userType == UserType.ta || userType == UserType.professor) {
@@ -26,7 +26,7 @@ class AnnouncementController {
           course: courseId,
           title: title,
           description: description,
-          files: files,
+          file: file,
           groups: groups,
           tutorials: tutorials,
           createdAt: DateTime.now());

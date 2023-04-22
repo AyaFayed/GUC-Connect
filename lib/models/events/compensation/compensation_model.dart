@@ -10,7 +10,7 @@ class Compensation extends Event {
       required super.course,
       required super.title,
       required super.description,
-      required super.files,
+      required super.file,
       required this.start,
       required this.end});
 
@@ -27,7 +27,7 @@ class Compensation extends Event {
       course: json['course'],
       title: json['title'],
       description: json['description'],
-      files: (json['files'] as List<dynamic>).cast<String>(),
+      file: json['file'],
       start: DateTime.fromMillisecondsSinceEpoch(json['start']),
       end: DateTime.fromMillisecondsSinceEpoch(json['end']));
 }

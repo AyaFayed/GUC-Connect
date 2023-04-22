@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/assignment_controller.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/date_time_selector.dart';
@@ -24,7 +28,8 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
 
   String error = '';
   List<String> selectedGroupIds = [];
-  List<String> files = [];
+  File? file;
+  UploadTask? task;
   DateTime? startDateTime;
 
   void scheduleAssignment() async {
@@ -38,11 +43,12 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
         });
       } else {
         try {
+          String? fileUrl = await uploadFile(file, task);
           await _assignmentController.scheduleAssignment(
             widget.courseId,
             controllerTitle.text,
             controllerDescription.text,
-            files,
+            fileUrl,
             selectedGroupIds,
             startDateTime ?? DateTime.now(),
           );
@@ -113,7 +119,7 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
               AddEvent(
                   controllerTitle: controllerTitle,
                   controllerDescription: controllerDescription,
-                  files: files,
+                  file: file,
                   selectedGroupIds: selectedGroupIds,
                   courseId: widget.courseId),
               const SizedBox(height: 40.0),

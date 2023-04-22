@@ -13,7 +13,7 @@ class AssignmentController {
   final UserController _user = UserController();
 
   Future scheduleAssignment(String courseId, String title, String description,
-      List<String> files, List<String> groupIds, DateTime deadline) async {
+      String? file, List<String> groupIds, DateTime deadline) async {
     UserType userType = await _user.getCurrentUserType();
 
     if (userType == UserType.professor) {
@@ -25,7 +25,7 @@ class AssignmentController {
           course: courseId,
           title: title,
           description: description,
-          files: files,
+          file: file,
           groups: groupIds,
           deadline: deadline);
 

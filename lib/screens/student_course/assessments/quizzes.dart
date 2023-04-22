@@ -33,7 +33,7 @@ class _QuizzesState extends State<Quizzes> {
           title: quiz.title,
           subtitle: formatDateRange(quiz.start, quiz.end),
           description: quiz.description,
-          files: quiz.files);
+          file: quiz.file);
     }).toList();
 
     setState(() {

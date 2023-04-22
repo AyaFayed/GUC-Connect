@@ -38,7 +38,7 @@ class _CompensationTutorialsState extends State<CompensationTutorials> {
           subtitle: formatDateRange(
               compensationTutorial.start, compensationTutorial.end),
           description: compensationTutorial.description,
-          files: compensationTutorial.files);
+          file: compensationTutorial.file);
     }).toList();
 
     setState(() {

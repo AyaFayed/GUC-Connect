@@ -19,32 +19,19 @@ class CompensationController {
       ScheduleEventsController();
 
   Future<int> canScheduleCompensationLecture(
-      String courseId,
-      String title,
-      String description,
-      List<String> files,
-      List<String> groupIds,
-      DateTime start,
-      DateTime end) async {
+      List<String> groupIds, DateTime start, DateTime end) async {
     List<Group> groups = await Database.getGroupListFromIds(groupIds);
 
     int conflicts =
         await _scheduleEventsController.canScheduleGroup(groups, start, end);
-    if (conflicts > 0) {
-      return conflicts;
-    }
-
-    await scheduleCompensationLecture(
-        courseId, title, description, files, groupIds, start, end);
-
-    return 0;
+    return conflicts;
   }
 
   Future scheduleCompensationLecture(
       String courseId,
       String title,
       String description,
-      List<String> files,
+      String? file,
       List<String> groupIds,
       DateTime start,
       DateTime end) async {
@@ -58,7 +45,7 @@ class CompensationController {
           course: courseId,
           title: title,
           description: description,
-          files: files,
+          file: file,
           groups: groupIds,
           start: start,
           end: end);
@@ -76,32 +63,19 @@ class CompensationController {
   }
 
   Future<int> canScheduleCompensationTutorial(
-      String courseId,
-      String title,
-      String description,
-      List<String> files,
-      List<String> tutorialIds,
-      DateTime start,
-      DateTime end) async {
+      List<String> tutorialIds, DateTime start, DateTime end) async {
     List<Tutorial> tutorials =
         await Database.getTutorialListFromIds(tutorialIds);
     int conflicts = await _scheduleEventsController.canScheduleTutorial(
         tutorials, start, end);
-    if (conflicts > 0) {
-      return conflicts;
-    }
-
-    await scheduleCompensationTutorial(
-        courseId, title, description, files, tutorialIds, start, end);
-
-    return 0;
+    return conflicts;
   }
 
   Future scheduleCompensationTutorial(
       String courseId,
       String title,
       String description,
-      List<String> files,
+      String? file,
       List<String> tutorialIds,
       DateTime start,
       DateTime end) async {
@@ -116,7 +90,7 @@ class CompensationController {
           course: courseId,
           title: title,
           description: description,
-          files: files,
+          file: file,
           tutorials: tutorialIds,
           start: start,
           end: end);

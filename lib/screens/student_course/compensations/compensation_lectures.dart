@@ -38,7 +38,7 @@ class _CompensationLecturesState extends State<CompensationLectures> {
           subtitle: formatDateRange(
               compensationLecture.start, compensationLecture.end),
           description: compensationLecture.description,
-          files: compensationLecture.files);
+          file: compensationLecture.file);
     }).toList();
 
     setState(() {

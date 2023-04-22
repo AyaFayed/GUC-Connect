@@ -4,7 +4,7 @@ class Event {
   String course;
   String title;
   String description;
-  List<String> files;
+  String? file;
 
   Event(
       {required this.id,
@@ -12,7 +12,7 @@ class Event {
       required this.course,
       required this.title,
       required this.description,
-      required this.files});
+      required this.file});
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -20,7 +20,7 @@ class Event {
         'course': course,
         'title': title,
         'description': description,
-        'files': files
+        'file': file
       };
 
   static Event fromJson(Map<String, dynamic> json) => Event(
@@ -29,7 +29,7 @@ class Event {
         course: json['course'],
         title: json['title'],
         description: json['description'],
-        files: (json['files'] as List<dynamic>).cast<String>(),
+        file: json['file'],
       );
 }
 
@@ -37,11 +37,11 @@ class DisplayEvent {
   String title;
   String subtitle;
   String description;
-  List<String> files;
+  String? file;
 
   DisplayEvent(
       {required this.title,
       required this.subtitle,
       required this.description,
-      required this.files});
+      required this.file});
 }

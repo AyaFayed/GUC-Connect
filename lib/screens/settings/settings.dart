@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guc_scheduling_app/controllers/auth_controller.dart';
+import 'package:guc_scheduling_app/services/authentication.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
@@ -10,14 +13,14 @@ class AddEvent extends StatefulWidget {
   final String courseId;
   final TextEditingController controllerTitle;
   final TextEditingController controllerDescription;
-  final List<String> files;
+  final File? file;
   final List<String> selectedGroupIds;
 
   const AddEvent(
       {super.key,
       required this.controllerTitle,
       required this.controllerDescription,
-      required this.files,
+      required this.file,
       required this.selectedGroupIds,
       required this.courseId});
 
@@ -30,10 +33,17 @@ class _AddEventState extends State<AddEvent> {
 
   UserType? _userType;
 
-  @override
-  void initState() {
-    super.initState();
-    _getData();
+  File? file;
+
+  void pickFile() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    if (result == null) return;
+
+    final path = result.files.single.path!;
+
+    setState(() {
+      file = File(path);
+    });
   }
 
   Future<void> _getData() async {
@@ -42,6 +52,12 @@ class _AddEventState extends State<AddEvent> {
     setState(() {
       _userType = userType;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getData();
   }
 
   @override
@@ -72,7 +88,7 @@ class _AddEventState extends State<AddEvent> {
                     courseId: widget.courseId,
                     selectedTutorialIds: widget.selectedGroupIds),
             const SizedBox(height: 20.0),
-            SmallBtn(onPressed: () {}, text: 'Add files')
+            SmallBtn(onPressed: pickFile, text: 'Add file')
           ]);
   }
 }

@@ -35,7 +35,7 @@ class _AssignmentsState extends State<Assignments> {
           title: assignment.title,
           subtitle: 'Deadline ${formatDate(assignment.deadline)}',
           description: assignment.description,
-          files: assignment.files);
+          file: assignment.file);
     }).toList();
 
     setState(() {

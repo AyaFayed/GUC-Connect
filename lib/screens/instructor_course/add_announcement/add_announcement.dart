@@ -1,9 +1,13 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/announcement_controller.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/add_event.dart';
@@ -29,16 +33,18 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
   UserType? _userType;
 
   List<String> selectedGroupIds = [];
-  List<String> files = [];
+  File? file;
+  UploadTask? task;
 
   void addAnnouncement() async {
     if (_formKey.currentState!.validate()) {
       try {
+        String? fileUrl = await uploadFile(file, task);
         await _announcementsController.createAnnouncement(
           widget.courseId,
           controllerTitle.text,
           controllerDescription.text,
-          [],
+          fileUrl,
           _userType == UserType.professor ? selectedGroupIds : [],
           _userType == UserType.ta ? selectedGroupIds : [],
         );
@@ -100,7 +106,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
                     AddEvent(
                         controllerTitle: controllerTitle,
                         controllerDescription: controllerDescription,
-                        files: files,
+                        file: file,
                         selectedGroupIds: selectedGroupIds,
                         courseId: widget.courseId),
                     const SizedBox(height: 60.0),

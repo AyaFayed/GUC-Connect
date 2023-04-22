@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/models/divisions/division_model.dart';
+import 'package:guc_scheduling_app/services/storage.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:path/path.dart';
 
 List<Course> searchCourses(String query, List<Course> courses) {
   final result = courses.where((course) {
@@ -147,4 +152,20 @@ String formatDate(DateTime date) {
 
 String formatDateRange(DateTime start, DateTime end) {
   return '${start.day.toString().padLeft(2, '0')}/${start.month.toString().padLeft(2, '0')}/${start.year.toString()} from ${start.hour.toString().padLeft(2, '0')}:${start.minute.toString().padLeft(2, '0')} to ${end.hour.toString().padLeft(2, '0')}:${end.minute.toString().padLeft(2, '0')}';
+}
+
+Future<String?> uploadFile(File? file, UploadTask? task) async {
+  if (file == null) return null;
+
+  final fileName = basename(file.path);
+  final destination = 'files/$fileName';
+
+  task = StorageService.uploadFile(destination, file);
+
+  if (task == null) return null;
+
+  final snapshot = await task.whenComplete(() {});
+  final urlDownload = await snapshot.ref.getDownloadURL();
+
+  return urlDownload;
 }

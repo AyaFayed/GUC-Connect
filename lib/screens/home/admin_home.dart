@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guc_scheduling_app/controllers/auth_controller.dart';
+import 'package:guc_scheduling_app/services/authentication.dart';
 import 'package:guc_scheduling_app/screens/Course/create_course.dart';
 import 'package:guc_scheduling_app/screens/course/all_courses.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';

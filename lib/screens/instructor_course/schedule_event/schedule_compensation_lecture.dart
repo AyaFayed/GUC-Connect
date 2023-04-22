@@ -1,8 +1,12 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/compensation_controller.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/date_time_selector.dart';
@@ -29,8 +33,51 @@ class _ScheduleCompensationLectureState
 
   String error = '';
   List<String> selectedGroupIds = [];
-  List<String> files = [];
+  File? file;
+  UploadTask? task;
   DateTime? startDateTime;
+
+  Future<void> completeScheduling() async {
+    try {
+      String? fileUrl = await uploadFile(file, task);
+      await _compensationController.scheduleCompensationLecture(
+          widget.courseId,
+          controllerTitle.text,
+          controllerDescription.text,
+          fileUrl,
+          selectedGroupIds,
+          startDateTime ?? DateTime.now(),
+          startDateTime?.add(
+                  Duration(minutes: int.parse(controllerDuration.text))) ??
+              DateTime.now());
+      controllerDescription.clear();
+      controllerDuration.clear();
+      controllerTitle.clear();
+      setState(() {
+        startDateTime = null;
+        file = null;
+        task = null;
+      });
+      if (context.mounted) {
+        Navigator.pop(context);
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          confirmBtnColor: AppColors.confirm,
+          text: Confirmations.scheduleSuccess('lecture'),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          confirmBtnColor: AppColors.confirm,
+          text: Errors.backend,
+        );
+      }
+    }
+  }
 
   void scheduleCompensationLecture() async {
     setState(() {
@@ -42,78 +89,26 @@ class _ScheduleCompensationLectureState
           error = Errors.required;
         });
       } else {
-        try {
-          int conflicts =
-              await _compensationController.canScheduleCompensationLecture(
-                  widget.courseId,
-                  controllerTitle.text,
-                  controllerDescription.text,
-                  files,
-                  selectedGroupIds,
-                  startDateTime ?? DateTime.now(),
-                  startDateTime?.add(Duration(
-                          minutes: int.parse(controllerDuration.text))) ??
-                      DateTime.now());
-          if (context.mounted) {
-            if (conflicts > 0) {
-              QuickAlert.show(
-                context: context,
-                type: QuickAlertType.confirm,
-                text: Confirmations.scheduleWarning('lecture', conflicts),
-                confirmBtnText: 'Complete',
-                cancelBtnText: 'Cancel',
-                onConfirmBtnTap: () async {
-                  await _compensationController.scheduleCompensationLecture(
-                      widget.courseId,
-                      controllerTitle.text,
-                      controllerDescription.text,
-                      files,
-                      selectedGroupIds,
-                      startDateTime ?? DateTime.now(),
-                      startDateTime?.add(Duration(
-                              minutes: int.parse(controllerDuration.text))) ??
-                          DateTime.now());
-                  controllerDescription.clear();
-                  controllerDuration.clear();
-                  controllerTitle.clear();
-                  setState(() {
-                    startDateTime = null;
-                  });
-                  if (context.mounted) {
-                    Navigator.pop(context);
-                    QuickAlert.show(
-                      context: context,
-                      type: QuickAlertType.success,
-                      confirmBtnColor: AppColors.confirm,
-                      text: Confirmations.scheduleSuccess('lecture'),
-                    );
-                  }
-                },
-                confirmBtnColor: AppColors.error,
-              );
-            } else {
-              controllerDescription.clear();
-              controllerDuration.clear();
-              controllerTitle.clear();
-              setState(() {
-                startDateTime = null;
-              });
-              QuickAlert.show(
-                context: context,
-                type: QuickAlertType.success,
-                confirmBtnColor: AppColors.confirm,
-                text: Confirmations.scheduleSuccess('lecture'),
-              );
-            }
-          }
-        } catch (e) {
-          if (context.mounted) {
+        int conflicts =
+            await _compensationController.canScheduleCompensationLecture(
+                selectedGroupIds,
+                startDateTime ?? DateTime.now(),
+                startDateTime?.add(Duration(
+                        minutes: int.parse(controllerDuration.text))) ??
+                    DateTime.now());
+        if (context.mounted) {
+          if (conflicts > 0) {
             QuickAlert.show(
               context: context,
-              type: QuickAlertType.error,
-              confirmBtnColor: AppColors.confirm,
-              text: Errors.backend,
+              type: QuickAlertType.confirm,
+              text: Confirmations.scheduleWarning('lecture', conflicts),
+              confirmBtnText: 'Complete',
+              cancelBtnText: 'Cancel',
+              onConfirmBtnTap: completeScheduling,
+              confirmBtnColor: AppColors.error,
             );
+          } else {
+            await completeScheduling();
           }
         }
       }
@@ -174,7 +169,7 @@ class _ScheduleCompensationLectureState
               AddEvent(
                   controllerTitle: controllerTitle,
                   controllerDescription: controllerDescription,
-                  files: files,
+                  file: file,
                   selectedGroupIds: selectedGroupIds,
                   courseId: widget.courseId),
               const SizedBox(height: 40.0),
