@@ -7,6 +7,7 @@ class EventCard extends StatelessWidget {
   final String subtitle;
   final String description;
   final String courseName;
+  final String? file;
 
   const EventCard({
     super.key,
@@ -14,6 +15,7 @@ class EventCard extends StatelessWidget {
     required this.subtitle,
     required this.description,
     required this.courseName,
+    required this.file,
   });
 
   @override
@@ -31,10 +33,12 @@ class EventCard extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) => EventDetails(
-                  title: title,
-                  subtitle: subtitle,
-                  description: description,
-                  courseName: courseName)),
+                    title: title,
+                    subtitle: subtitle,
+                    description: description,
+                    courseName: courseName,
+                    file: file,
+                  )),
         );
       },
     );

@@ -18,10 +18,12 @@ class EventList extends StatelessWidget {
     return ListView.separated(
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) => EventCard(
-            title: events[index].title,
-            subtitle: events[index].subtitle,
-            description: events[index].description,
-            courseName: courseName),
+              title: events[index].title,
+              subtitle: events[index].subtitle,
+              description: events[index].description,
+              courseName: courseName,
+              file: events[index].file,
+            ),
         itemCount: events.length,
         separatorBuilder: (BuildContext context, int index) => Divider(
               color: AppColors.unselected,
