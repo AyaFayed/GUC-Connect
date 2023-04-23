@@ -46,7 +46,7 @@ class _AddPostState extends State<AddPost> {
     if (_formKey.currentState!.validate()) {
       try {
         String? fileUrl = await uploadFile(file, task);
-        await _discussionController.createPost(
+        await _discussionController.addPost(
             controllerPost.text, fileUrl, widget.courseId);
         controllerPost.clear();
         setState(() {

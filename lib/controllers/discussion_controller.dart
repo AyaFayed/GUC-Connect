@@ -9,7 +9,7 @@ class DiscussionController {
   final UserController _user = UserController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future createPost(String content, String? file, String courseId) async {
+  Future addPost(String content, String? file, String courseId) async {
     final docPost = Database.posts.doc();
 
     final post = Post(
