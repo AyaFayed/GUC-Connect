@@ -17,7 +17,11 @@ class _PostListState extends State<PostList> {
     return ListView(
       shrinkWrap: true,
       children: widget.posts
-          .map((post) => PostCard(courseId: widget.courseId, post: post))
+          .map((post) => PostCard(
+                courseId: widget.courseId,
+                post: post,
+                posts: widget.posts,
+              ))
           .toList(),
     );
   }

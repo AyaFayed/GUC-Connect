@@ -9,7 +9,12 @@ class Confirmations {
       'The $object was scheduled successfully.';
   static String postSuccess(String object) =>
       'The $object was posted successfully.';
+  static String deleteSuccess(String object) =>
+      'The $object was deleted successfully.';
 
   static String scheduleWarning(String object, int conflicts) =>
       '${Errors.scheduling(conflicts)} Are you sure you want to complete scheduling the $object?';
+
+  static String deleteWarning(String object) =>
+      'Are you sure you want to delete this $object?';
 }

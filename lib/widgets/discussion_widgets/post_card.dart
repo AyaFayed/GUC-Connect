@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/discussion_controller.dart';
 import 'package:guc_scheduling_app/models/discussion/post_model.dart';
+import 'package:guc_scheduling_app/shared/confirmations.dart';
+import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/discussion_widgets/reply_list.dart';
 import 'package:guc_scheduling_app/widgets/download_file.dart';
+import 'package:quickalert/quickalert.dart';
 
 class PostCard extends StatefulWidget {
   final String courseId;
   final Post post;
-  const PostCard({super.key, required this.courseId, required this.post});
+  final List<Post> posts;
+  const PostCard(
+      {super.key,
+      required this.courseId,
+      required this.post,
+      required this.posts});
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -25,6 +33,47 @@ class _PostCardState extends State<PostCard> {
     setState(() {
       _showDelete = canDelete;
     });
+  }
+
+  void deletePost() async {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.confirm,
+      text: Confirmations.deleteWarning('post'),
+      confirmBtnText: 'Complete',
+      cancelBtnText: 'Cancel',
+      onConfirmBtnTap: completeDeletingPost,
+      confirmBtnColor: AppColors.error,
+    );
+  }
+
+  void completeDeletingPost() async {
+    try {
+      await _discussionController.deletePost(widget.post.id, widget.courseId);
+      setState(() {
+        widget.posts.removeWhere((p) =>
+            p.authorId == widget.post.authorId &&
+            p.createdAt == widget.post.createdAt &&
+            p.content == widget.post.content);
+      });
+      if (mounted) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          confirmBtnColor: AppColors.confirm,
+          text: Confirmations.deleteSuccess('post'),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          confirmBtnColor: AppColors.confirm,
+          text: Errors.backend,
+        );
+      }
+    }
   }
 
   @override
@@ -59,7 +108,7 @@ class _PostCardState extends State<PostCard> {
           children: [
             _showDelete
                 ? TextButton.icon(
-                    onPressed: () {},
+                    onPressed: deletePost,
                     icon: Icon(
                       Icons.delete,
                       color: AppColors.error,
