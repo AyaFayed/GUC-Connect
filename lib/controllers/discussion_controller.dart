@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/database/database.dart';
@@ -61,9 +62,9 @@ class DiscussionController {
           authorName: formatName(currentUser.name, currentUser.type),
           createdAt: DateTime.now());
 
-      List<Reply> replies = post.replies;
-      replies.add(reply);
-      await Database.posts.doc(postId).update({'replies': replies});
+      await Database.posts.doc(postId).update({
+        'replies': FieldValue.arrayUnion([reply.toJson()])
+      });
 
       return reply;
     }

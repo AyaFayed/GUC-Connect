@@ -11,12 +11,12 @@ import 'package:quickalert/quickalert.dart';
 class PostCard extends StatefulWidget {
   final String courseId;
   final Post post;
-  final List<Post> posts;
+  final Future<void> Function() getData;
   const PostCard(
       {super.key,
       required this.courseId,
       required this.post,
-      required this.posts});
+      required this.getData});
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -40,7 +40,7 @@ class _PostCardState extends State<PostCard> {
       context: context,
       type: QuickAlertType.confirm,
       text: Confirmations.deleteWarning('post'),
-      confirmBtnText: 'Complete',
+      confirmBtnText: 'Delete',
       cancelBtnText: 'Cancel',
       onConfirmBtnTap: completeDeletingPost,
       confirmBtnColor: AppColors.error,
@@ -50,13 +50,9 @@ class _PostCardState extends State<PostCard> {
   void completeDeletingPost() async {
     try {
       await _discussionController.deletePost(widget.post.id, widget.courseId);
-      setState(() {
-        widget.posts.removeWhere((p) =>
-            p.authorId == widget.post.authorId &&
-            p.createdAt == widget.post.createdAt &&
-            p.content == widget.post.content);
-      });
+      await widget.getData();
       if (mounted) {
+        Navigator.pop(context);
         QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
@@ -85,6 +81,8 @@ class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+        child: Container(
+      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
           widget.post.authorName,
@@ -103,21 +101,22 @@ class _PostCardState extends State<PostCard> {
         const SizedBox(
           height: 5.0,
         ),
-        const Divider(),
+        Divider(
+          color: AppColors.unselected,
+        ),
         Row(
           children: [
             _showDelete
                 ? TextButton.icon(
                     onPressed: deletePost,
-                    icon: Icon(
-                      Icons.delete,
-                      color: AppColors.error,
+                    icon: const Icon(
+                      Icons.delete_outline,
                     ),
-                    label: Text(
+                    label: const Text(
                       'Delete post',
-                      style: TextStyle(color: AppColors.error),
                     ))
                 : const SizedBox(height: 0.0),
+            const Spacer(),
             TextButton(
                 onPressed: () {
                   setState(() {
@@ -130,11 +129,14 @@ class _PostCardState extends State<PostCard> {
                 ))
           ],
         ),
-        const Divider(),
         _showReplies
-            ? ReplyList(postId: widget.post.id, replies: widget.post.replies)
+            ? ReplyList(
+                postId: widget.post.id,
+                replies: widget.post.replies,
+                getData: widget.getData,
+              )
             : const SizedBox(height: 0.0)
       ]),
-    );
+    ));
   }
 }

@@ -65,13 +65,14 @@ class CourseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) => CourseCard(
-            name: courses[index].name, widget: getWidget(courses[index])),
-        itemCount: courses.length,
-        separatorBuilder: (BuildContext context, int index) => Divider(
-              color: AppColors.unselected,
-            ));
+    return Column(
+        children: courses
+            .map((course) => Column(children: [
+                  CourseCard(name: course.name, widget: getWidget(course)),
+                  Divider(
+                    color: AppColors.unselected,
+                  )
+                ]))
+            .toList());
   }
 }

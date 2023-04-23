@@ -10,12 +10,14 @@ import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/small_btn.dart';
+import 'package:guc_scheduling_app/widgets/discussion_widgets/post_card.dart';
 import 'package:quickalert/quickalert.dart';
 
 class AddPost extends StatefulWidget {
   final String courseId;
-  final List<Post> posts;
-  const AddPost({super.key, required this.courseId, required this.posts});
+  final Future<void> Function() getData;
+
+  const AddPost({super.key, required this.courseId, required this.getData});
 
   @override
   State<AddPost> createState() => _AddPostState();
@@ -46,15 +48,13 @@ class _AddPostState extends State<AddPost> {
     if (_formKey.currentState!.validate()) {
       try {
         String? fileUrl = await uploadFile(file, task);
-        Post? post = await _discussionController.addPost(
+        await _discussionController.addPost(
             controllerPost.text, fileUrl, widget.courseId);
+        await widget.getData();
         controllerPost.clear();
         setState(() {
           file = null;
           task = null;
-          if (post != null) {
-            widget.posts.insert(0, post);
-          }
         });
         if (mounted) {
           QuickAlert.show(
@@ -86,33 +86,37 @@ class _AddPostState extends State<AddPost> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            const SizedBox(height: 20.0),
-            TextFormField(
-              keyboardType: TextInputType.multiline,
-              minLines: 1,
-              maxLines: 7,
-              decoration: const InputDecoration(hintText: 'write a post'),
-              validator: (val) => val!.isEmpty ? Errors.required : null,
-              controller: controllerPost,
-            ),
-            const SizedBox(height: 20.0),
-            Row(
-              children: [
-                TextButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.attach_file),
-                    label: Text(fileName)),
-                SmallBtn(
-                  onPressed: addPost,
-                  text: 'Post',
-                )
-              ],
-            )
-          ],
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              const SizedBox(height: 20.0),
+              TextFormField(
+                keyboardType: TextInputType.multiline,
+                minLines: 1,
+                maxLines: 7,
+                decoration: const InputDecoration(hintText: 'write a post'),
+                validator: (val) => val!.isEmpty ? Errors.required : null,
+                controller: controllerPost,
+              ),
+              const SizedBox(height: 20.0),
+              Row(
+                children: [
+                  TextButton.icon(
+                      onPressed: pickFile,
+                      icon: const Icon(Icons.attach_file),
+                      label: Text(fileName)),
+                  const Spacer(),
+                  SmallBtn(
+                    onPressed: addPost,
+                    text: 'Post',
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

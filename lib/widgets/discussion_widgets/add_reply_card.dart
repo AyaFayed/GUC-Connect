@@ -9,8 +9,9 @@ import 'package:quickalert/quickalert.dart';
 
 class AddReply extends StatefulWidget {
   final String postId;
-  final List<Reply> replies;
-  const AddReply({super.key, required this.postId, required this.replies});
+  final Future<void> Function() getData;
+
+  const AddReply({super.key, required this.postId, required this.getData});
 
   @override
   State<AddReply> createState() => _AddReplyState();
@@ -27,9 +28,7 @@ class _AddReplyState extends State<AddReply> {
         Reply? reply = await _discussionController.addReplyToPost(
             controllerReply.text, widget.postId);
         if (reply != null) {
-          setState(() {
-            widget.replies.add(reply);
-          });
+          await widget.getData();
         }
         controllerReply.clear();
         if (context.mounted) {
@@ -75,9 +74,14 @@ class _AddReplyState extends State<AddReply> {
             controller: controllerReply,
           ),
           const SizedBox(height: 20.0),
-          SmallBtn(
-            onPressed: addReply,
-            text: 'Post reply',
+          Row(
+            children: [
+              const Spacer(),
+              SmallBtn(
+                onPressed: addReply,
+                text: 'Post reply',
+              )
+            ],
           )
         ],
       ),

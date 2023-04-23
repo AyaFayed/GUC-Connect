@@ -15,18 +15,20 @@ class EventList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) => EventCard(
-              title: events[index].title,
-              subtitle: events[index].subtitle,
-              description: events[index].description,
-              courseName: courseName,
-              file: events[index].file,
-            ),
-        itemCount: events.length,
-        separatorBuilder: (BuildContext context, int index) => Divider(
-              color: AppColors.unselected,
-            ));
+    return Column(
+        children: events
+            .map((event) => Column(children: [
+                  EventCard(
+                    title: event.title,
+                    subtitle: event.subtitle,
+                    description: event.description,
+                    courseName: courseName,
+                    file: event.file,
+                  ),
+                  Divider(
+                    color: AppColors.unselected,
+                  )
+                ]))
+            .toList());
   }
 }

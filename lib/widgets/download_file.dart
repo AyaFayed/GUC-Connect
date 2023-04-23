@@ -85,9 +85,9 @@ class _DownloadFileState extends State<DownloadFile> {
                   });
                 },
                 icon: const Icon(Icons.attach_file),
-                label: const Text(
+                label: Text(
                   'Attachment',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: Sizes.xsmall),
                 ),
               ),
         Text(downloadConfirmation, style: TextStyle(fontSize: Sizes.xsmall))
