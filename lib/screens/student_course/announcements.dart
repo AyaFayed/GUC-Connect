@@ -4,6 +4,7 @@ import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/models/events/announcement_model.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/event_list.dart';
 
 class Announcements extends StatefulWidget {
@@ -40,8 +41,7 @@ class _AnnouncementsState extends State<Announcements> {
       String instructorName =
           await _userController.getUserName(announcement.creator);
       return DisplayEvent(
-          title:
-              '${userType == UserType.professor ? 'Dr.' : 'Ta.'} $instructorName',
+          title: formatName(instructorName, userType),
           subtitle: announcement.title,
           description: announcement.description,
           file: announcement.file);

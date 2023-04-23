@@ -3,28 +3,38 @@ import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/models/discussion/post_model.dart';
+import 'package:guc_scheduling_app/models/user/user_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/shared/helper.dart';
 
 class DiscussionController {
   final UserController _user = UserController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future addPost(String content, String? file, String courseId) async {
+  Future<Post?> addPost(String content, String? file, String courseId) async {
     final docPost = Database.posts.doc();
 
-    final post = Post(
-        id: docPost.id,
-        content: content,
-        file: file,
-        author: _auth.currentUser?.uid ?? '',
-        replies: [],
-        createdAt: DateTime.now());
+    UserModel? currentUser =
+        await Database.getUser(_auth.currentUser?.uid ?? '');
 
-    final json = post.toJson();
+    if (currentUser != null) {
+      final post = Post(
+          id: docPost.id,
+          content: content,
+          file: file,
+          authorId: _auth.currentUser?.uid ?? '',
+          authorName: formatName(currentUser.name, currentUser.type),
+          replies: [],
+          createdAt: DateTime.now());
 
-    await docPost.set(json);
+      final json = post.toJson();
 
-    await addPostToCourse(docPost.id, courseId);
+      await docPost.set(json);
+
+      await addPostToCourse(docPost.id, courseId);
+
+      return post;
+    }
 
     return null;
   }
@@ -39,13 +49,18 @@ class DiscussionController {
   }
 
   Future<Reply?> addReplyToPost(String content, String postId) async {
-    Reply reply = Reply(
-        content: content,
-        author: _auth.currentUser?.uid ?? '',
-        createdAt: DateTime.now());
+    UserModel? currentUser =
+        await Database.getUser(_auth.currentUser?.uid ?? '');
 
     Post? post = await Database.getPost(postId);
-    if (post != null) {
+
+    if (currentUser != null && post != null) {
+      Reply reply = Reply(
+          content: content,
+          authorId: _auth.currentUser?.uid ?? '',
+          authorName: formatName(currentUser.name, currentUser.type),
+          createdAt: DateTime.now());
+
       List<Reply> replies = post.replies;
       replies.add(reply);
       await Database.posts.doc(postId).update({'replies': replies});
@@ -61,9 +76,9 @@ class DiscussionController {
     Course? course = await Database.getCourse(courseId);
 
     if (post != null && course != null) {
-      if (post.author != _auth.currentUser?.uid) {
+      if (post.authorId != _auth.currentUser?.uid) {
         UserType userType = await _user.getCurrentUserType();
-        if (userType == UserType.student) return;
+        if (userType != UserType.professor) return;
       }
 
       List<String> posts = course.posts;
@@ -80,15 +95,15 @@ class DiscussionController {
     Post? post = await Database.getPost(postId);
 
     if (post != null) {
-      if (reply.author != _auth.currentUser?.uid) {
+      if (reply.authorId != _auth.currentUser?.uid) {
         UserType userType = await _user.getCurrentUserType();
-        if (userType == UserType.student) return;
+        if (userType != UserType.professor) return;
       }
 
       List<Reply> replies = post.replies;
 
       replies.removeWhere((r) =>
-          r.author == reply.author &&
+          r.authorId == reply.authorId &&
           r.createdAt == reply.createdAt &&
           r.content == reply.content);
 

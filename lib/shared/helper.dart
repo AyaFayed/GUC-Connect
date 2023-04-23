@@ -173,3 +173,15 @@ Future<String?> uploadFile(File? file, UploadTask? task) async {
 String getFileName(String path) {
   return basename(path);
 }
+
+String formatName(String name, UserType userType) {
+  switch (userType) {
+    case UserType.ta:
+      return 'Ta. $name';
+    case UserType.professor:
+      return 'Dr. $name';
+    case UserType.student:
+    case UserType.admin:
+      return name;
+  }
+}
