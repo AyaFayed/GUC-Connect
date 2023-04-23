@@ -154,13 +154,13 @@ String formatDateRange(DateTime start, DateTime end) {
   return '${start.day.toString().padLeft(2, '0')}/${start.month.toString().padLeft(2, '0')}/${start.year.toString()} from ${start.hour.toString().padLeft(2, '0')}:${start.minute.toString().padLeft(2, '0')} to ${end.hour.toString().padLeft(2, '0')}:${end.minute.toString().padLeft(2, '0')}';
 }
 
-Future<String?> uploadFile(List<File> file, UploadTask? task) async {
-  if (file.isEmpty) return null;
+Future<String?> uploadFile(File? file, UploadTask? task) async {
+  if (file == null) return null;
 
-  final fileName = basename(file.first.path);
+  final fileName = basename(file.path);
   final destination = 'files/$fileName';
 
-  task = StorageService.uploadFile(destination, file.first);
+  task = StorageService.uploadFile(destination, file);
 
   if (task == null) return null;
 
@@ -168,4 +168,8 @@ Future<String?> uploadFile(List<File> file, UploadTask? task) async {
   final urlDownload = await snapshot.ref.getDownloadURL();
 
   return urlDownload;
+}
+
+String getFileName(String path) {
+  return basename(path);
 }

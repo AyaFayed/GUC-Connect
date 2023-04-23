@@ -39,7 +39,8 @@ class _ScheduleCompensationTutorialState
 
   Future<void> completeScheduling() async {
     try {
-      String? fileUrl = await uploadFile(file, task);
+      String? fileUrl =
+          file.isNotEmpty ? await uploadFile(file.first, task) : null;
       await _compensationController.scheduleCompensationTutorial(
           widget.courseId,
           controllerTitle.text,

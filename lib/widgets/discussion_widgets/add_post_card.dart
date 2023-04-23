@@ -1,8 +1,16 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/discussion_controller.dart';
 import 'package:guc_scheduling_app/models/discussion/post_model.dart';
+import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/shared/helper.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/small_btn.dart';
+import 'package:quickalert/quickalert.dart';
 
 class AddPost extends StatefulWidget {
   final String courseId;
@@ -18,7 +26,53 @@ class _AddPostState extends State<AddPost> {
   final _formKey = GlobalKey<FormState>();
   final DiscussionController _discussionController = DiscussionController();
 
-  Future<void> addPost() async {}
+  File? file;
+  UploadTask? task;
+  String fileName = 'Add file';
+
+  void pickFile() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    if (result == null) return;
+
+    final path = result.files.single.path!;
+
+    setState(() {
+      file = File(path);
+      fileName = getFileName(path);
+    });
+  }
+
+  Future<void> addPost() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        String? fileUrl = await uploadFile(file, task);
+        await _discussionController.createPost(
+            controllerPost.text, fileUrl, widget.courseId);
+        controllerPost.clear();
+        setState(() {
+          file = null;
+          task = null;
+        });
+        if (mounted) {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.success,
+            confirmBtnColor: AppColors.confirm,
+            text: Confirmations.addSuccess('post'),
+          );
+        }
+      } catch (e) {
+        if (context.mounted) {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            confirmBtnColor: AppColors.confirm,
+            text: Errors.backend,
+          );
+        }
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -48,7 +102,7 @@ class _AddPostState extends State<AddPost> {
                 TextButton.icon(
                     onPressed: () {},
                     icon: const Icon(Icons.attach_file),
-                    label: const Text('Add file')),
+                    label: Text(fileName)),
                 SmallBtn(
                   onPressed: addPost,
                   text: 'Post',

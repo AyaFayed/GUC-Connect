@@ -43,7 +43,8 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
         });
       } else {
         try {
-          String? fileUrl = await uploadFile(file, task);
+          String? fileUrl =
+              file.isNotEmpty ? await uploadFile(file.first, task) : null;
           await _assignmentController.scheduleAssignment(
             widget.courseId,
             controllerTitle.text,

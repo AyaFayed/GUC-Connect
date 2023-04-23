@@ -36,7 +36,8 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
 
   Future<void> completeScheduling() async {
     try {
-      String? fileUrl = await uploadFile(file, task);
+      String? fileUrl =
+          file.isNotEmpty ? await uploadFile(file.first, task) : null;
       await _quizController.scheduleQuiz(
           widget.courseId,
           controllerTitle.text,

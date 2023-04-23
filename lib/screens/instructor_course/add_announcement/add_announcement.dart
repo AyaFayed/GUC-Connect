@@ -39,7 +39,8 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
   Future<void> addAnnouncement() async {
     if (_formKey.currentState!.validate()) {
       try {
-        String? fileUrl = await uploadFile(file, task);
+        String? fileUrl =
+            file.isNotEmpty ? await uploadFile(file.first, task) : null;
         await _announcementsController.createAnnouncement(
           widget.courseId,
           controllerTitle.text,
