@@ -75,18 +75,9 @@ class _AddReplyState extends State<AddReply> {
             controller: controllerReply,
           ),
           const SizedBox(height: 20.0),
-          Row(
-            children: [
-              SmallBtn(
-                onPressed: addReply,
-                text: 'Cancel',
-                color: AppColors.unselected,
-              ),
-              SmallBtn(
-                onPressed: addReply,
-                text: 'Post reply',
-              )
-            ],
+          SmallBtn(
+            onPressed: addReply,
+            text: 'Post reply',
           )
         ],
       ),

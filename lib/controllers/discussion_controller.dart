@@ -91,6 +91,20 @@ class DiscussionController {
     }
   }
 
+  Future<bool> canDeletePost(String postId) async {
+    Post? post = await Database.getPost(postId);
+
+    if (post != null) {
+      if (post.authorId != _auth.currentUser?.uid) {
+        UserType userType = await _user.getCurrentUserType();
+        if (userType != UserType.professor) return false;
+      }
+      return true;
+    }
+
+    return false;
+  }
+
   Future deleteReply(String postId, Reply reply) async {
     Post? post = await Database.getPost(postId);
 
@@ -117,6 +131,10 @@ class DiscussionController {
     if (course != null) {
       List<Post> posts = await Database.getPostListFromIds(course.posts);
       posts.sort(((Post a, Post b) => b.createdAt.compareTo(a.createdAt)));
+      for (Post post in posts) {
+        post.replies
+            .sort(((Reply a, Reply b) => a.createdAt.compareTo(b.createdAt)));
+      }
       return posts;
     }
 
