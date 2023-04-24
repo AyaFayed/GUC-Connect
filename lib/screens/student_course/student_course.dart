@@ -28,11 +28,11 @@ class _StudentCourseState extends State<StudentCourse> {
         courseId: widget.courseId,
         courseName: widget.courseName,
       ),
-      Announcements(
+      Assessments(
         courseId: widget.courseId,
         courseName: widget.courseName,
       ),
-      Announcements(
+      Compensations(
         courseId: widget.courseId,
         courseName: widget.courseName,
       ),
@@ -43,33 +43,9 @@ class _StudentCourseState extends State<StudentCourse> {
   }
 
   Future<void> _onItemTapped(int index) async {
-    if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Card(
-              child: Assessments(
-            courseId: widget.courseId,
-            courseName: widget.courseName,
-          )),
-        ),
-      );
-    } else if (index == 2) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Card(
-              child: Compensations(
-            courseId: widget.courseId,
-            courseName: widget.courseName,
-          )),
-        ),
-      );
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
@@ -79,11 +55,9 @@ class _StudentCourseState extends State<StudentCourse> {
         title: Text(widget.courseName),
         elevation: 0.0,
       ),
-      body: SingleChildScrollView(
-        child: _widgetOptions == null
-            ? const CircularProgressIndicator()
-            : _widgetOptions?.elementAt(_selectedIndex),
-      ),
+      body: _widgetOptions == null
+          ? const CircularProgressIndicator()
+          : _widgetOptions?.elementAt(_selectedIndex),
       bottomNavigationBar:
           StudentBottomBar(selectedIndex: _selectedIndex, onTap: _onItemTapped),
     );

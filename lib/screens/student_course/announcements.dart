@@ -57,9 +57,10 @@ class _AnnouncementsState extends State<Announcements> {
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
         child: _events == null
             ? const Center(child: CircularProgressIndicator())
-            : EventList(
+            : SingleChildScrollView(
+                child: EventList(
                 events: _events ?? [],
                 courseName: widget.courseName,
-              ));
+              )));
   }
 }
