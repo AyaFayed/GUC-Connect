@@ -91,9 +91,13 @@ class AnnouncementController {
   }
 
   Future<List<Announcement>> getMyAnnouncements(String courseId) async {
-    return (await _helper.getEventsofInstructor(
+    List<Announcement> announcements = (await _helper.getEventsofInstructor(
             courseId, EventType.announcements) as List<dynamic>)
         .cast<Announcement>();
+    announcements.sort(((Announcement a, Announcement b) =>
+        b.createdAt.compareTo(a.createdAt)));
+
+    return announcements;
   }
 
   // Future deleteAnnouncement(String id) async {

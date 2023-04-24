@@ -58,7 +58,11 @@ class AssignmentController {
     if (student != null) {
       for (StudentCourse course in student.courses) {
         if (course.id == courseId) {
-          return await getGroupAssignments(course.group);
+          List<Assignment> assignments =
+              await getGroupAssignments(course.group);
+          assignments.sort(((Assignment a, Assignment b) =>
+              a.deadline.compareTo(b.deadline)));
+          return assignments;
         }
       }
     }
@@ -66,8 +70,11 @@ class AssignmentController {
   }
 
   Future<List<Assignment>> getMyAssignments(String courseId) async {
-    return (await _helper.getEventsofInstructor(courseId, EventType.assignments)
-            as List<dynamic>)
+    List<Assignment> assignments = (await _helper.getEventsofInstructor(
+            courseId, EventType.assignments) as List<dynamic>)
         .cast<Assignment>();
+    assignments.sort(
+        ((Assignment a, Assignment b) => a.deadline.compareTo(b.deadline)));
+    return assignments;
   }
 }

@@ -127,7 +127,13 @@ class CompensationController {
     if (student != null) {
       for (StudentCourse course in student.courses) {
         if (course.id == courseId) {
-          return await getGroupCompensationLectures(course.group);
+          List<CompensationLecture> compensationLectures =
+              await getGroupCompensationLectures(course.group);
+
+          compensationLectures.sort(
+              ((CompensationLecture a, CompensationLecture b) =>
+                  a.start.compareTo(b.start)));
+          return compensationLectures;
         }
       }
     }
@@ -153,7 +159,12 @@ class CompensationController {
     if (student != null) {
       for (StudentCourse course in student.courses) {
         if (course.id == courseId) {
-          return await getTutorialCompensationTutorials(course.tutorial);
+          List<CompensationTutorial> compensationTutorials =
+              await getTutorialCompensationTutorials(course.tutorial);
+          compensationTutorials.sort(
+              ((CompensationTutorial a, CompensationTutorial b) =>
+                  a.start.compareTo(b.start)));
+          return compensationTutorials;
         }
       }
     }
@@ -162,15 +173,26 @@ class CompensationController {
 
   Future<List<CompensationLecture>> getMyCompensationLectures(
       String courseId) async {
-    return (await _helper.getEventsofInstructor(
-            courseId, EventType.compensationLectures) as List<dynamic>)
+    List<CompensationLecture> compensationLectures = (await _helper
+                .getEventsofInstructor(courseId, EventType.compensationLectures)
+            as List<dynamic>)
         .cast<CompensationLecture>();
+
+    compensationLectures.sort(((CompensationLecture a, CompensationLecture b) =>
+        a.start.compareTo(b.start)));
+    return compensationLectures;
   }
 
   Future<List<CompensationTutorial>> getMyCompensationTutorials(
       String courseId) async {
-    return (await _helper.getEventsofInstructor(
-            courseId, EventType.compensationTutorials) as List<dynamic>)
-        .cast<CompensationTutorial>();
+    List<CompensationTutorial> compensationTutorials =
+        (await _helper.getEventsofInstructor(
+                courseId, EventType.compensationTutorials) as List<dynamic>)
+            .cast<CompensationTutorial>();
+
+    compensationTutorials.sort(
+        ((CompensationTutorial a, CompensationTutorial b) =>
+            a.start.compareTo(b.start)));
+    return compensationTutorials;
   }
 }

@@ -70,7 +70,9 @@ class QuizController {
     if (student != null) {
       for (StudentCourse course in student.courses) {
         if (course.id == courseId) {
-          return await getGroupQuizzes(course.group);
+          List<Quiz> quizzes = await getGroupQuizzes(course.group);
+          quizzes.sort(((Quiz a, Quiz b) => a.start.compareTo(b.start)));
+          return quizzes;
         }
       }
     }
@@ -78,8 +80,11 @@ class QuizController {
   }
 
   Future<List<Quiz>> getMyQuizzes(String courseId) async {
-    return (await _helper.getEventsofInstructor(courseId, EventType.quizzes)
-            as List<dynamic>)
+    List<Quiz> quizzes = (await _helper.getEventsofInstructor(
+            courseId, EventType.quizzes) as List<dynamic>)
         .cast<Quiz>();
+
+    quizzes.sort(((Quiz a, Quiz b) => a.start.compareTo(b.start)));
+    return quizzes;
   }
 }
