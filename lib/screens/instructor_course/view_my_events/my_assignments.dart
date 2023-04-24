@@ -3,6 +3,7 @@ import 'package:guc_scheduling_app/controllers/event_controllers/assignment_cont
 import 'package:guc_scheduling_app/models/events/assignment_model.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
+import 'package:guc_scheduling_app/widgets/drawers/professor_drawer.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/event_list.dart';
 
 class MyAssignments extends StatefulWidget {
@@ -50,6 +51,8 @@ class _MyAssignmentsState extends State<MyAssignments> {
         title: const Text('Posted assignments'),
         elevation: 0.0,
       ),
+      drawer: ProfessorDrawer(
+          courseId: widget.courseId, courseName: widget.courseName, pop: true),
       body: Container(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
           child: _events == null

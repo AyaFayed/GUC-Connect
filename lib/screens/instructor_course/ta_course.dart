@@ -3,11 +3,8 @@ import 'package:guc_scheduling_app/screens/discussion/discussion.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_announcement/add_announcement.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_division/add_tutorial.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_compensation_tutorial.dart';
-import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_announcements.dart';
-import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_compensation_tutorials.dart';
-import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_tutorials.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
-import 'package:guc_scheduling_app/theme/sizes.dart';
+import 'package:guc_scheduling_app/widgets/drawers/ta_drawer.dart';
 
 class TACourse extends StatefulWidget {
   final String courseId;
@@ -55,82 +52,8 @@ class _TACourseState extends State<TACourse> {
         title: Text(widget.courseName),
         elevation: 0.0,
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(color: AppColors.primary),
-              child: Text(
-                widget.courseName,
-                style:
-                    TextStyle(color: AppColors.light, fontSize: Sizes.medium),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.notifications,
-              ),
-              title: const Text('My announcements'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Card(
-                        child: MyAnnouncements(
-                      courseId: widget.courseId,
-                      courseName: widget.courseName,
-                    )),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.schedule,
-              ),
-              title: const Text('Scheduled compensations'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Card(
-                        child: MyCompensationTutorials(
-                      courseId: widget.courseId,
-                      courseName: widget.courseName,
-                    )),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.group,
-              ),
-              title: const Text('My tutorials'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Card(
-                        child: MyTutorials(
-                      courseId: widget.courseId,
-                      courseName: widget.courseName,
-                    )),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.logout,
-              ),
-              title: const Text('Unenroll'),
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
+      drawer: TADrawer(
+          courseId: widget.courseId, courseName: widget.courseName, pop: false),
       body: SingleChildScrollView(
         child: _widgetOptions == null
             ? const CircularProgressIndicator()
