@@ -55,7 +55,7 @@ class _MyTutorialsState extends State<MyTutorials> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My announcements'),
+        title: const Text('My tutorials'),
         elevation: 0.0,
       ),
       body: Container(

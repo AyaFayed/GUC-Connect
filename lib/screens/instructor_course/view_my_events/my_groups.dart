@@ -54,7 +54,7 @@ class _MyGroupsState extends State<MyGroups> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My announcements'),
+        title: const Text('My groups'),
         elevation: 0.0,
       ),
       body: Container(

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:guc_scheduling_app/controllers/event_controllers/announcement_controller.dart';
-import 'package:guc_scheduling_app/controllers/user_controller.dart';
-import 'package:guc_scheduling_app/models/events/announcement_model.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/compensation_controller.dart';
+import 'package:guc_scheduling_app/models/events/compensation/compensation_lecture_model.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
-import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/event_list.dart';
 
@@ -18,28 +16,25 @@ class MyCompensationLectures extends StatefulWidget {
 }
 
 class _MyCompensationLecturesState extends State<MyCompensationLectures> {
-  final AnnouncementController _announcementController =
-      AnnouncementController();
-  final UserController _userController = UserController();
+  final CompensationController _compensationController =
+      CompensationController();
 
   List<DisplayEvent>? _events;
 
   Future<void> _getData() async {
-    List<Announcement> announcements =
-        await _announcementController.getMyAnnouncements(widget.courseId);
+    List<CompensationLecture> compensationLectures =
+        await _compensationController.getCompensationLectures(widget.courseId);
 
     List<DisplayEvent> events =
-        await Future.wait(announcements.map((Announcement announcement) async {
-      UserType userType =
-          await _userController.getUserType(announcement.creator);
-      String instructorName =
-          await _userController.getUserName(announcement.creator);
+        compensationLectures.map((CompensationLecture compensationLecture) {
       return DisplayEvent(
-          title: formatName(instructorName, userType),
-          subtitle: announcement.title,
-          description: announcement.description,
-          file: announcement.file);
-    }));
+          title: compensationLecture.title,
+          subtitle: formatDateRange(
+              compensationLecture.start, compensationLecture.end),
+          description: compensationLecture.description,
+          file: compensationLecture.file);
+    }).toList();
+
     setState(() {
       _events = events;
     });
@@ -55,7 +50,7 @@ class _MyCompensationLecturesState extends State<MyCompensationLectures> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My announcements'),
+        title: const Text('Scheduled compensations'),
         elevation: 0.0,
       ),
       body: Container(

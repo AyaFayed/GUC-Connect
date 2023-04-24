@@ -21,12 +21,6 @@ class _CompensationLecturesState extends State<CompensationLectures> {
 
   List<DisplayEvent>? _events;
 
-  @override
-  void initState() {
-    super.initState();
-    _getData();
-  }
-
   Future<void> _getData() async {
     List<CompensationLecture> compensationLectures =
         await _compensationController.getCompensationLectures(widget.courseId);
@@ -44,6 +38,12 @@ class _CompensationLecturesState extends State<CompensationLectures> {
     setState(() {
       _events = events;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getData();
   }
 
   @override

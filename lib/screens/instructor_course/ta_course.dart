@@ -3,6 +3,9 @@ import 'package:guc_scheduling_app/screens/discussion/discussion.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_announcement/add_announcement.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_division/add_tutorial.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_compensation_tutorial.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_announcements.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_compensation_tutorials.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_tutorials.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 
@@ -69,21 +72,54 @@ class _TACourseState extends State<TACourse> {
                 Icons.notifications,
               ),
               title: const Text('My announcements'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Card(
+                        child: MyAnnouncements(
+                      courseId: widget.courseId,
+                      courseName: widget.courseName,
+                    )),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(
                 Icons.schedule,
               ),
               title: const Text('Scheduled compensations'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Card(
+                        child: MyCompensationTutorials(
+                      courseId: widget.courseId,
+                      courseName: widget.courseName,
+                    )),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(
                 Icons.group,
               ),
               title: const Text('My tutorials'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Card(
+                        child: MyTutorials(
+                      courseId: widget.courseId,
+                      courseName: widget.courseName,
+                    )),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(

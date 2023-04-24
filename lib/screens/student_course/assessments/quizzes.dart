@@ -19,12 +19,6 @@ class _QuizzesState extends State<Quizzes> {
 
   List<DisplayEvent>? _events;
 
-  @override
-  void initState() {
-    super.initState();
-    _getData();
-  }
-
   Future<void> _getData() async {
     List<Quiz> quizzes = await _quizController.getQuizzes(widget.courseId);
 
@@ -39,6 +33,12 @@ class _QuizzesState extends State<Quizzes> {
     setState(() {
       _events = events;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getData();
   }
 
   @override

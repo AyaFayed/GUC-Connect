@@ -4,6 +4,10 @@ import 'package:guc_scheduling_app/screens/instructor_course/add_announcement/ad
 import 'package:guc_scheduling_app/screens/instructor_course/add_division/add_group.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_event.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_announcements.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_assignments.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_compensation_lectures.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_groups.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_quizzes.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 
@@ -102,28 +106,72 @@ class _ProfessorCourseState extends State<ProfessorCourse> {
                 Icons.edit_document,
               ),
               title: const Text('Scheduled quizzes'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Card(
+                        child: MyQuizzes(
+                      courseId: widget.courseId,
+                      courseName: widget.courseName,
+                    )),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(
                 Icons.assignment,
               ),
               title: const Text('Posted assignments'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Card(
+                        child: MyAssignments(
+                      courseId: widget.courseId,
+                      courseName: widget.courseName,
+                    )),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(
                 Icons.schedule,
               ),
               title: const Text('Scheduled compensations'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Card(
+                        child: MyCompensationLectures(
+                      courseId: widget.courseId,
+                      courseName: widget.courseName,
+                    )),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(
                 Icons.group,
               ),
               title: const Text('My groups'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Card(
+                        child: MyGroups(
+                      courseId: widget.courseId,
+                      courseName: widget.courseName,
+                    )),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(
