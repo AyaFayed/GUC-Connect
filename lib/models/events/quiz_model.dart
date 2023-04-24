@@ -24,6 +24,14 @@ class Quiz extends Event {
         'end': end.millisecondsSinceEpoch,
       };
 
+  static Map<String, dynamic> toJsonUpdate(String title, String description,
+          String? file, DateTime start, DateTime end) =>
+      {
+        ...Event.toJsonUpdate(title, description, file),
+        'start': start.millisecondsSinceEpoch,
+        'end': end.millisecondsSinceEpoch,
+      };
+
   static Quiz fromJson(Map<String, dynamic> json) => Quiz(
       id: json['id'],
       creator: json['creator'],

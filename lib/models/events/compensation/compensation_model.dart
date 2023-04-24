@@ -21,6 +21,14 @@ class Compensation extends Event {
         'end': end.millisecondsSinceEpoch,
       };
 
+  static Map<String, dynamic> toJsonUpdate(String title, String description,
+          String? file, DateTime start, DateTime end) =>
+      {
+        ...Event.toJsonUpdate(title, description, file),
+        'start': start.millisecondsSinceEpoch,
+        'end': end.millisecondsSinceEpoch,
+      };
+
   static Compensation fromJson(Map<String, dynamic> json) => Compensation(
       id: json['id'],
       creator: json['creator'],

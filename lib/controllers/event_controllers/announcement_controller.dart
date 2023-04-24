@@ -99,9 +99,4 @@ class AnnouncementController {
 
     return announcements;
   }
-
-  // Future deleteAnnouncement(String id) async {
-  //   final docAnnouncement = _database.collection('announcements').doc(id);
-  //   await docAnnouncement.delete();
-  // }
 }

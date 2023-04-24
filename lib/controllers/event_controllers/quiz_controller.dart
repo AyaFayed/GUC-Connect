@@ -87,4 +87,16 @@ class QuizController {
     quizzes.sort(((Quiz a, Quiz b) => a.start.compareTo(b.start)));
     return quizzes;
   }
+
+  Future editQuiz(String quizId, String title, String description, String? file,
+      DateTime start, DateTime end) async {
+    UserType userType = await _user.getCurrentUserType();
+
+    if (userType == UserType.professor) {
+      final docQuiz = Database.quizzes.doc(quizId);
+
+      await docQuiz
+          .update(Quiz.toJsonUpdate(title, description, file, start, end));
+    }
+  }
 }

@@ -21,6 +21,13 @@ class Assignment extends Event {
         'deadline': deadline.millisecondsSinceEpoch,
       };
 
+  static Map<String, dynamic> toJsonUpdate(
+          String title, String description, String? file, DateTime deadline) =>
+      {
+        ...Event.toJsonUpdate(title, description, file),
+        'deadline': deadline.millisecondsSinceEpoch,
+      };
+
   static Assignment fromJson(Map<String, dynamic> json) => Assignment(
       id: json['id'],
       creator: json['creator'],

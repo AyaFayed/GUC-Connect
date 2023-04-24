@@ -25,6 +25,14 @@ class Event {
         'file': file
       };
 
+  static Map<String, dynamic> toJsonUpdate(
+          String title, String description, String? file) =>
+      {
+        'title': title,
+        'description': description,
+        'file': file,
+      };
+
   static Event fromJson(Map<String, dynamic> json) => Event(
         id: json['id'],
         creator: json['creator'],

@@ -6,6 +6,7 @@ import 'package:guc_scheduling_app/controllers/event_controllers/schedule_event_
 import 'package:guc_scheduling_app/models/divisions/group_model.dart';
 import 'package:guc_scheduling_app/models/divisions/tutorial_model.dart';
 import 'package:guc_scheduling_app/models/events/compensation/compensation_lecture_model.dart';
+import 'package:guc_scheduling_app/models/events/compensation/compensation_model.dart';
 import 'package:guc_scheduling_app/models/events/compensation/compensation_tutorial_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
@@ -194,5 +195,31 @@ class CompensationController {
         ((CompensationTutorial a, CompensationTutorial b) =>
             a.start.compareTo(b.start)));
     return compensationTutorials;
+  }
+
+  Future editCompensationLecture(String compensationLectureId, String title,
+      String description, String? file, DateTime start, DateTime end) async {
+    UserType userType = await _user.getCurrentUserType();
+
+    if (userType == UserType.professor) {
+      final docCompensationLecture =
+          Database.compensationLectures.doc(compensationLectureId);
+
+      await docCompensationLecture.update(
+          Compensation.toJsonUpdate(title, description, file, start, end));
+    }
+  }
+
+  Future editCompensationTutorial(String compensationTutorialId, String title,
+      String description, String? file, DateTime start, DateTime end) async {
+    UserType userType = await _user.getCurrentUserType();
+
+    if (userType == UserType.professor) {
+      final docCompensationTutorial =
+          Database.compensationTutorials.doc(compensationTutorialId);
+
+      await docCompensationTutorial.update(
+          Compensation.toJsonUpdate(title, description, file, start, end));
+    }
   }
 }

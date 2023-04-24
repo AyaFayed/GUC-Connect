@@ -77,4 +77,16 @@ class AssignmentController {
         ((Assignment a, Assignment b) => a.deadline.compareTo(b.deadline)));
     return assignments;
   }
+
+  Future editAssignment(String assignmentId, String title, String description,
+      String? file, DateTime deadline) async {
+    UserType userType = await _user.getCurrentUserType();
+
+    if (userType == UserType.professor) {
+      final docAssignment = Database.assignments.doc(assignmentId);
+
+      await docAssignment
+          .update(Assignment.toJsonUpdate(title, description, file, deadline));
+    }
+  }
 }

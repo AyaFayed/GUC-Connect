@@ -98,7 +98,7 @@ class EnrollmentController {
       List<String> students =
           (division!['students'] as List<dynamic>).cast<String>();
       students.add(_auth.currentUser?.uid ?? '');
-      docDivision.update({'students': students});
+      await docDivision.update({'students': students});
     }
   }
 
