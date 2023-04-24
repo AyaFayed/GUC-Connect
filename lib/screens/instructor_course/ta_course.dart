@@ -4,6 +4,7 @@ import 'package:guc_scheduling_app/screens/instructor_course/add_announcement/ad
 import 'package:guc_scheduling_app/screens/instructor_course/add_division/add_tutorial.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_compensation_tutorial.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
+import 'package:guc_scheduling_app/theme/sizes.dart';
 
 class TACourse extends StatefulWidget {
   final String courseId;
@@ -50,6 +51,49 @@ class _TACourseState extends State<TACourse> {
       appBar: AppBar(
         title: Text(widget.courseName),
         elevation: 0.0,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(color: AppColors.primary),
+              child: Text(
+                widget.courseName,
+                style:
+                    TextStyle(color: AppColors.light, fontSize: Sizes.medium),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.notifications,
+              ),
+              title: const Text('My announcements'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.schedule,
+              ),
+              title: const Text('Scheduled compensations'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.group,
+              ),
+              title: const Text('My tutorials'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.logout,
+              ),
+              title: const Text('Unenroll'),
+              onTap: () {},
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: _widgetOptions == null

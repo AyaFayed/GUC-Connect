@@ -4,13 +4,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/discussion_controller.dart';
-import 'package:guc_scheduling_app/models/discussion/post_model.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/small_btn.dart';
-import 'package:guc_scheduling_app/widgets/discussion_widgets/post_card.dart';
 import 'package:quickalert/quickalert.dart';
 
 class AddPost extends StatefulWidget {
