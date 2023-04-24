@@ -47,7 +47,8 @@ class _DiscussionState extends State<Discussion> {
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
         child: _posts == null
             ? const Center(child: CircularProgressIndicator())
-            : Column(
+            : SingleChildScrollView(
+                child: Column(
                 children: [
                   AddPost(courseId: widget.courseId, getData: _getData),
                   const SizedBox(
@@ -60,6 +61,6 @@ class _DiscussionState extends State<Discussion> {
                         ),
                   ..._postCards,
                 ],
-              ));
+              )));
   }
 }

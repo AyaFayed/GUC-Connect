@@ -87,7 +87,8 @@ class _AddGroupState extends State<AddGroup> {
   Widget build(BuildContext context) {
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-        child: Form(
+        child: SingleChildScrollView(
+            child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
@@ -132,6 +133,6 @@ class _AddGroupState extends State<AddGroup> {
               LargeBtn(onPressed: addGroup, text: 'Add group'),
             ],
           ),
-        ));
+        )));
   }
 }

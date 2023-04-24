@@ -14,24 +14,32 @@ class Assessments extends StatefulWidget {
   State<Assessments> createState() => _AssessmentsState();
 }
 
-class _AssessmentsState extends State<Assessments> {
+class _AssessmentsState extends State<Assessments>
+    with SingleTickerProviderStateMixin {
+  late TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0.0,
-            bottom: TabBar(
-              tabs: const [
-                Tab(text: 'Quizzes'),
-                Tab(text: 'Assignments'),
-              ],
-              indicatorColor: AppColors.light,
-            ),
-            title: Text(widget.courseName),
-          ),
-          body: TabBarView(
+    return Column(
+      children: [
+        TabBar(
+          controller: tabController,
+          tabs: const [
+            Tab(text: 'Quizzes'),
+            Tab(text: 'Assignments'),
+          ],
+          labelColor: AppColors.selected,
+          indicatorColor: AppColors.selected,
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: tabController,
             children: [
               SingleChildScrollView(
                   child: Quizzes(
@@ -45,6 +53,8 @@ class _AssessmentsState extends State<Assessments> {
               )),
             ],
           ),
-        ));
+        )
+      ],
+    );
   }
 }

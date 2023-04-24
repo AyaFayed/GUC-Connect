@@ -14,37 +14,44 @@ class Compensations extends StatefulWidget {
   State<Compensations> createState() => _CompensationsState();
 }
 
-class _CompensationsState extends State<Compensations> {
+class _CompensationsState extends State<Compensations>
+    with SingleTickerProviderStateMixin {
+  late TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0.0,
-            bottom: TabBar(
-              tabs: const [
-                Tab(text: 'Lectures'),
-                Tab(text: 'Tutorials'),
-              ],
-              indicatorColor: AppColors.light,
-            ),
-            title: Text(widget.courseName),
-          ),
-          body: TabBarView(
-            children: [
-              SingleChildScrollView(
-                  child: CompensationLectures(
-                courseId: widget.courseId,
-                courseName: widget.courseName,
-              )),
-              SingleChildScrollView(
-                  child: CompensationTutorials(
-                courseId: widget.courseId,
-                courseName: widget.courseName,
-              )),
-            ],
-          ),
-        ));
+    return Column(
+      children: [
+        TabBar(
+          controller: tabController,
+          tabs: const [
+            Tab(text: 'Lectures'),
+            Tab(text: 'Tutorials'),
+          ],
+          labelColor: AppColors.selected,
+          indicatorColor: AppColors.selected,
+        ),
+        Expanded(
+          child: TabBarView(controller: tabController, children: [
+            SingleChildScrollView(
+                child: CompensationLectures(
+              courseId: widget.courseId,
+              courseName: widget.courseName,
+            )),
+            SingleChildScrollView(
+                child: CompensationTutorials(
+              courseId: widget.courseId,
+              courseName: widget.courseName,
+            )),
+          ]),
+        )
+      ],
+    );
   }
 }

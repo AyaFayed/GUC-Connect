@@ -9,9 +9,13 @@ import 'package:guc_scheduling_app/widgets/drawers/professor_drawer.dart';
 class ProfessorCourse extends StatefulWidget {
   final String courseId;
   final String courseName;
+  final int? selectedIndex;
 
   const ProfessorCourse(
-      {super.key, required this.courseId, required this.courseName});
+      {super.key,
+      required this.courseId,
+      required this.courseName,
+      this.selectedIndex});
 
   @override
   State<ProfessorCourse> createState() => _ProfessorCourseState();
@@ -24,12 +28,14 @@ class _ProfessorCourseState extends State<ProfessorCourse> {
   @override
   void initState() {
     super.initState();
+    _selectedIndex = widget.selectedIndex ?? 0;
     _widgetOptions = <Widget>[
       AddAnnouncement(
         courseId: widget.courseId,
       ),
-      AddGroup(
+      ScheduleEvent(
         courseId: widget.courseId,
+        courseName: widget.courseName,
       ),
       AddGroup(
         courseId: widget.courseId,
@@ -41,22 +47,9 @@ class _ProfessorCourseState extends State<ProfessorCourse> {
   }
 
   Future<void> _onItemTapped(int index) async {
-    if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Card(
-              child: ScheduleEvent(
-            courseId: widget.courseId,
-            courseName: widget.courseName,
-          )),
-        ),
-      );
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
@@ -71,11 +64,9 @@ class _ProfessorCourseState extends State<ProfessorCourse> {
           courseName: widget.courseName,
           pop: false,
         ),
-        body: SingleChildScrollView(
-          child: _widgetOptions == null
-              ? const CircularProgressIndicator()
-              : _widgetOptions?.elementAt(_selectedIndex),
-        ),
+        body: _widgetOptions == null
+            ? const CircularProgressIndicator()
+            : _widgetOptions?.elementAt(_selectedIndex),
         bottomNavigationBar: ProfessorBottomBar(
             selectedIndex: _selectedIndex, onTap: _onItemTapped));
   }

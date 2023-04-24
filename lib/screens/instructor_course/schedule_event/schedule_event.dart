@@ -3,7 +3,6 @@ import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/sche
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_compensation_lecture.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_quiz.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
-import 'package:guc_scheduling_app/widgets/drawers/professor_drawer.dart';
 
 class ScheduleEvent extends StatefulWidget {
   final String courseId;
@@ -16,29 +15,33 @@ class ScheduleEvent extends StatefulWidget {
   State<ScheduleEvent> createState() => _ScheduleEventState();
 }
 
-class _ScheduleEventState extends State<ScheduleEvent> {
+class _ScheduleEventState extends State<ScheduleEvent>
+    with SingleTickerProviderStateMixin {
+  late TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 3, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0.0,
-            bottom: TabBar(
-              tabs: const [
-                Tab(text: 'Quiz'),
-                Tab(text: 'Assignment'),
-                Tab(text: 'Compensation'),
-              ],
-              indicatorColor: AppColors.light,
-            ),
-            title: Text(widget.courseName),
-          ),
-          drawer: ProfessorDrawer(
-              courseId: widget.courseId,
-              courseName: widget.courseName,
-              pop: true),
-          body: TabBarView(
+    return Column(
+      children: [
+        TabBar(
+          controller: tabController,
+          tabs: const [
+            Tab(text: 'Quiz'),
+            Tab(text: 'Assignment'),
+            Tab(text: 'Compensation'),
+          ],
+          labelColor: AppColors.selected,
+          indicatorColor: AppColors.selected,
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: tabController,
             children: [
               SingleChildScrollView(
                   child: ScheduleQuiz(courseId: widget.courseId)),
@@ -49,6 +52,8 @@ class _ScheduleEventState extends State<ScheduleEvent> {
                       ScheduleCompensationLecture(courseId: widget.courseId)),
             ],
           ),
-        ));
+        )
+      ],
+    );
   }
 }

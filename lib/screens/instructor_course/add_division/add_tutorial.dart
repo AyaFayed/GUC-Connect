@@ -89,7 +89,8 @@ class _AddTutorialState extends State<AddTutorial> {
   Widget build(BuildContext context) {
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-        child: Form(
+        child: SingleChildScrollView(
+            child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
@@ -134,6 +135,6 @@ class _AddTutorialState extends State<AddTutorial> {
               LargeBtn(onPressed: addTutorial, text: 'Add tutorial'),
             ],
           ),
-        ));
+        )));
   }
 }

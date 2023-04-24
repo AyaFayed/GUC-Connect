@@ -103,7 +103,8 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: _userType == null
             ? const Center(child: CircularProgressIndicator())
-            : Form(
+            : SingleChildScrollView(
+                child: Form(
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
@@ -119,6 +120,6 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
                         onPressed: addAnnouncement, text: 'Add announcement'),
                   ],
                 ),
-              ));
+              )));
   }
 }
