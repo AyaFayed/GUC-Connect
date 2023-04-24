@@ -64,4 +64,10 @@ class AssignmentController {
     }
     return [];
   }
+
+  Future<List<Assignment>> getMyAssignments(String courseId) async {
+    return (await _helper.getEventsofInstructor(courseId, EventType.assignments)
+            as List<dynamic>)
+        .cast<Assignment>();
+  }
 }

@@ -159,4 +159,18 @@ class CompensationController {
     }
     return [];
   }
+
+  Future<List<CompensationLecture>> getMyCompensationLectures(
+      String courseId) async {
+    return (await _helper.getEventsofInstructor(
+            courseId, EventType.compensationLectures) as List<dynamic>)
+        .cast<CompensationLecture>();
+  }
+
+  Future<List<CompensationTutorial>> getMyCompensationTutorials(
+      String courseId) async {
+    return (await _helper.getEventsofInstructor(
+            courseId, EventType.compensationTutorials) as List<dynamic>)
+        .cast<CompensationTutorial>();
+  }
 }

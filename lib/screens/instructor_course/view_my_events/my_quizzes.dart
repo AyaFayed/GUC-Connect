@@ -21,7 +21,7 @@ class _MyQuizzesState extends State<MyQuizzes> {
   List<DisplayEvent>? _events;
 
   Future<void> _getData() async {
-    List<Quiz> quizzes = await _quizController.getQuizzes(widget.courseId);
+    List<Quiz> quizzes = await _quizController.getMyQuizzes(widget.courseId);
 
     List<DisplayEvent> events = quizzes.map((Quiz quiz) {
       return DisplayEvent(

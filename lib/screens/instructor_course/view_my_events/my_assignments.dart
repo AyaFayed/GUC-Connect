@@ -22,7 +22,7 @@ class _MyAssignmentsState extends State<MyAssignments> {
 
   Future<void> _getData() async {
     List<Assignment> assignments =
-        await _assignmentController.getAssignments(widget.courseId);
+        await _assignmentController.getMyAssignments(widget.courseId);
 
     List<DisplayEvent> events = assignments.map((Assignment assignment) {
       return DisplayEvent(

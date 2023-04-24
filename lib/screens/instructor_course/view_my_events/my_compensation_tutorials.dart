@@ -24,7 +24,8 @@ class _MyCompensationTutorialsState extends State<MyCompensationTutorials> {
 
   Future<void> _getData() async {
     List<CompensationTutorial> compensationTutorials =
-        await _compensationController.getCompensationTutorials(widget.courseId);
+        await _compensationController
+            .getMyCompensationTutorials(widget.courseId);
 
     List<DisplayEvent> events =
         compensationTutorials.map((CompensationTutorial compensationTutorial) {

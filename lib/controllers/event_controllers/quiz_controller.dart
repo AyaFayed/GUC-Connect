@@ -76,4 +76,10 @@ class QuizController {
     }
     return [];
   }
+
+  Future<List<Quiz>> getMyQuizzes(String courseId) async {
+    return (await _helper.getEventsofInstructor(courseId, EventType.quizzes)
+            as List<dynamic>)
+        .cast<Quiz>();
+  }
 }
