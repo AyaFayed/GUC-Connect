@@ -3,6 +3,7 @@ import 'package:guc_scheduling_app/controllers/event_controllers/compensation_co
 import 'package:guc_scheduling_app/models/events/compensation/compensation_tutorial_model.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
+import 'package:guc_scheduling_app/widgets/drawers/ta_drawer.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/event_list.dart';
 
 class MyCompensationTutorials extends StatefulWidget {
@@ -55,6 +56,8 @@ class _MyCompensationTutorialsState extends State<MyCompensationTutorials> {
         title: const Text('Scheduled compensations'),
         elevation: 0.0,
       ),
+      drawer: TADrawer(
+          courseId: widget.courseId, courseName: widget.courseName, pop: true),
       body: Container(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
           child: _events == null

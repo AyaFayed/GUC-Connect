@@ -3,6 +3,7 @@ import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/sche
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_compensation_lecture.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_quiz.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
+import 'package:guc_scheduling_app/widgets/drawers/professor_drawer.dart';
 
 class ScheduleEvent extends StatefulWidget {
   final String courseId;
@@ -33,6 +34,10 @@ class _ScheduleEventState extends State<ScheduleEvent> {
             ),
             title: Text(widget.courseName),
           ),
+          drawer: ProfessorDrawer(
+              courseId: widget.courseId,
+              courseName: widget.courseName,
+              pop: true),
           body: TabBarView(
             children: [
               SingleChildScrollView(

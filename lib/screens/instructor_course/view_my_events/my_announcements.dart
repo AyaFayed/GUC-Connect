@@ -5,6 +5,8 @@ import 'package:guc_scheduling_app/models/events/announcement_model.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
+import 'package:guc_scheduling_app/widgets/drawers/professor_drawer.dart';
+import 'package:guc_scheduling_app/widgets/drawers/ta_drawer.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/event_list.dart';
 
 class MyAnnouncements extends StatefulWidget {
@@ -23,6 +25,7 @@ class _MyAnnouncementsState extends State<MyAnnouncements> {
   final UserController _userController = UserController();
 
   List<DisplayEvent>? _events;
+  UserType? _currentUserType;
 
   Future<void> _getData() async {
     List<Announcement> announcements =
@@ -40,8 +43,11 @@ class _MyAnnouncementsState extends State<MyAnnouncements> {
           description: announcement.description,
           file: announcement.file);
     }));
+
+    UserType currentUserType = await _userController.getCurrentUserType();
     setState(() {
       _events = events;
+      _currentUserType = currentUserType;
     });
   }
 
@@ -53,20 +59,32 @@ class _MyAnnouncementsState extends State<MyAnnouncements> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My announcements'),
-        elevation: 0.0,
-      ),
-      body: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-          child: _events == null
-              ? const Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                  child: EventList(
-                  events: _events ?? [],
-                  courseName: widget.courseName,
-                ))),
-    );
+    return _currentUserType == null
+        ? const Center(child: CircularProgressIndicator())
+        : Scaffold(
+            appBar: AppBar(
+              title: const Text('My announcements'),
+              elevation: 0.0,
+            ),
+            drawer: _currentUserType == UserType.professor
+                ? ProfessorDrawer(
+                    courseId: widget.courseId,
+                    courseName: widget.courseName,
+                    pop: true)
+                : TADrawer(
+                    courseId: widget.courseId,
+                    courseName: widget.courseName,
+                    pop: true),
+            body: Container(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 15.0),
+                child: _events == null
+                    ? const Center(child: CircularProgressIndicator())
+                    : SingleChildScrollView(
+                        child: EventList(
+                        events: _events ?? [],
+                        courseName: widget.courseName,
+                      ))),
+          );
   }
 }
