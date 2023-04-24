@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/compensation_controller.dart';
 import 'package:guc_scheduling_app/models/events/compensation/compensation_tutorial_model.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
+import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/event_list.dart';
 
@@ -28,6 +29,8 @@ class _CompensationTutorialsState extends State<CompensationTutorials> {
     List<DisplayEvent> events =
         compensationTutorials.map((CompensationTutorial compensationTutorial) {
       return DisplayEvent(
+          id: compensationTutorial.id,
+          eventType: EventType.compensationTutorials,
           title: compensationTutorial.title,
           subtitle: formatDateRange(
               compensationTutorial.start, compensationTutorial.end),

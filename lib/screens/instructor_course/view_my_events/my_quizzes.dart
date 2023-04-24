@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/quiz_controller.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/models/events/quiz_model.dart';
+import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/widgets/drawers/professor_drawer.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/event_list.dart';
@@ -26,6 +27,8 @@ class _MyQuizzesState extends State<MyQuizzes> {
 
     List<DisplayEvent> events = quizzes.map((Quiz quiz) {
       return DisplayEvent(
+          id: quiz.id,
+          eventType: EventType.quizzes,
           title: quiz.title,
           subtitle: formatDateRange(quiz.start, quiz.end),
           description: quiz.description,
@@ -60,6 +63,7 @@ class _MyQuizzesState extends State<MyQuizzes> {
                   child: EventList(
                   events: _events ?? [],
                   courseName: widget.courseName,
+                  editable: true,
                 ))),
     );
   }

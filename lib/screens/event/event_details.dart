@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/widgets/download_file.dart';
 
 class EventDetails extends StatefulWidget {
   final String courseName;
-  final String title;
-  final String subtitle;
-  final String description;
-  final String? file;
+  final DisplayEvent event;
 
   const EventDetails({
     super.key,
-    required this.title,
-    required this.subtitle,
-    required this.description,
     required this.courseName,
-    required this.file,
+    required this.event,
   });
 
   @override
@@ -37,22 +32,22 @@ class _EventDetailsState extends State<EventDetails> {
           children: <Widget>[
             const SizedBox(height: 40.0),
             Text(
-              widget.title,
+              widget.event.title,
               style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 20.0),
             Text(
-              widget.subtitle,
+              widget.event.subtitle,
               style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 20.0),
             Text(
-              widget.description,
+              widget.event.description,
               style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 20.0),
-            widget.file != null
-                ? DownloadFile(file: widget.file!)
+            widget.event.file != null
+                ? DownloadFile(file: widget.event.file!)
                 : const SizedBox(height: 0.0),
           ],
         ),

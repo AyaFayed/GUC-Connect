@@ -6,11 +6,13 @@ import 'package:guc_scheduling_app/widgets/event_widgets/event_card.dart';
 class EventList extends StatelessWidget {
   final List<DisplayEvent> events;
   final String courseName;
+  final bool? editable;
 
   const EventList({
     super.key,
     required this.events,
     required this.courseName,
+    this.editable,
   });
 
   @override
@@ -19,11 +21,8 @@ class EventList extends StatelessWidget {
         children: events
             .map((event) => Column(children: [
                   EventCard(
-                    title: event.title,
-                    subtitle: event.subtitle,
-                    description: event.description,
+                    event: event,
                     courseName: courseName,
-                    file: event.file,
                   ),
                   Divider(
                     color: AppColors.unselected,

@@ -1,3 +1,5 @@
+import 'package:guc_scheduling_app/shared/constants.dart';
+
 class Event {
   String id;
   String creator;
@@ -34,13 +36,17 @@ class Event {
 }
 
 class DisplayEvent {
+  String id;
+  EventType eventType;
   String title;
   String subtitle;
   String description;
   String? file;
 
   DisplayEvent(
-      {required this.title,
+      {required this.id,
+      required this.eventType,
+      required this.title,
       required this.subtitle,
       required this.description,
       required this.file});

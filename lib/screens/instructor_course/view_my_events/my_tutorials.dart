@@ -36,6 +36,8 @@ class _MyTutorialsState extends State<MyTutorials> {
       String instructorName =
           await _userController.getUserName(announcement.creator);
       return DisplayEvent(
+          id: announcement.id,
+          eventType: EventType.announcements,
           title: formatName(instructorName, userType),
           subtitle: announcement.title,
           description: announcement.description,

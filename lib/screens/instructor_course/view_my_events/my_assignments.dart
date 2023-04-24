@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/assignment_controller.dart';
 import 'package:guc_scheduling_app/models/events/assignment_model.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
+import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/widgets/drawers/professor_drawer.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/event_list.dart';
@@ -27,6 +28,8 @@ class _MyAssignmentsState extends State<MyAssignments> {
 
     List<DisplayEvent> events = assignments.map((Assignment assignment) {
       return DisplayEvent(
+          id: assignment.id,
+          eventType: EventType.assignments,
           title: assignment.title,
           subtitle: 'Deadline ${formatDate(assignment.deadline)}',
           description: assignment.description,
@@ -61,6 +64,7 @@ class _MyAssignmentsState extends State<MyAssignments> {
                   child: EventList(
                   events: _events ?? [],
                   courseName: widget.courseName,
+                  editable: true,
                 ))),
     );
   }
