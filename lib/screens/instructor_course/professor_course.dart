@@ -3,7 +3,7 @@ import 'package:guc_scheduling_app/screens/discussion/discussion.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_announcement/add_announcement.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_division/add_group.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_event.dart';
-import 'package:guc_scheduling_app/theme/colors.dart';
+import 'package:guc_scheduling_app/widgets/bottom_bars/professor_bottom_bar.dart';
 import 'package:guc_scheduling_app/widgets/drawers/professor_drawer.dart';
 
 class ProfessorCourse extends StatefulWidget {
@@ -62,49 +62,21 @@ class _ProfessorCourseState extends State<ProfessorCourse> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.courseName),
-        elevation: 0.0,
-      ),
-      drawer: ProfessorDrawer(
-        courseId: widget.courseId,
-        courseName: widget.courseName,
-        pop: false,
-      ),
-      body: SingleChildScrollView(
-        child: _widgetOptions == null
-            ? const CircularProgressIndicator()
-            : _widgetOptions?.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notification_add),
-            label: 'Announcement',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.schedule),
-            label: 'Schedule',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'Add group',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people_alt_outlined),
-            label: 'Discussion',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: AppColors.bottomNavbar,
-        showUnselectedLabels: true,
-        unselectedItemColor: AppColors.unselected,
-        selectedItemColor: AppColors.selected,
-        onTap: (val) async {
-          await _onItemTapped(val);
-        },
-      ),
-    );
+        appBar: AppBar(
+          title: Text(widget.courseName),
+          elevation: 0.0,
+        ),
+        drawer: ProfessorDrawer(
+          courseId: widget.courseId,
+          courseName: widget.courseName,
+          pop: false,
+        ),
+        body: SingleChildScrollView(
+          child: _widgetOptions == null
+              ? const CircularProgressIndicator()
+              : _widgetOptions?.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: ProfessorBottomBar(
+            selectedIndex: _selectedIndex, onTap: _onItemTapped));
   }
 }

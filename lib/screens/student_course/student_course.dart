@@ -3,7 +3,7 @@ import 'package:guc_scheduling_app/screens/discussion/discussion.dart';
 import 'package:guc_scheduling_app/screens/student_course/announcements.dart';
 import 'package:guc_scheduling_app/screens/student_course/assessments/assessments.dart';
 import 'package:guc_scheduling_app/screens/student_course/compensations/compensations.dart';
-import 'package:guc_scheduling_app/theme/colors.dart';
+import 'package:guc_scheduling_app/widgets/bottom_bars/student_bottom_bar.dart';
 
 class StudentCourse extends StatefulWidget {
   final String courseId;
@@ -84,35 +84,8 @@ class _StudentCourseState extends State<StudentCourse> {
             ? const CircularProgressIndicator()
             : _widgetOptions?.elementAt(_selectedIndex),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Announcements',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.assignment),
-            label: 'Assessments',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.schedule),
-            label: 'Compensations',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people_alt_outlined),
-            label: 'Discussion',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: AppColors.bottomNavbar,
-        showUnselectedLabels: true,
-        unselectedItemColor: AppColors.unselected,
-        selectedItemColor: AppColors.selected,
-        onTap: (val) async {
-          await _onItemTapped(val);
-        },
-      ),
+      bottomNavigationBar:
+          StudentBottomBar(selectedIndex: _selectedIndex, onTap: _onItemTapped),
     );
   }
 }
