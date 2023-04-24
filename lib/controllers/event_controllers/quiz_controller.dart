@@ -17,9 +17,8 @@ class QuizController {
 
   Future<int> canScheduleQuiz(
       List<String> groupIds, DateTime start, DateTime end) async {
-    List<Group> groups = await Database.getGroupListFromIds(groupIds);
     int conflicts =
-        await _scheduleEventsController.canScheduleGroup(groups, start, end);
+        await _scheduleEventsController.canScheduleGroups(groupIds, start, end);
     return conflicts;
   }
 

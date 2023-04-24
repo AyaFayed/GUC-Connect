@@ -1,4 +1,7 @@
+import 'package:guc_scheduling_app/controllers/event_controllers/assignment_controller.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/compensation_controller.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/event_controllers_helper.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/quiz_controller.dart';
 import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/models/divisions/group_model.dart';
 import 'package:guc_scheduling_app/models/divisions/tutorial_model.dart';
@@ -10,6 +13,10 @@ import 'package:guc_scheduling_app/shared/constants.dart';
 
 class ScheduleEventsController {
   final EventsControllerHelper _helper = EventsControllerHelper();
+  final AssignmentController _assignmentController = AssignmentController();
+  final QuizController _quizController = QuizController();
+  final CompensationController _compensationController =
+      CompensationController();
 
   Future<bool> isConflictingWithQuiz(
       List<String> ids, DateTime start, DateTime end) async {
@@ -74,9 +81,10 @@ class ScheduleEventsController {
     return false;
   }
 
-  Future<int> canScheduleGroup(
-      List<Group> groups, DateTime start, DateTime end) async {
+  Future<int> canScheduleGroups(
+      List<String> groupIds, DateTime start, DateTime end) async {
     int conflicts = 0;
+    List<Group> groups = await Database.getGroupListFromIds(groupIds);
     for (Group group in groups) {
       List<String> studentIds = group.students;
       for (String studentId in studentIds) {
@@ -94,9 +102,11 @@ class ScheduleEventsController {
     return conflicts;
   }
 
-  Future<int> canScheduleTutorial(
-      List<Tutorial> tutorials, DateTime start, DateTime end) async {
+  Future<int> canScheduleTutorials(
+      List<String> tutorialIds, DateTime start, DateTime end) async {
     int conflicts = 0;
+    List<Tutorial> tutorials =
+        await Database.getTutorialListFromIds(tutorialIds);
     for (Tutorial tutorial in tutorials) {
       List<String> studentIds = tutorial.students;
       for (String studentId in studentIds) {
@@ -141,5 +151,56 @@ class ScheduleEventsController {
       }
     }
     return false;
+  }
+
+  Future editScheduledEvent(EventType eventType, String eventId, String title,
+      String description, String? file, DateTime start, DateTime? end) async {
+    switch (eventType) {
+      case EventType.announcements:
+        break;
+      case EventType.assignments:
+        await _assignmentController.editAssignment(
+            eventId, title, description, file, start);
+        break;
+      case EventType.quizzes:
+        await _quizController.editQuiz(
+            eventId, title, description, file, start, end!);
+        break;
+      case EventType.compensationLectures:
+        await _compensationController.editCompensationLecture(
+            eventId, title, description, file, start, end!);
+        break;
+      case EventType.compensationTutorials:
+        await _compensationController.editCompensationTutorial(
+            eventId, title, description, file, start, end!);
+        break;
+    }
+  }
+
+  Future<int> canScheduleEvent(
+      EventType eventType, String eventId, DateTime start, DateTime end) async {
+    switch (eventType) {
+      case EventType.announcements:
+        return 0;
+      case EventType.assignments:
+        return 0;
+      case EventType.quizzes:
+        Quiz? quiz = await Database.getQuiz(eventId);
+        int conflicts = await canScheduleGroups(quiz?.groups ?? [], start, end);
+        return conflicts;
+      case EventType.compensationLectures:
+        CompensationLecture? compensationLecture =
+            await Database.getCompensationLecture(eventId);
+        int conflicts = await canScheduleGroups(
+            compensationLecture?.groups ?? [], start, end);
+        return conflicts;
+      case EventType.compensationTutorials:
+        CompensationTutorial? compensationTutorial =
+            await Database.getCompensationTutorial(eventId);
+        int conflicts =
+            await _compensationController.canScheduleCompensationTutorial(
+                compensationTutorial?.tutorials ?? [], start, end);
+        return conflicts;
+    }
   }
 }

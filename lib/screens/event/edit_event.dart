@@ -4,11 +4,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:guc_scheduling_app/controllers/event_controllers/quiz_controller.dart';
-import 'package:guc_scheduling_app/controllers/user_controller.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/schedule_event_controller.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
-import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
@@ -16,8 +14,6 @@ import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/buttons/small_icon_btn.dart';
 import 'package:guc_scheduling_app/widgets/date_time_selector.dart';
-import 'package:guc_scheduling_app/widgets/download_file.dart';
-import 'package:guc_scheduling_app/widgets/event_widgets/add_event.dart';
 import 'package:quickalert/quickalert.dart';
 
 class EditEvent extends StatefulWidget {
@@ -38,8 +34,8 @@ class _EditEventState extends State<EditEvent> {
   final controllerTitle = TextEditingController();
   final controllerDescription = TextEditingController();
   final controllerDuration = TextEditingController();
-  final QuizController _quizController = QuizController();
-  final UserController _userController = UserController();
+  final ScheduleEventsController _scheduleEventsController =
+      ScheduleEventsController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -53,7 +49,16 @@ class _EditEventState extends State<EditEvent> {
     try {
       String? fileUrl =
           file.isNotEmpty ? await uploadFile(file.first, task) : null;
-      // await _quizController
+      await _scheduleEventsController.editScheduledEvent(
+          widget.event.eventType,
+          widget.event.id,
+          controllerTitle.text,
+          controllerDescription.text,
+          fileUrl,
+          startDateTime ?? DateTime.now(),
+          startDateTime?.add(
+                  Duration(minutes: int.parse(controllerDuration.text))) ??
+              DateTime.now());
       controllerDescription.clear();
       controllerDuration.clear();
       controllerTitle.clear();
@@ -93,8 +98,9 @@ class _EditEventState extends State<EditEvent> {
           error = Errors.required;
         });
       } else {
-        int conflicts = await _quizController.canScheduleQuiz(
-            selectedGroupIds,
+        int conflicts = await _scheduleEventsController.canScheduleEvent(
+            widget.event.eventType,
+            widget.event.id,
             startDateTime ?? DateTime.now(),
             startDateTime?.add(
                     Duration(minutes: int.parse(controllerDuration.text))) ??
@@ -128,7 +134,6 @@ class _EditEventState extends State<EditEvent> {
     });
   }
 
-  UserType? _userType;
   String fileName = 'No File Selected';
 
   void pickFile() async {
@@ -142,20 +147,6 @@ class _EditEventState extends State<EditEvent> {
       file.add(File(path));
       fileName = getFileName(path);
     });
-  }
-
-  Future<void> _getData() async {
-    UserType userType = await _userController.getCurrentUserType();
-
-    setState(() {
-      _userType = userType;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getData();
   }
 
   @override

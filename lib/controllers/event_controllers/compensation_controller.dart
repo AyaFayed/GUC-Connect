@@ -21,10 +21,8 @@ class CompensationController {
 
   Future<int> canScheduleCompensationLecture(
       List<String> groupIds, DateTime start, DateTime end) async {
-    List<Group> groups = await Database.getGroupListFromIds(groupIds);
-
     int conflicts =
-        await _scheduleEventsController.canScheduleGroup(groups, start, end);
+        await _scheduleEventsController.canScheduleGroups(groupIds, start, end);
     return conflicts;
   }
 
@@ -65,10 +63,8 @@ class CompensationController {
 
   Future<int> canScheduleCompensationTutorial(
       List<String> tutorialIds, DateTime start, DateTime end) async {
-    List<Tutorial> tutorials =
-        await Database.getTutorialListFromIds(tutorialIds);
-    int conflicts = await _scheduleEventsController.canScheduleTutorial(
-        tutorials, start, end);
+    int conflicts = await _scheduleEventsController.canScheduleTutorials(
+        tutorialIds, start, end);
     return conflicts;
   }
 
