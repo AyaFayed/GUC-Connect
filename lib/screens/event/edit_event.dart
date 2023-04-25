@@ -26,12 +26,14 @@ class EditEvent extends StatefulWidget {
   final String courseName;
   final String eventId;
   final EventType eventType;
+  final Future<void> Function() getData;
 
   const EditEvent({
     super.key,
     required this.courseName,
     required this.eventId,
     required this.eventType,
+    required this.getData,
   });
 
   @override
@@ -56,6 +58,12 @@ class _EditEventState extends State<EditEvent> {
   File? file;
   UploadTask? task;
   DateTime? startDateTime;
+
+  Future<void> cancel() async {
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
+  }
 
   Future<void> completeScheduling() async {
     try {
@@ -83,6 +91,11 @@ class _EditEventState extends State<EditEvent> {
           context: context,
           type: QuickAlertType.success,
           confirmBtnColor: AppColors.confirm,
+          onConfirmBtnTap: () async {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            await widget.getData();
+          },
           text: Confirmations.updateSuccess,
         );
       }
@@ -324,8 +337,14 @@ class _EditEventState extends State<EditEvent> {
                                 fontSize: Sizes.xsmall,
                                 fontWeight: FontWeight.w400),
                           ),
-                          const SizedBox(height: 40.0),
+                          const SizedBox(height: 20.0),
                           LargeBtn(onPressed: editEvent, text: 'Save changes'),
+                          const SizedBox(height: 10.0),
+                          LargeBtn(
+                            onPressed: cancel,
+                            text: 'Cancel',
+                            color: AppColors.unselected,
+                          ),
                         ],
                       ),
                     ))),

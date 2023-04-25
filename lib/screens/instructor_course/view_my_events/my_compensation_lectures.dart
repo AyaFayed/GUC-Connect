@@ -69,6 +69,7 @@ class _MyCompensationLecturesState extends State<MyCompensationLectures> {
                   events: _events ?? [],
                   courseName: widget.courseName,
                   editable: true,
+                  getData: _getData,
                 ))),
     );
   }

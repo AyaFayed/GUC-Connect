@@ -65,6 +65,7 @@ class _MyAssignmentsState extends State<MyAssignments> {
                   events: _events ?? [],
                   courseName: widget.courseName,
                   editable: true,
+                  getData: _getData,
                 ))),
     );
   }

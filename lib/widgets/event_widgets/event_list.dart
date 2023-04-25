@@ -7,12 +7,14 @@ class EventList extends StatelessWidget {
   final List<DisplayEvent> events;
   final String courseName;
   final bool? editable;
+  final Future<void> Function()? getData;
 
   const EventList({
     super.key,
     required this.events,
     required this.courseName,
     this.editable,
+    this.getData,
   });
 
   @override
@@ -24,6 +26,7 @@ class EventList extends StatelessWidget {
                     event: event,
                     courseName: courseName,
                     editable: editable,
+                    getData: getData,
                   ),
                   Divider(
                     color: AppColors.unselected,

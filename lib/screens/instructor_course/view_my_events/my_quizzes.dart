@@ -64,6 +64,7 @@ class _MyQuizzesState extends State<MyQuizzes> {
                   events: _events ?? [],
                   courseName: widget.courseName,
                   editable: true,
+                  getData: _getData,
                 ))),
     );
   }

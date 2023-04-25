@@ -70,6 +70,7 @@ class _MyCompensationTutorialsState extends State<MyCompensationTutorials> {
                   events: _events ?? [],
                   courseName: widget.courseName,
                   editable: true,
+                  getData: _getData,
                 ))),
     );
   }

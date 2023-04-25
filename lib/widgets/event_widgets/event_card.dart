@@ -8,12 +8,14 @@ class EventCard extends StatelessWidget {
   final String courseName;
   final DisplayEvent event;
   final bool? editable;
+  final Future<void> Function()? getData;
 
   const EventCard({
     super.key,
     required this.event,
     this.editable,
     required this.courseName,
+    this.getData,
   });
 
   @override
@@ -34,7 +36,9 @@ class EventCard extends StatelessWidget {
                   ? EditEvent(
                       courseName: courseName,
                       eventId: event.id,
-                      eventType: event.eventType)
+                      eventType: event.eventType,
+                      getData: getData!,
+                    )
                   : EventDetails(courseName: courseName, event: event)),
         );
       },
