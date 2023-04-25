@@ -86,6 +86,13 @@ class _EditEventState extends State<EditEvent> {
         cancelBtnText: 'Cancel',
         onConfirmBtnTap: () async {
           try {
+            Navigator.pop(context);
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.loading,
+              confirmBtnColor: AppColors.confirm,
+              text: Confirmations.loading,
+            );
             switch (widget.eventType) {
               case EventType.announcements:
                 break;

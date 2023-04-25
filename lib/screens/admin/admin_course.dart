@@ -23,9 +23,25 @@ class _AdminCourseState extends State<AdminCourse> {
 
   final _formKey = GlobalKey<FormState>();
 
+  bool _disableAllButtons = false;
+
   TextEditingController? controllerName;
 
+  Future<void> onConfirm() async {
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Card(child: AdminHome()),
+        ));
+  }
+
   Future<void> editCourse() async {
+    setState(() {
+      _disableAllButtons = true;
+    });
     if (_formKey.currentState!.validate()) {
       try {
         dynamic result = await _courseController.editCourse(
@@ -38,16 +54,7 @@ class _AdminCourseState extends State<AdminCourse> {
               context: context,
               type: QuickAlertType.success,
               confirmBtnColor: AppColors.confirm,
-              onConfirmBtnTap: () async {
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Card(child: AdminHome()),
-                    ));
-              },
+              onConfirmBtnTap: onConfirm,
               text: Confirmations.updateSuccess,
             );
           } else {
@@ -70,6 +77,114 @@ class _AdminCourseState extends State<AdminCourse> {
         }
       }
     }
+
+    setState(() {
+      _disableAllButtons = false;
+    });
+  }
+
+  Future<void> cancel() async {
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
+  }
+
+  Future<void> delete() async {
+    setState(() {
+      _disableAllButtons = true;
+    });
+    if (context.mounted) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.confirm,
+        text: Confirmations.deleteWarning('course'),
+        confirmBtnText: 'Delete',
+        cancelBtnText: 'Cancel',
+        onConfirmBtnTap: () async {
+          try {
+            Navigator.pop(context);
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.loading,
+              confirmBtnColor: AppColors.confirm,
+              text: Confirmations.loading,
+            );
+            await _courseController.deleteCourse(widget.courseId);
+            if (context.mounted) {
+              Navigator.pop(context);
+              QuickAlert.show(
+                context: context,
+                type: QuickAlertType.success,
+                confirmBtnColor: AppColors.confirm,
+                onConfirmBtnTap: onConfirm,
+                text: Confirmations.deleteSuccess('course'),
+              );
+            }
+          } catch (e) {
+            Navigator.pop(context);
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              confirmBtnColor: AppColors.confirm,
+              text: Errors.backend,
+            );
+          }
+        },
+        confirmBtnColor: AppColors.error,
+      );
+    }
+    setState(() {
+      _disableAllButtons = false;
+    });
+  }
+
+  Future<void> clearData() async {
+    setState(() {
+      _disableAllButtons = true;
+    });
+    if (context.mounted) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.confirm,
+        text: Confirmations.clearWarning('course'),
+        confirmBtnText: 'Clear',
+        cancelBtnText: 'Cancel',
+        onConfirmBtnTap: () async {
+          try {
+            Navigator.pop(context);
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.loading,
+              confirmBtnColor: AppColors.confirm,
+              text: Confirmations.loading,
+            );
+            await _courseController.clearCourse(widget.courseId);
+            if (context.mounted) {
+              Navigator.pop(context);
+              QuickAlert.show(
+                context: context,
+                type: QuickAlertType.success,
+                confirmBtnColor: AppColors.confirm,
+                onConfirmBtnTap: onConfirm,
+                text: Confirmations.updateSuccess,
+              );
+            }
+          } catch (e) {
+            Navigator.pop(context);
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              confirmBtnColor: AppColors.confirm,
+              text: Errors.backend,
+            );
+          }
+        },
+        confirmBtnColor: AppColors.error,
+      );
+    }
+    setState(() {
+      _disableAllButtons = false;
+    });
   }
 
   @override
@@ -114,7 +229,27 @@ class _AdminCourseState extends State<AdminCourse> {
                         controller: controllerName,
                       ),
                 const SizedBox(height: 40.0),
-                LargeBtn(onPressed: editCourse, text: 'Save changes'),
+                LargeBtn(
+                    onPressed: _disableAllButtons ? null : editCourse,
+                    text: 'Save changes'),
+                const SizedBox(height: 20.0),
+                LargeBtn(
+                  onPressed: _disableAllButtons ? null : delete,
+                  text: 'Delete course',
+                  color: AppColors.primary,
+                ),
+                const SizedBox(height: 20.0),
+                LargeBtn(
+                  onPressed: _disableAllButtons ? null : clearData,
+                  text: 'Clear data',
+                  color: AppColors.secondary,
+                ),
+                const SizedBox(height: 20.0),
+                LargeBtn(
+                  onPressed: _disableAllButtons ? null : cancel,
+                  text: 'Cancel',
+                  color: AppColors.unselected,
+                ),
               ],
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:guc_scheduling_app/shared/errors.dart';
 
 class Confirmations {
   static String updateSuccess = 'This update was completed successfully.';
+  static String loading = 'This may take a couple of seconds';
   static String unenrollWarning =
       'Are you sure you want to unenroll from this course?';
   static String creationSuccess(String object) =>
@@ -23,4 +24,7 @@ class Confirmations {
 
   static String deleteWarning(String object) =>
       'Are you sure you want to delete this $object?';
+
+  static String clearWarning(String object) =>
+      'Are you sure you want to clear all the data related to this $object?';
 }
