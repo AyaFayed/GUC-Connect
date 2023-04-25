@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_announcements.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_compensation_tutorials.dart';
-import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_tutorials.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 
@@ -66,26 +65,6 @@ class _TADrawerState extends State<TADrawer> {
                 MaterialPageRoute(
                   builder: (context) => Card(
                       child: MyCompensationTutorials(
-                    courseId: widget.courseId,
-                    courseName: widget.courseName,
-                  )),
-                ),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.group,
-            ),
-            title: const Text('My tutorials'),
-            onTap: () {
-              Navigator.pop(context);
-              if (widget.pop) Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Card(
-                      child: MyTutorials(
                     courseId: widget.courseId,
                     courseName: widget.courseName,
                   )),
