@@ -91,7 +91,10 @@ class _AddEventState extends State<AddEvent> {
                     courseId: widget.courseId,
                     selectedTutorialIds: widget.selectedGroupIds),
             const SizedBox(height: 20.0),
-            SmallIconBtn(onPressed: pickFile, text: 'Add file'),
+            SmallIconBtn(
+              onPressed: pickFile,
+              text: widget.file.isEmpty ? 'Add file' : 'Change file',
+            ),
             const SizedBox(height: 5),
             Text(
               fileName,

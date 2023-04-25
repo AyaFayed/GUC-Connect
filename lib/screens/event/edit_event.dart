@@ -19,6 +19,7 @@ import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/buttons/small_icon_btn.dart';
 import 'package:guc_scheduling_app/widgets/date_time_selector.dart';
+import 'package:guc_scheduling_app/widgets/download_file.dart';
 import 'package:quickalert/quickalert.dart';
 
 class EditEvent extends StatefulWidget {
@@ -50,14 +51,17 @@ class _EditEventState extends State<EditEvent> {
   TextEditingController? controllerDuration;
 
   String error = '';
-  String fileName = 'No File Selected';
+  String fileName = '';
+  String? fileUrl;
   File? file;
   UploadTask? task;
   DateTime? startDateTime;
 
   Future<void> completeScheduling() async {
     try {
-      String? fileUrl = file != null ? await uploadFile(file, task) : null;
+      if (file != null) {
+        fileUrl = await uploadFile(file, task);
+      }
       await _scheduleEventsController.editScheduledEvent(
           widget.eventType,
           widget.eventId,
@@ -163,6 +167,7 @@ class _EditEventState extends State<EditEvent> {
     String title = '';
     String description = '';
     String duration = '';
+    String? fileDownloadLink;
     DateTime? start;
 
     switch (widget.eventType) {
@@ -173,6 +178,7 @@ class _EditEventState extends State<EditEvent> {
         start = assignment?.deadline;
         title = assignment?.title ?? '';
         description = assignment?.description ?? '';
+        fileDownloadLink = assignment?.file;
         break;
       case EventType.quizzes:
         Quiz? quiz = await Database.getQuiz(widget.eventId);
@@ -180,6 +186,7 @@ class _EditEventState extends State<EditEvent> {
         title = quiz?.title ?? '';
         description = quiz?.description ?? '';
         duration = quiz!.end.difference(quiz.start).inMinutes.toString();
+        fileDownloadLink = quiz.file;
         break;
       case EventType.compensationLectures:
         CompensationLecture? compensationLecture =
@@ -191,6 +198,7 @@ class _EditEventState extends State<EditEvent> {
             .difference(compensationLecture.start)
             .inMinutes
             .toString();
+        fileDownloadLink = compensationLecture.file;
         break;
       case EventType.compensationTutorials:
         CompensationTutorial? compensationTutorial =
@@ -202,6 +210,8 @@ class _EditEventState extends State<EditEvent> {
             .difference(compensationTutorial.start)
             .inMinutes
             .toString();
+        fileDownloadLink = compensationTutorial.file;
+
         break;
     }
 
@@ -209,6 +219,8 @@ class _EditEventState extends State<EditEvent> {
       controllerTitle = TextEditingController(text: title);
       controllerDescription = TextEditingController(text: description);
       controllerDuration = TextEditingController(text: duration);
+
+      fileUrl = fileDownloadLink;
 
       if (start != null) startDateTime = start;
 
@@ -297,7 +309,14 @@ class _EditEventState extends State<EditEvent> {
                             controller: controllerDescription,
                           ),
                           const SizedBox(height: 20.0),
-                          SmallIconBtn(onPressed: pickFile, text: 'Add file'),
+                          fileUrl != null
+                              ? DownloadFile(file: fileUrl!)
+                              : const SizedBox(height: 0.0),
+                          const SizedBox(height: 20.0),
+                          SmallIconBtn(
+                            onPressed: pickFile,
+                            text: fileUrl == null ? 'Add file' : 'Change file',
+                          ),
                           const SizedBox(height: 5),
                           Text(
                             fileName,
