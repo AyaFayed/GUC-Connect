@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 
 class SmallIconBtn extends StatelessWidget {
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final String text;
   final Icon? icon;
   const SmallIconBtn(

@@ -3,7 +3,7 @@ import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 
 class LargeBtn extends StatefulWidget {
-  final Future<void> Function() onPressed;
+  final Future<void> Function()? onPressed;
   final String text;
   final Color? color;
   const LargeBtn(
@@ -21,7 +21,7 @@ class _LargeBtnState extends State<LargeBtn> {
       _isButtonDisabled = true;
     });
 
-    await widget.onPressed();
+    await widget.onPressed!();
 
     setState(() {
       _isButtonDisabled = false;
@@ -35,7 +35,8 @@ class _LargeBtnState extends State<LargeBtn> {
             minimumSize: const Size.fromHeight(50.0),
             textStyle: TextStyle(fontSize: Sizes.medium),
             backgroundColor: widget.color ?? AppColors.dark),
-        onPressed: _isButtonDisabled ? null : onPressed,
+        onPressed:
+            _isButtonDisabled || (widget.onPressed == null) ? null : onPressed,
         child: Text(
           _isButtonDisabled ? 'Loading...' : widget.text,
         ));

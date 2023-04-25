@@ -54,6 +54,7 @@ class _EditEventState extends State<EditEvent> {
   final _formKey = GlobalKey<FormState>();
 
   bool _isLoading = true;
+  bool _disableAllButtons = false;
 
   TextEditingController? controllerTitle;
   TextEditingController? controllerDescription;
@@ -73,6 +74,9 @@ class _EditEventState extends State<EditEvent> {
   }
 
   Future<void> delete() async {
+    setState(() {
+      _disableAllButtons = true;
+    });
     if (context.mounted) {
       QuickAlert.show(
         context: context,
@@ -128,6 +132,9 @@ class _EditEventState extends State<EditEvent> {
         confirmBtnColor: AppColors.error,
       );
     }
+    setState(() {
+      _disableAllButtons = false;
+    });
   }
 
   Future<void> completeScheduling() async {
@@ -179,6 +186,7 @@ class _EditEventState extends State<EditEvent> {
   Future<void> editEvent() async {
     setState(() {
       error = '';
+      _disableAllButtons = true;
     });
     if (_formKey.currentState!.validate()) {
       if (startDateTime == null) {
@@ -188,6 +196,9 @@ class _EditEventState extends State<EditEvent> {
       } else {
         if (widget.eventType == EventType.assignments) {
           await completeScheduling();
+          setState(() {
+            _disableAllButtons = false;
+          });
           return;
         }
         int conflicts = await _scheduleEventsController.canScheduleEvent(
@@ -221,6 +232,9 @@ class _EditEventState extends State<EditEvent> {
         error = Errors.required;
       });
     }
+    setState(() {
+      _disableAllButtons = false;
+    });
   }
 
   void setDateTime(dateTime) {
@@ -392,7 +406,7 @@ class _EditEventState extends State<EditEvent> {
                               : const SizedBox(height: 0.0),
                           const SizedBox(height: 20.0),
                           SmallIconBtn(
-                            onPressed: pickFile,
+                            onPressed: _disableAllButtons ? null : pickFile,
                             text: fileUrl == null ? 'Add file' : 'Change file',
                           ),
                           const SizedBox(height: 5),
@@ -403,16 +417,18 @@ class _EditEventState extends State<EditEvent> {
                                 fontWeight: FontWeight.w400),
                           ),
                           const SizedBox(height: 20.0),
-                          LargeBtn(onPressed: editEvent, text: 'Save changes'),
+                          LargeBtn(
+                              onPressed: _disableAllButtons ? null : editEvent,
+                              text: 'Save changes'),
                           const SizedBox(height: 10.0),
                           LargeBtn(
-                            onPressed: delete,
+                            onPressed: _disableAllButtons ? null : delete,
                             text: 'Delete',
                             color: AppColors.primary,
                           ),
                           const SizedBox(height: 10.0),
                           LargeBtn(
-                            onPressed: cancel,
+                            onPressed: _disableAllButtons ? null : cancel,
                             text: 'Cancel',
                             color: AppColors.unselected,
                           ),
