@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/enrollment_controller.dart';
 import 'package:guc_scheduling_app/screens/home/home.dart';
-import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_announcements.dart';
-import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_compensation_tutorials.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';

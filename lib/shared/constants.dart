@@ -1,7 +1,5 @@
 enum UserType { ta, student, professor, admin }
 
-enum Semester { winter, spring, summer }
-
 enum Day { saturday, sunday, monday, tuesday, wednesday, thursday }
 
 enum Slot {

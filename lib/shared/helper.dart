@@ -62,17 +62,6 @@ Slot getSlotFromString(String slot) {
   }
 }
 
-Semester getSemesterFromString(String semester) {
-  switch (semester) {
-    case 'winter':
-      return Semester.winter;
-    case 'spring':
-      return Semester.spring;
-    default:
-      return Semester.summer;
-  }
-}
-
 String abbreviateDay(Day day) {
   switch (day) {
     case Day.saturday:

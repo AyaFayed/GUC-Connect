@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/enrollment_controller.dart';
 import 'package:guc_scheduling_app/screens/home/home.dart';
-import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/widgets/buttons/floating_btn.dart';
 
 class InstructorEnroll extends StatelessWidget {
   final String courseId;
   final String courseName;
-  final Semester semester;
-  final int year;
 
   const InstructorEnroll(
-      {super.key,
-      required this.courseName,
-      required this.semester,
-      required this.year,
-      required this.courseId});
+      {super.key, required this.courseName, required this.courseId});
 
   Future<void> enroll(BuildContext context) async {
     final EnrollmentController enrollmentController = EnrollmentController();
@@ -48,16 +41,6 @@ class InstructorEnroll extends StatelessWidget {
               const SizedBox(height: 40.0),
               Text(
                 courseName,
-                style: const TextStyle(fontSize: 20),
-              ),
-              const SizedBox(height: 20.0),
-              Text(
-                semester.name,
-                style: const TextStyle(fontSize: 20),
-              ),
-              const SizedBox(height: 20.0),
-              Text(
-                year.toString(),
                 style: const TextStyle(fontSize: 20),
               ),
             ],

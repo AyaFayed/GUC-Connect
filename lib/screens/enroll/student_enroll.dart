@@ -4,7 +4,6 @@ import 'package:guc_scheduling_app/controllers/enrollment_controller.dart';
 import 'package:guc_scheduling_app/models/divisions/group_model.dart';
 import 'package:guc_scheduling_app/models/divisions/tutorial_model.dart';
 import 'package:guc_scheduling_app/screens/home/home.dart';
-import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/floating_btn.dart';
@@ -12,15 +11,11 @@ import 'package:guc_scheduling_app/widgets/buttons/floating_btn.dart';
 class StudentEnroll extends StatefulWidget {
   final String courseId;
   final String courseName;
-  final Semester semester;
-  final int year;
-
-  const StudentEnroll(
-      {super.key,
-      required this.courseId,
-      required this.courseName,
-      required this.semester,
-      required this.year});
+  const StudentEnroll({
+    super.key,
+    required this.courseId,
+    required this.courseName,
+  });
 
   @override
   State<StudentEnroll> createState() => _StudentEnrollState();
@@ -105,16 +100,6 @@ class _StudentEnrollState extends State<StudentEnroll> {
               const SizedBox(height: 40.0),
               Text(
                 widget.courseName,
-                style: const TextStyle(fontSize: 20),
-              ),
-              const SizedBox(height: 20.0),
-              Text(
-                widget.semester.name,
-                style: const TextStyle(fontSize: 20),
-              ),
-              const SizedBox(height: 20.0),
-              Text(
-                widget.year.toString(),
                 style: const TextStyle(fontSize: 20),
               ),
               const SizedBox(height: 20.0),

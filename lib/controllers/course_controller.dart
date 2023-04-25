@@ -12,12 +12,10 @@ class CourseController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // course creation:
-  Future createCourse(String name, Semester semester, int year) async {
+  Future createCourse(String name) async {
     List<Course> allCourses = await Database.getAllCourses();
     for (Course course in allCourses) {
-      if (course.name == name &&
-          course.semester == semester &&
-          course.year == year) {
+      if (course.name == name) {
         return 'This course already exists.';
       }
     }
@@ -26,8 +24,6 @@ class CourseController {
     final course = Course(
       id: docCourse.id,
       name: name,
-      semester: semester,
-      year: year,
       professors: [],
       tas: [],
       groups: [],

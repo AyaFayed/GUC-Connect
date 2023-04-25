@@ -25,28 +25,19 @@ class CourseList extends StatelessWidget {
     switch (userType) {
       case UserType.admin:
         return CourseDetails(
-            id: course.id,
-            name: course.name,
-            semester: course.semester,
-            year: course.year);
+          id: course.id,
+          name: course.name,
+        );
       case UserType.professor:
         return enroll
-            ? InstructorEnroll(
-                courseName: course.name,
-                semester: course.semester,
-                year: course.year,
-                courseId: course.id)
+            ? InstructorEnroll(courseName: course.name, courseId: course.id)
             : ProfessorCourse(
                 courseId: course.id,
                 courseName: course.name,
               );
       case UserType.ta:
         return enroll
-            ? InstructorEnroll(
-                courseName: course.name,
-                semester: course.semester,
-                year: course.year,
-                courseId: course.id)
+            ? InstructorEnroll(courseName: course.name, courseId: course.id)
             : TACourse(
                 courseId: course.id,
                 courseName: course.name,
@@ -56,8 +47,6 @@ class CourseList extends StatelessWidget {
             ? StudentEnroll(
                 courseId: course.id,
                 courseName: course.name,
-                semester: course.semester,
-                year: course.year,
               )
             : StudentCourse(courseId: course.id, courseName: course.name);
     }
