@@ -28,6 +28,22 @@ class EnrollmentController {
     }
   }
 
+  Future removeInstructorFromCourse(
+      String courseId, InstructorType instructorType) async {
+    final docCourse = Database.courses.doc(courseId);
+    final courseSnapshot = await docCourse.get();
+
+    if (courseSnapshot.exists) {
+      final course = courseSnapshot.data();
+      List<String> instructors =
+          (course![instructorType.name] as List<dynamic>).cast<String>();
+      instructors.remove(_auth.currentUser?.uid ?? '');
+      await docCourse.update(instructorType == InstructorType.professors
+          ? {'professors': instructors}
+          : {'tas': instructors});
+    }
+  }
+
   Future instructorEnroll(String courseId) async {
     UserType userType = await _user.getCurrentUserType();
 
@@ -102,6 +118,20 @@ class EnrollmentController {
     }
   }
 
+  Future removeStudentFromDivision(
+      String divisionId, DivisionType divisionType) async {
+    final docDivision = _database.collection(divisionType.name).doc(divisionId);
+    final divisionSnapshot = await docDivision.get();
+
+    if (divisionSnapshot.exists) {
+      final division = divisionSnapshot.data();
+      List<String> students =
+          (division!['students'] as List<dynamic>).cast<String>();
+      students.remove(_auth.currentUser?.uid ?? '');
+      await docDivision.update({'students': students});
+    }
+  }
+
   Future studentEnroll(
       String courseId, String groupId, String tutorialId) async {
     Student? student = await Database.getStudent(_auth.currentUser?.uid ?? '');
@@ -123,6 +153,62 @@ class EnrollmentController {
       await addStudentToDivision(groupId, DivisionType.groups);
 
       await addStudentToDivision(tutorialId, DivisionType.tutorials);
+    }
+  }
+
+  Future studentUnenroll(String courseId) async {
+    Student? student = await Database.getStudent(_auth.currentUser?.uid ?? '');
+
+    if (student != null) {
+      List<StudentCourse> courses = student.courses;
+
+      for (StudentCourse course in courses) {
+        if (course.id == courseId) {
+          await removeStudentFromDivision(course.group, DivisionType.groups);
+
+          await removeStudentFromDivision(
+              course.tutorial, DivisionType.tutorials);
+        }
+      }
+
+      courses.removeWhere((course) => course.id == courseId);
+
+      await Database.users
+          .doc(_auth.currentUser?.uid)
+          .update({'courses': courses.map((course) => course.toJson())});
+    }
+  }
+
+  Future professorUnenroll(String courseId) async {
+    Professor? professor =
+        await Database.getProfessor(_auth.currentUser?.uid ?? '');
+
+    if (professor != null) {
+      List<ProfessorCourse> courses = professor.courses;
+
+      courses.removeWhere((course) => course.id == courseId);
+
+      await Database.users
+          .doc(_auth.currentUser?.uid)
+          .update({'courses': courses.map((course) => course.toJson())});
+
+      await removeInstructorFromCourse(courseId, InstructorType.professors);
+    }
+  }
+
+  Future taUnenroll(String courseId) async {
+    TA? ta = await Database.getTa(_auth.currentUser?.uid ?? '');
+
+    if (ta != null) {
+      List<TACourse> courses = ta.courses;
+
+      courses.removeWhere((course) => course.id == courseId);
+
+      await Database.users
+          .doc(_auth.currentUser?.uid)
+          .update({'courses': courses.map((course) => course.toJson())});
+
+      await removeInstructorFromCourse(courseId, InstructorType.tas);
     }
   }
 }
