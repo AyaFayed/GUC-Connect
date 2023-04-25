@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/screens/admin/add_admin.dart';
 import 'package:guc_scheduling_app/services/authentication_service.dart';
-import 'package:guc_scheduling_app/screens/Course/create_course.dart';
+import 'package:guc_scheduling_app/screens/admin/create_course.dart';
 import 'package:guc_scheduling_app/screens/course/all_courses.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/widgets/bottom_bars/admin_bottom_bar.dart';

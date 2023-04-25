@@ -96,16 +96,22 @@ class CourseController {
   }
 
   Future editCourse(String courseId, String name) async {
+    UserType currentUserType = await _user.getCurrentUserType();
+    if (currentUserType != UserType.admin) return;
     final docCourse = Database.courses.doc(courseId);
     await docCourse.update({'name': name});
   }
 
   Future deleteCourse(String courseId) async {
+    UserType currentUserType = await _user.getCurrentUserType();
+    if (currentUserType != UserType.admin) return;
     await clearCourse(courseId);
     await Database.courses.doc(courseId).delete();
   }
 
   Future clearCourse(String courseId) async {
+    UserType currentUserType = await _user.getCurrentUserType();
+    if (currentUserType != UserType.admin) return;
     Course? course = await Database.getCourse(courseId);
     if (course != null) {
       List<Announcement> announcements = await Database.getAllAnnouncements();
@@ -215,6 +221,8 @@ class CourseController {
   }
 
   Future clearCourseList(List<String> courseIds) async {
+    UserType currentUserType = await _user.getCurrentUserType();
+    if (currentUserType != UserType.admin) return;
     List<Future> clearing = [];
     for (String courseId in courseIds) {
       clearing.add(clearCourse(courseId));
@@ -224,6 +232,8 @@ class CourseController {
   }
 
   Future clearAllCoursesData() async {
+    UserType currentUserType = await _user.getCurrentUserType();
+    if (currentUserType != UserType.admin) return;
     await Future.wait([
       Database.deleteAllAnnouncements(),
       Database.deleteAllAssignments(),

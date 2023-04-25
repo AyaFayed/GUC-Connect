@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
-import 'package:guc_scheduling_app/screens/course/course_details.dart';
+import 'package:guc_scheduling_app/screens/admin/admin_course.dart';
 import 'package:guc_scheduling_app/screens/student_course/student_course.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/course_widgets/course_card.dart';
@@ -24,9 +24,9 @@ class CourseList extends StatelessWidget {
   Widget getWidget(Course course) {
     switch (userType) {
       case UserType.admin:
-        return CourseDetails(
-          id: course.id,
-          name: course.name,
+        return AdminCourse(
+          courseId: course.id,
+          courseName: course.name,
         );
       case UserType.professor:
         return enroll
