@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/services/authentication_service.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
+import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
+import 'package:guc_scheduling_app/widgets/drawers/admin_drawer.dart';
 import 'package:quickalert/quickalert.dart';
 
 class AddAdmin extends StatefulWidget {
@@ -60,40 +62,50 @@ class _AddAdminState extends State<AddAdmin> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              const SizedBox(height: 20.0),
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(labelText: 'Email'),
-                validator: (val) => val!.isEmpty ? Errors.required : null,
-                controller: controllerEmail,
-              ),
-              const SizedBox(height: 20.0),
-              TextFormField(
-                obscureText: true,
-                decoration: const InputDecoration(labelText: 'Password'),
-                validator: (val) => val!.length < 6 ? Errors.password : null,
-                controller: controllerPassword,
-              ),
-              const SizedBox(height: 20.0),
-              TextFormField(
-                obscureText: true,
-                decoration:
-                    const InputDecoration(labelText: 'Confirm password'),
-                validator: (val) => val != controllerPassword.text
-                    ? Errors.confirmPassword
-                    : null,
-                controller: controllerConfirmPassword,
-              ),
-              const SizedBox(height: 60.0),
-              LargeBtn(onPressed: addAdmin, text: 'Add admin'),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(appName),
+        elevation: 0.0,
+      ),
+      drawer: const AdminDrawer(pop: true),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                const SizedBox(height: 20.0),
+                TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(labelText: 'Email'),
+                  validator: (val) => val!.isEmpty ? Errors.required : null,
+                  controller: controllerEmail,
+                ),
+                const SizedBox(height: 20.0),
+                TextFormField(
+                  obscureText: true,
+                  decoration: const InputDecoration(labelText: 'Password'),
+                  validator: (val) => val!.length < 6 ? Errors.password : null,
+                  controller: controllerPassword,
+                ),
+                const SizedBox(height: 20.0),
+                TextFormField(
+                  obscureText: true,
+                  decoration:
+                      const InputDecoration(labelText: 'Confirm password'),
+                  validator: (val) => val != controllerPassword.text
+                      ? Errors.confirmPassword
+                      : null,
+                  controller: controllerConfirmPassword,
+                ),
+                const SizedBox(height: 60.0),
+                LargeBtn(onPressed: addAdmin, text: 'Add admin'),
+              ],
+            ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

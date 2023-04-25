@@ -25,12 +25,8 @@ class _AdminBottomBarState extends State<AdminBottomBar> {
           label: 'Create course',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.admin_panel_settings_outlined),
-          label: 'Add Admin',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.logout),
-          label: 'Log out',
+          icon: Icon(Icons.clear_all_rounded),
+          label: 'Clear courses',
         ),
       ],
       currentIndex: widget.selectedIndex,

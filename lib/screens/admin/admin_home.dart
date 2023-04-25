@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:guc_scheduling_app/screens/admin/add_admin.dart';
-import 'package:guc_scheduling_app/services/authentication_service.dart';
+import 'package:guc_scheduling_app/screens/admin/clear_courses.dart';
 import 'package:guc_scheduling_app/screens/admin/create_course.dart';
 import 'package:guc_scheduling_app/screens/course/all_courses.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/widgets/bottom_bars/admin_bottom_bar.dart';
+import 'package:guc_scheduling_app/widgets/drawers/admin_drawer.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
@@ -14,23 +14,18 @@ class AdminHome extends StatefulWidget {
 }
 
 class _AdminHomeState extends State<AdminHome> {
-  final AuthService _auth = AuthService();
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
     AllCourses(),
     CreateCourse(),
-    AddAdmin(),
+    ClearCourses(),
   ];
 
   Future<void> _onItemTapped(int index) async {
-    if (index == 3) {
-      await _auth.logout();
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
@@ -40,6 +35,7 @@ class _AdminHomeState extends State<AdminHome> {
         title: Text(appName),
         elevation: 0.0,
       ),
+      drawer: const AdminDrawer(pop: false),
       body: SingleChildScrollView(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
