@@ -4,6 +4,7 @@ import 'package:guc_scheduling_app/screens/student_course/announcements.dart';
 import 'package:guc_scheduling_app/screens/student_course/assessments/assessments.dart';
 import 'package:guc_scheduling_app/screens/student_course/compensations/compensations.dart';
 import 'package:guc_scheduling_app/widgets/bottom_bars/student_bottom_bar.dart';
+import 'package:guc_scheduling_app/widgets/drawers/student_drawer.dart';
 
 class StudentCourse extends StatefulWidget {
   final String courseId;
@@ -55,6 +56,8 @@ class _StudentCourseState extends State<StudentCourse> {
         title: Text(widget.courseName),
         elevation: 0.0,
       ),
+      drawer: StudentDrawer(
+          courseId: widget.courseId, courseName: widget.courseName, pop: false),
       body: _widgetOptions == null
           ? const CircularProgressIndicator()
           : _widgetOptions?.elementAt(_selectedIndex),

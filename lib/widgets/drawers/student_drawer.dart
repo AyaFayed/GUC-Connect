@@ -8,21 +8,21 @@ import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:quickalert/quickalert.dart';
 
-class TADrawer extends StatefulWidget {
+class StudentDrawer extends StatefulWidget {
   final String courseId;
   final String courseName;
   final bool pop;
-  const TADrawer(
+  const StudentDrawer(
       {super.key,
       required this.courseId,
       required this.courseName,
       required this.pop});
 
   @override
-  State<TADrawer> createState() => _TADrawerState();
+  State<StudentDrawer> createState() => _StudentDrawerState();
 }
 
-class _TADrawerState extends State<TADrawer> {
+class _StudentDrawerState extends State<StudentDrawer> {
   final EnrollmentController _enrollmentController = EnrollmentController();
 
   Future<void> unenroll() async {
@@ -34,7 +34,7 @@ class _TADrawerState extends State<TADrawer> {
         confirmBtnText: 'Unenroll',
         cancelBtnText: 'Cancel',
         onConfirmBtnTap: () async {
-          await _enrollmentController.taUnenroll(widget.courseId);
+          await _enrollmentController.studentUnenroll(widget.courseId);
           if (context.mounted) {
             Navigator.pop(context);
             Navigator.pop(context);
@@ -65,46 +65,6 @@ class _TADrawerState extends State<TADrawer> {
               widget.courseName,
               style: TextStyle(color: AppColors.light, fontSize: Sizes.medium),
             ),
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.notifications,
-            ),
-            title: const Text('My announcements'),
-            onTap: () {
-              Navigator.pop(context);
-              if (widget.pop) Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Card(
-                      child: MyAnnouncements(
-                    courseId: widget.courseId,
-                    courseName: widget.courseName,
-                  )),
-                ),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.schedule,
-            ),
-            title: const Text('Scheduled compensations'),
-            onTap: () {
-              Navigator.pop(context);
-              if (widget.pop) Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Card(
-                      child: MyCompensationTutorials(
-                    courseId: widget.courseId,
-                    courseName: widget.courseName,
-                  )),
-                ),
-              );
-            },
           ),
           ListTile(
             leading: const Icon(

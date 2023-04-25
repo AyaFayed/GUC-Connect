@@ -2,6 +2,8 @@ import 'package:guc_scheduling_app/shared/errors.dart';
 
 class Confirmations {
   static String updateSuccess = 'This update was completed successfully.';
+  static String unenrollWarning =
+      'Are you sure you want to unenroll from this course?';
   static String creationSuccess(String object) =>
       'The $object was created successfully.';
   static String addSuccess(String object) =>

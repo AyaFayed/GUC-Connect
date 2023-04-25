@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/controllers/enrollment_controller.dart';
+import 'package:guc_scheduling_app/screens/home/home.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_announcements.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_assignments.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_compensation_lectures.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_quizzes.dart';
+import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
+import 'package:quickalert/quickalert.dart';
 
 class ProfessorDrawer extends StatefulWidget {
   final String courseId;
@@ -21,6 +25,36 @@ class ProfessorDrawer extends StatefulWidget {
 }
 
 class _ProfessorDrawerState extends State<ProfessorDrawer> {
+  final EnrollmentController _enrollmentController = EnrollmentController();
+
+  Future<void> unenroll() async {
+    if (context.mounted) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.confirm,
+        text: Confirmations.unenrollWarning,
+        confirmBtnText: 'Unenroll',
+        cancelBtnText: 'Cancel',
+        onConfirmBtnTap: () async {
+          await _enrollmentController.professorUnenroll(widget.courseId);
+          if (context.mounted) {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+            if (widget.pop) Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Card(child: Home()),
+                ));
+          }
+        },
+        confirmBtnColor: AppColors.error,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -119,7 +153,7 @@ class _ProfessorDrawerState extends State<ProfessorDrawer> {
               Icons.logout,
             ),
             title: const Text('Unenroll'),
-            onTap: () {},
+            onTap: unenroll,
           ),
         ],
       ),
