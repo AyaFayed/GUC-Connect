@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/screens/admin/add_admin.dart';
 import 'package:guc_scheduling_app/services/authentication_service.dart';
 import 'package:guc_scheduling_app/screens/Course/create_course.dart';
 import 'package:guc_scheduling_app/screens/course/all_courses.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
+import 'package:guc_scheduling_app/widgets/bottom_bars/admin_bottom_bar.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
@@ -19,10 +21,11 @@ class _AdminHomeState extends State<AdminHome> {
   static const List<Widget> _widgetOptions = <Widget>[
     AllCourses(),
     CreateCourse(),
+    AddAdmin(),
   ];
 
   Future<void> _onItemTapped(int index) async {
-    if (index == 2) {
+    if (index == 3) {
       await _auth.logout();
     } else {
       setState(() {
@@ -41,27 +44,8 @@ class _AdminHomeState extends State<AdminHome> {
       body: SingleChildScrollView(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'Courses',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'Create course',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.logout),
-            label: 'Log out',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: AppColors.selected,
-        onTap: (val) async {
-          await _onItemTapped(val);
-        },
-      ),
+      bottomNavigationBar:
+          AdminBottomBar(selectedIndex: _selectedIndex, onTap: _onItemTapped),
     );
   }
 }

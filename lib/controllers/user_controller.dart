@@ -36,11 +36,7 @@ class UserController {
         break;
     }
     final json = user.toJson();
-    try {
-      await docUser.set(json);
-    } catch (e) {
-      // print(e);
-    }
+    await docUser.set(json);
   }
 
   Future<UserType> getCurrentUserType() async {
@@ -75,6 +71,7 @@ class UserController {
   }
 
   Future<Map<String, dynamic>?> getCurrentUser() async {
+    if (_auth.currentUser == null) return null;
     final userDoc =
         await Database.getDocumentData(Database.users, _auth.currentUser?.uid);
     return userDoc;

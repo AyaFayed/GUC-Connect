@@ -88,4 +88,21 @@ class CourseController {
         return [];
     }
   }
+
+  Future editCourse(String courseId, String name) async {
+    final docCourse = Database.courses.doc(courseId);
+    await docCourse.update({'name': name});
+  }
+
+  Future deleteCourse(String courseId) async {
+    final docCourse = Database.courses.doc(courseId);
+  }
+
+  Future clearCourse(String courseId) async {
+    final docCourse = Database.courses.doc(courseId);
+  }
+
+  Future clearCourseList(List<String> courseIds) async {}
+
+  Future clearAllCoursesData(List<String> courseIds) async {}
 }

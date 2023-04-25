@@ -50,4 +50,20 @@ class AuthService {
       return null;
     }
   }
+
+  Future addAdmin(String email, String password) async {
+    UserType currentUserType = await _user.getCurrentUserType();
+    if (currentUserType != UserType.admin) return;
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      User? user = result.user;
+
+      await _user.createUser(user?.uid, 'admin', UserType.admin);
+
+      return null;
+    } catch (e) {
+      return e.toString();
+    }
+  }
 }
