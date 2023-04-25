@@ -21,8 +21,8 @@ class CompensationController {
 
   Future<int> canScheduleCompensationLecture(
       List<String> groupIds, DateTime start, DateTime end) async {
-    int conflicts =
-        await _scheduleEventsController.canScheduleGroups(groupIds, start, end);
+    int conflicts = await _scheduleEventsController.canScheduleGroups(
+        groupIds, start, end, null, null);
     return conflicts;
   }
 
@@ -62,9 +62,12 @@ class CompensationController {
   }
 
   Future<int> canScheduleCompensationTutorial(
-      List<String> tutorialIds, DateTime start, DateTime end) async {
+    List<String> tutorialIds,
+    DateTime start,
+    DateTime end,
+  ) async {
     int conflicts = await _scheduleEventsController.canScheduleTutorials(
-        tutorialIds, start, end);
+        tutorialIds, start, end, null, null);
     return conflicts;
   }
 
@@ -193,29 +196,31 @@ class CompensationController {
     return compensationTutorials;
   }
 
-  Future editCompensationLecture(String compensationLectureId, String title,
-      String description, String? file, DateTime start, DateTime end) async {
-    UserType userType = await _user.getCurrentUserType();
+  static Future editCompensationLecture(
+      String compensationLectureId,
+      String title,
+      String description,
+      String? file,
+      DateTime start,
+      DateTime end) async {
+    final docCompensationLecture =
+        Database.compensationLectures.doc(compensationLectureId);
 
-    if (userType == UserType.professor) {
-      final docCompensationLecture =
-          Database.compensationLectures.doc(compensationLectureId);
-
-      await docCompensationLecture.update(
-          Compensation.toJsonUpdate(title, description, file, start, end));
-    }
+    await docCompensationLecture.update(
+        Compensation.toJsonUpdate(title, description, file, start, end));
   }
 
-  Future editCompensationTutorial(String compensationTutorialId, String title,
-      String description, String? file, DateTime start, DateTime end) async {
-    UserType userType = await _user.getCurrentUserType();
+  static Future editCompensationTutorial(
+      String compensationTutorialId,
+      String title,
+      String description,
+      String? file,
+      DateTime start,
+      DateTime end) async {
+    final docCompensationTutorial =
+        Database.compensationTutorials.doc(compensationTutorialId);
 
-    if (userType == UserType.professor) {
-      final docCompensationTutorial =
-          Database.compensationTutorials.doc(compensationTutorialId);
-
-      await docCompensationTutorial.update(
-          Compensation.toJsonUpdate(title, description, file, start, end));
-    }
+    await docCompensationTutorial.update(
+        Compensation.toJsonUpdate(title, description, file, start, end));
   }
 }

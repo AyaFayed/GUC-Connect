@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
+import 'package:guc_scheduling_app/screens/event/edit_event.dart';
 import 'package:guc_scheduling_app/screens/event/event_details.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 
@@ -29,8 +30,12 @@ class EventCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  EventDetails(courseName: courseName, event: event)),
+              builder: (context) => editable == true
+                  ? EditEvent(
+                      courseName: courseName,
+                      eventId: event.id,
+                      eventType: event.eventType)
+                  : EventDetails(courseName: courseName, event: event)),
         );
       },
     );

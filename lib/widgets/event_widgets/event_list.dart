@@ -23,6 +23,7 @@ class EventList extends StatelessWidget {
                   EventCard(
                     event: event,
                     courseName: courseName,
+                    editable: editable,
                   ),
                   Divider(
                     color: AppColors.unselected,

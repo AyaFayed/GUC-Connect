@@ -78,15 +78,11 @@ class AssignmentController {
     return assignments;
   }
 
-  Future editAssignment(String assignmentId, String title, String description,
-      String? file, DateTime deadline) async {
-    UserType userType = await _user.getCurrentUserType();
+  static Future editAssignment(String assignmentId, String title,
+      String description, String? file, DateTime deadline) async {
+    final docAssignment = Database.assignments.doc(assignmentId);
 
-    if (userType == UserType.professor) {
-      final docAssignment = Database.assignments.doc(assignmentId);
-
-      await docAssignment
-          .update(Assignment.toJsonUpdate(title, description, file, deadline));
-    }
+    await docAssignment
+        .update(Assignment.toJsonUpdate(title, description, file, deadline));
   }
 }

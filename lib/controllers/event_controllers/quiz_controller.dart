@@ -17,8 +17,8 @@ class QuizController {
 
   Future<int> canScheduleQuiz(
       List<String> groupIds, DateTime start, DateTime end) async {
-    int conflicts =
-        await _scheduleEventsController.canScheduleGroups(groupIds, start, end);
+    int conflicts = await _scheduleEventsController.canScheduleGroups(
+        groupIds, start, end, null, null);
     return conflicts;
   }
 
@@ -87,15 +87,11 @@ class QuizController {
     return quizzes;
   }
 
-  Future editQuiz(String quizId, String title, String description, String? file,
-      DateTime start, DateTime end) async {
-    UserType userType = await _user.getCurrentUserType();
+  static Future editQuiz(String quizId, String title, String description,
+      String? file, DateTime start, DateTime end) async {
+    final docQuiz = Database.quizzes.doc(quizId);
 
-    if (userType == UserType.professor) {
-      final docQuiz = Database.quizzes.doc(quizId);
-
-      await docQuiz
-          .update(Quiz.toJsonUpdate(title, description, file, start, end));
-    }
+    await docQuiz
+        .update(Quiz.toJsonUpdate(title, description, file, start, end));
   }
 }
