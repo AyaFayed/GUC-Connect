@@ -20,12 +20,6 @@ class _AllCoursesState extends State<AllCourses> {
   List<Course>? _courses;
   UserType? _userType;
 
-  @override
-  void initState() {
-    super.initState();
-    _getData();
-  }
-
   Future<void> _getData() async {
     List<Course> coursesData = await _courseController.getAllCourses();
     UserType userTypeData = await _userController.getCurrentUserType();
@@ -34,6 +28,12 @@ class _AllCoursesState extends State<AllCourses> {
       _courses = coursesData;
       _userType = userTypeData;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getData();
   }
 
   @override
