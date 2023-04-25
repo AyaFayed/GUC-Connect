@@ -94,4 +94,21 @@ class QuizController {
     await docQuiz
         .update(Quiz.toJsonUpdate(title, description, file, start, end));
   }
+
+  Future deleteQuiz(String quizId) async {
+    UserType userType = await _user.getCurrentUserType();
+
+    if (userType == UserType.professor) {
+      Quiz? quiz = await Database.getQuiz(quizId);
+
+      if (quiz != null) {
+        await _helper.removeEventFromDivisions(
+            quizId, EventType.quizzes, DivisionType.groups, quiz.groups);
+        await _helper.removeEventFromInstructor(
+            quiz.course, quizId, EventType.quizzes);
+
+        await Database.quizzes.doc(quizId).delete();
+      }
+    }
+  }
 }

@@ -223,4 +223,48 @@ class CompensationController {
     await docCompensationTutorial.update(
         Compensation.toJsonUpdate(title, description, file, start, end));
   }
+
+  Future deleteCompensationLecture(String compensationLectureId) async {
+    UserType userType = await _user.getCurrentUserType();
+
+    if (userType == UserType.professor) {
+      CompensationLecture? compensationLecture =
+          await Database.getCompensationLecture(compensationLectureId);
+
+      if (compensationLecture != null) {
+        await _helper.removeEventFromDivisions(
+            compensationLectureId,
+            EventType.compensationLectures,
+            DivisionType.groups,
+            compensationLecture.groups);
+        await _helper.removeEventFromInstructor(compensationLecture.course,
+            compensationLectureId, EventType.compensationLectures);
+
+        await Database.compensationLectures.doc(compensationLectureId).delete();
+      }
+    }
+  }
+
+  Future deleteCompensationTutorial(String compensationTutorialId) async {
+    UserType userType = await _user.getCurrentUserType();
+
+    if (userType == UserType.ta) {
+      CompensationTutorial? compensationTutorial =
+          await Database.getCompensationTutorial(compensationTutorialId);
+
+      if (compensationTutorial != null) {
+        await _helper.removeEventFromDivisions(
+            compensationTutorialId,
+            EventType.compensationTutorials,
+            DivisionType.tutorials,
+            compensationTutorial.tutorials);
+        await _helper.removeEventFromInstructor(compensationTutorial.course,
+            compensationTutorialId, EventType.compensationTutorials);
+
+        await Database.compensationTutorials
+            .doc(compensationTutorialId)
+            .delete();
+      }
+    }
+  }
 }

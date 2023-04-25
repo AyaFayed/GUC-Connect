@@ -85,4 +85,21 @@ class AssignmentController {
     await docAssignment
         .update(Assignment.toJsonUpdate(title, description, file, deadline));
   }
+
+  Future deleteAssignment(String assignmentId) async {
+    UserType userType = await _user.getCurrentUserType();
+
+    if (userType == UserType.professor) {
+      Assignment? assignment = await Database.getAssignment(assignmentId);
+
+      if (assignment != null) {
+        await _helper.removeEventFromDivisions(assignmentId,
+            EventType.assignments, DivisionType.groups, assignment.groups);
+        await _helper.removeEventFromInstructor(
+            assignment.course, assignmentId, EventType.assignments);
+
+        await Database.assignments.doc(assignmentId).delete();
+      }
+    }
+  }
 }

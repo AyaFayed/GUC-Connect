@@ -156,4 +156,72 @@ class EventsControllerHelper {
       }
     }
   }
+
+  Future removeEventFromInstructor(
+      String courseId, String eventId, EventType eventType) async {
+    final docUser = Database.users.doc(_auth.currentUser?.uid);
+
+    Professor? professor =
+        await Database.getProfessor(_auth.currentUser?.uid ?? '');
+
+    if (professor != null) {
+      List<ProfessorCourse> courses = professor.courses;
+      for (ProfessorCourse course in courses) {
+        if (course.id == courseId) {
+          getProfessorEventsList(course, eventType).remove(eventId);
+        }
+      }
+      await docUser
+          .update({'courses': courses.map((course) => course.toJson())});
+    } else {
+      TA? ta = await Database.getTa(_auth.currentUser?.uid ?? '');
+      if (ta != null) {
+        List<TACourse> courses = ta.courses;
+        for (TACourse course in courses) {
+          if (course.id == courseId) {
+            getTAEventsList(course, eventType).remove(eventId);
+          }
+        }
+        await docUser
+            .update({'courses': courses.map((course) => course.toJson())});
+      }
+    }
+  }
+
+  Future removeEventFromDivisions(String eventId, EventType eventType,
+      DivisionType divisionType, List<String> divisions) async {
+    for (String divisionId in divisions) {
+      final docDivision =
+          _database.collection(divisionType.name).doc(divisionId);
+      final divisionSnapshot = await docDivision.get();
+
+      if (divisionSnapshot.exists) {
+        final division = divisionSnapshot.data();
+        List<String> events =
+            (division![eventType.name] as List<dynamic>).cast<String>();
+        events.remove(eventId);
+
+        switch (eventType) {
+          case EventType.announcements:
+            await docDivision.update({'announcements': events});
+            break;
+
+          case EventType.assignments:
+            await docDivision.update({'assignments': events});
+            break;
+
+          case EventType.quizzes:
+            await docDivision.update({'quizzes': events});
+            break;
+
+          case EventType.compensationLectures:
+            await docDivision.update({'compensationLectures': events});
+            break;
+
+          case EventType.compensationTutorials:
+            await docDivision.update({'compensationTutorials': events});
+        }
+      }
+    }
+  }
 }
