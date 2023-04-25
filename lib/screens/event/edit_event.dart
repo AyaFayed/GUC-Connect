@@ -4,6 +4,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/assignment_controller.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/compensation_controller.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/quiz_controller.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/schedule_event_controller.dart';
 import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/models/events/assignment_model.dart';
@@ -43,6 +46,10 @@ class EditEvent extends StatefulWidget {
 class _EditEventState extends State<EditEvent> {
   final ScheduleEventsController _scheduleEventsController =
       ScheduleEventsController();
+  final AssignmentController _assignmentController = AssignmentController();
+  final QuizController _quizController = QuizController();
+  final CompensationController _compensationController =
+      CompensationController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -62,6 +69,64 @@ class _EditEventState extends State<EditEvent> {
   Future<void> cancel() async {
     if (context.mounted) {
       Navigator.pop(context);
+    }
+  }
+
+  Future<void> delete() async {
+    if (context.mounted) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.confirm,
+        text: Confirmations.deleteWarning(formatEventType(widget.eventType)),
+        confirmBtnText: 'Delete',
+        cancelBtnText: 'Cancel',
+        onConfirmBtnTap: () async {
+          try {
+            switch (widget.eventType) {
+              case EventType.announcements:
+                break;
+              case EventType.assignments:
+                await _assignmentController.deleteAssignment(widget.eventId);
+                break;
+              case EventType.quizzes:
+                await _quizController.deleteQuiz(widget.eventId);
+                break;
+              case EventType.compensationLectures:
+                await _compensationController
+                    .deleteCompensationLecture(widget.eventId);
+                break;
+              case EventType.compensationTutorials:
+                await _compensationController
+                    .deleteCompensationTutorial(widget.eventId);
+                break;
+            }
+            if (context.mounted) {
+              Navigator.pop(context);
+              QuickAlert.show(
+                context: context,
+                type: QuickAlertType.success,
+                confirmBtnColor: AppColors.confirm,
+                onConfirmBtnTap: () async {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  await widget.getData();
+                },
+                text: Confirmations.deleteSuccess(
+                    formatEventType(widget.eventType)),
+              );
+            }
+          } catch (e) {
+            Navigator.pop(context);
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              confirmBtnColor: AppColors.confirm,
+              text: Errors.backend,
+            );
+          }
+        },
+        confirmBtnColor: AppColors.error,
+      );
     }
   }
 
@@ -339,6 +404,12 @@ class _EditEventState extends State<EditEvent> {
                           ),
                           const SizedBox(height: 20.0),
                           LargeBtn(onPressed: editEvent, text: 'Save changes'),
+                          const SizedBox(height: 10.0),
+                          LargeBtn(
+                            onPressed: delete,
+                            text: 'Delete',
+                            color: AppColors.primary,
+                          ),
                           const SizedBox(height: 10.0),
                           LargeBtn(
                             onPressed: cancel,

@@ -185,3 +185,18 @@ String formatName(String name, UserType userType) {
       return name;
   }
 }
+
+String formatEventType(EventType eventType) {
+  switch (eventType) {
+    case EventType.announcements:
+      return 'announcement';
+    case EventType.assignments:
+      return 'assignment';
+    case EventType.quizzes:
+      return 'quiz';
+    case EventType.compensationLectures:
+      return 'compensation lecture';
+    case EventType.compensationTutorials:
+      return 'compensation tutorials';
+  }
+}
