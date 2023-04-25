@@ -60,7 +60,6 @@ class _ScheduleCompensationLectureState
         task = null;
       });
       if (context.mounted) {
-        Navigator.pop(context);
         QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
@@ -105,7 +104,10 @@ class _ScheduleCompensationLectureState
               text: Confirmations.scheduleWarning('lecture', conflicts),
               confirmBtnText: 'Complete',
               cancelBtnText: 'Cancel',
-              onConfirmBtnTap: completeScheduling,
+              onConfirmBtnTap: () async {
+                Navigator.pop(context);
+                await completeScheduling();
+              },
               confirmBtnColor: AppColors.error,
             );
           } else {

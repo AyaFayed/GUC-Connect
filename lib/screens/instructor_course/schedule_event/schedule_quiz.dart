@@ -57,7 +57,6 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
         task = null;
       });
       if (context.mounted) {
-        Navigator.pop(context);
         QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
@@ -101,7 +100,10 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
               text: Confirmations.scheduleWarning('quiz', conflicts),
               confirmBtnText: 'Complete',
               cancelBtnText: 'Cancel',
-              onConfirmBtnTap: completeScheduling,
+              onConfirmBtnTap: () async {
+                Navigator.pop(context);
+                await completeScheduling();
+              },
               confirmBtnColor: AppColors.error,
             );
           } else {
