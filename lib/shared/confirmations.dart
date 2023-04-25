@@ -27,4 +27,10 @@ class Confirmations {
 
   static String clearWarning(String object) =>
       'Are you sure you want to clear all the data related to this $object?';
+
+  static String clearAllWarning =
+      'Are you sure you want to clear all the data related to all courses?';
+
+  static String clearSelectedWarning =
+      'Are you sure you want to clear all the data related to the selected courses?';
 }

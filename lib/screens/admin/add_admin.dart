@@ -5,7 +5,6 @@ import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
-import 'package:guc_scheduling_app/widgets/drawers/admin_drawer.dart';
 import 'package:quickalert/quickalert.dart';
 
 class AddAdmin extends StatefulWidget {
@@ -67,7 +66,6 @@ class _AddAdminState extends State<AddAdmin> {
         title: Text(appName),
         elevation: 0.0,
       ),
-      drawer: const AdminDrawer(pop: true),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
