@@ -210,6 +210,54 @@ class Database {
     return allCourses;
   }
 
+  static Future<List<Announcement>> getAllAnnouncements() async {
+    QuerySnapshot querySnapshot = await announcements.get();
+
+    List<Announcement> allAnnouncements = querySnapshot.docs
+        .map((doc) => Announcement.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
+    return allAnnouncements;
+  }
+
+  static Future<List<Assignment>> getAllAssignments() async {
+    QuerySnapshot querySnapshot = await assignments.get();
+
+    List<Assignment> allAssignments = querySnapshot.docs
+        .map((doc) => Assignment.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
+    return allAssignments;
+  }
+
+  static Future<List<Quiz>> getAllQuizzes() async {
+    QuerySnapshot querySnapshot = await quizzes.get();
+
+    List<Quiz> allQuizzes = querySnapshot.docs
+        .map((doc) => Quiz.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
+    return allQuizzes;
+  }
+
+  static Future<List<CompensationLecture>> getAllCompensationLectures() async {
+    QuerySnapshot querySnapshot = await compensationLectures.get();
+
+    List<CompensationLecture> allCompensationLectures = querySnapshot.docs
+        .map((doc) =>
+            CompensationLecture.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
+    return allCompensationLectures;
+  }
+
+  static Future<List<CompensationTutorial>>
+      getAllCompensationTutorials() async {
+    QuerySnapshot querySnapshot = await compensationTutorials.get();
+
+    List<CompensationTutorial> allCompensationTutorials = querySnapshot.docs
+        .map((doc) =>
+            CompensationTutorial.fromJson(doc.data() as Map<String, dynamic>))
+        .toList();
+    return allCompensationTutorials;
+  }
+
   static Future<List<Group>> getGroupListFromIds(List<String> ids) async {
     List<Group> groups = [];
     for (String groupId in ids) {
@@ -252,5 +300,82 @@ class Database {
       }
     }
     return posts;
+  }
+
+  static Future deleteAllGroups() async {
+    QuerySnapshot querySnapshot = await groups.get();
+
+    await Future.wait(
+        querySnapshot.docs.map((doc) => doc.reference.delete()).toList());
+  }
+
+  static Future deleteAllTutorials() async {
+    QuerySnapshot querySnapshot = await tutorials.get();
+
+    await Future.wait(
+        querySnapshot.docs.map((doc) => doc.reference.delete()).toList());
+  }
+
+  static Future deleteAllAnnouncements() async {
+    QuerySnapshot querySnapshot = await announcements.get();
+
+    await Future.wait(
+        querySnapshot.docs.map((doc) => doc.reference.delete()).toList());
+  }
+
+  static Future deleteAllAssignments() async {
+    QuerySnapshot querySnapshot = await assignments.get();
+
+    await Future.wait(
+        querySnapshot.docs.map((doc) => doc.reference.delete()).toList());
+  }
+
+  static Future deleteAllQuizzes() async {
+    QuerySnapshot querySnapshot = await quizzes.get();
+
+    await Future.wait(
+        querySnapshot.docs.map((doc) => doc.reference.delete()).toList());
+  }
+
+  static Future deleteAllCompensationLectures() async {
+    QuerySnapshot querySnapshot = await compensationLectures.get();
+
+    await Future.wait(
+        querySnapshot.docs.map((doc) => doc.reference.delete()).toList());
+  }
+
+  static Future deleteAllCompensationTutorials() async {
+    QuerySnapshot querySnapshot = await compensationTutorials.get();
+
+    await Future.wait(
+        querySnapshot.docs.map((doc) => doc.reference.delete()).toList());
+  }
+
+  static Future deleteAllPosts() async {
+    QuerySnapshot querySnapshot = await posts.get();
+
+    await Future.wait(
+        querySnapshot.docs.map((doc) => doc.reference.delete()).toList());
+  }
+
+  static Future clearAllCourses() async {
+    QuerySnapshot querySnapshot = await courses.get();
+    await Future.wait(querySnapshot.docs
+        .map((doc) => doc.reference.update({
+              'professors': [],
+              'tas': [],
+              'groups': [],
+              'tutorials': [],
+              'posts': []
+            }))
+        .toList());
+  }
+
+  static Future clearAllUserData() async {
+    QuerySnapshot querySnapshot = await users.get();
+
+    await Future.wait(querySnapshot.docs
+        .map((doc) => doc.reference.update({'courses': []}))
+        .toList());
   }
 }

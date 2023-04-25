@@ -99,4 +99,28 @@ class AnnouncementController {
 
     return announcements;
   }
+
+  Future deleteAnnouncement(String announcementId) async {
+    UserType userType = await _user.getCurrentUserType();
+
+    if (userType == UserType.professor) {
+      Announcement? assignment = await Database.getAnnouncement(announcementId);
+
+      if (assignment != null) {
+        await _helper.removeEventFromDivisions(announcementId,
+            EventType.announcements, DivisionType.groups, assignment.groups);
+
+        await _helper.removeEventFromDivisions(
+            announcementId,
+            EventType.announcements,
+            DivisionType.tutorials,
+            assignment.tutorials);
+
+        await _helper.removeEventFromInstructor(
+            assignment.course, announcementId, EventType.announcements);
+
+        await Database.announcements.doc(announcementId).delete();
+      }
+    }
+  }
 }

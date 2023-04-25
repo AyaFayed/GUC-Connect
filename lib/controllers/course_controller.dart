@@ -2,6 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
+import 'package:guc_scheduling_app/models/divisions/group_model.dart';
+import 'package:guc_scheduling_app/models/events/announcement_model.dart';
+import 'package:guc_scheduling_app/models/events/assignment_model.dart';
+import 'package:guc_scheduling_app/models/events/compensation/compensation_lecture_model.dart';
+import 'package:guc_scheduling_app/models/events/compensation/compensation_tutorial_model.dart';
+import 'package:guc_scheduling_app/models/events/quiz_model.dart';
 import 'package:guc_scheduling_app/models/user/professor_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/models/user/ta_model.dart';
@@ -95,14 +101,140 @@ class CourseController {
   }
 
   Future deleteCourse(String courseId) async {
-    final docCourse = Database.courses.doc(courseId);
+    await clearCourse(courseId);
+    await Database.courses.doc(courseId).delete();
   }
 
   Future clearCourse(String courseId) async {
-    final docCourse = Database.courses.doc(courseId);
+    Course? course = await Database.getCourse(courseId);
+    if (course != null) {
+      List<Announcement> announcements = await Database.getAllAnnouncements();
+      List<Assignment> assignments = await Database.getAllAssignments();
+      List<Quiz> quizzes = await Database.getAllQuizzes();
+      List<CompensationLecture> compensationLectures =
+          await Database.getAllCompensationLectures();
+      List<CompensationTutorial> compensationTutorials =
+          await Database.getAllCompensationTutorials();
+      List<Future> deleting = [];
+      for (Announcement announcement in announcements) {
+        if (announcement.course == courseId) {
+          deleting.add(Database.announcements.doc(announcement.id).delete());
+        }
+      }
+      for (Assignment assignment in assignments) {
+        if (assignment.course == courseId) {
+          deleting.add(Database.assignments.doc(assignment.id).delete());
+        }
+      }
+      for (Quiz quiz in quizzes) {
+        if (quiz.course == courseId) {
+          deleting.add(Database.quizzes.doc(quiz.id).delete());
+        }
+      }
+      for (CompensationLecture compensationLecture in compensationLectures) {
+        if (compensationLecture.course == courseId) {
+          deleting.add(Database.compensationLectures
+              .doc(compensationLecture.id)
+              .delete());
+        }
+      }
+      for (CompensationTutorial compensationTutorial in compensationTutorials) {
+        if (compensationTutorial.course == courseId) {
+          deleting.add(Database.compensationTutorials
+              .doc(compensationTutorial.id)
+              .delete());
+        }
+      }
+      List<String> groupIds = course.groups;
+      List<Group> groups = await Database.getGroupListFromIds(groupIds);
+      for (Group group in groups) {
+        List<String> studentIds = group.students;
+        for (String studentId in studentIds) {
+          Student? student = await Database.getStudent(studentId);
+
+          if (student != null) {
+            List<StudentCourse> courses = student.courses;
+            courses.removeWhere((course) => course.id == courseId);
+
+            deleting.add(Database.users
+                .doc(studentId)
+                .update({'courses': courses.map((course) => course.toJson())}));
+          }
+        }
+        deleting.add(Database.groups.doc(group.id).delete());
+      }
+
+      List<String> tutorialIds = course.tutorials;
+      for (String tutorialId in tutorialIds) {
+        deleting.add(Database.tutorials.doc(tutorialId).delete());
+      }
+
+      List<String> professorIds = course.professors;
+      for (String professorId in professorIds) {
+        Professor? professor = await Database.getProfessor(professorId);
+
+        if (professor != null) {
+          List<ProfessorCourse> courses = professor.courses;
+
+          courses.removeWhere((course) => course.id == courseId);
+
+          deleting.add(Database.users
+              .doc(professorId)
+              .update({'courses': courses.map((course) => course.toJson())}));
+        }
+      }
+      List<String> taIds = course.tas;
+      for (String taId in taIds) {
+        TA? ta = await Database.getTa(taId);
+
+        if (ta != null) {
+          List<TACourse> courses = ta.courses;
+
+          courses.removeWhere((course) => course.id == courseId);
+
+          deleting.add(Database.users
+              .doc(taId)
+              .update({'courses': courses.map((course) => course.toJson())}));
+        }
+      }
+      List<String> postIds = course.posts;
+      for (String postId in postIds) {
+        deleting.add(Database.posts.doc(postId).delete());
+      }
+
+      await Future.wait(deleting);
+
+      await Database.courses.doc(courseId).update({
+        'professors': [],
+        'tas': [],
+        'groups': [],
+        'tutorials': [],
+        'posts': []
+      });
+    }
   }
 
-  Future clearCourseList(List<String> courseIds) async {}
+  Future clearCourseList(List<String> courseIds) async {
+    List<Future> clearing = [];
+    for (String courseId in courseIds) {
+      clearing.add(clearCourse(courseId));
+    }
 
-  Future clearAllCoursesData(List<String> courseIds) async {}
+    await Future.wait(clearing);
+  }
+
+  Future clearAllCoursesData() async {
+    await Future.wait([
+      Database.deleteAllAnnouncements(),
+      Database.deleteAllAssignments(),
+      Database.deleteAllCompensationLectures(),
+      Database.deleteAllCompensationTutorials(),
+      Database.deleteAllGroups(),
+      Database.deleteAllPosts(),
+      Database.deleteAllQuizzes(),
+      Database.deleteAllTutorials(),
+      Database.clearAllCourses(),
+      Database.clearAllUserData()
+    ]);
+  }
 }
