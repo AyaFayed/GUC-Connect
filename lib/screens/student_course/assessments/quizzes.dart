@@ -50,9 +50,11 @@ class _QuizzesState extends State<Quizzes> {
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
         child: _events == null
             ? const Center(child: CircularProgressIndicator())
-            : EventList(
-                events: _events ?? [],
-                courseName: widget.courseName,
-              ));
+            : _events!.isEmpty
+                ? const Text('There are no quizzes.')
+                : EventList(
+                    events: _events ?? [],
+                    courseName: widget.courseName,
+                  ));
   }
 }

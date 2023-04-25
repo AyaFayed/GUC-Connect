@@ -46,7 +46,7 @@ class _AllCoursesState extends State<AllCourses> {
                 ? const CircularProgressIndicator()
                 : Column(children: [
                     _courses!.isEmpty
-                        ? const Text("There are no courses")
+                        ? const Text("There are no courses.")
                         : CourseList(
                             courses: _courses ?? [],
                             userType: _userType ?? UserType.student,

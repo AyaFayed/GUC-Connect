@@ -65,13 +65,15 @@ class _MyCompensationTutorialsState extends State<MyCompensationTutorials> {
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
           child: _events == null
               ? const Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                  child: EventList(
-                  events: _events ?? [],
-                  courseName: widget.courseName,
-                  editable: true,
-                  getData: _getData,
-                ))),
+              : _events!.isEmpty
+                  ? const Text("You haven't scheduled any quizzes yet.")
+                  : SingleChildScrollView(
+                      child: EventList(
+                      events: _events ?? [],
+                      courseName: widget.courseName,
+                      editable: true,
+                      getData: _getData,
+                    ))),
     );
   }
 }
