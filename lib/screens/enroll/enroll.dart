@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/course_controller.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/course_widgets/course_list.dart';
+import 'package:guc_scheduling_app/widgets/search_bar.dart';
 
 class Enroll extends StatefulWidget {
   final UserType userType;
@@ -16,11 +18,15 @@ class _EnrollState extends State<Enroll> {
   final CourseController _courseController = CourseController();
 
   List<Course>? _courses;
+  List<Course>? _originalCourses;
 
-  @override
-  void initState() {
-    super.initState();
-    _getData();
+  onSearch(String courseName) {
+    setState(() {
+      _courses = _originalCourses
+          ?.where((course) =>
+              course.name.toLowerCase().contains(courseName.toLowerCase()))
+          .toList();
+    });
   }
 
   Future<void> _getData() async {
@@ -28,7 +34,14 @@ class _EnrollState extends State<Enroll> {
 
     setState(() {
       _courses = coursesData;
+      _originalCourses = coursesData;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getData();
   }
 
   @override
@@ -39,13 +52,29 @@ class _EnrollState extends State<Enroll> {
           elevation: 0.0,
         ),
         body: SingleChildScrollView(
-            child: Center(
-          child: _courses == null
-              ? const CircularProgressIndicator()
-              : CourseList(
-                  courses: _courses ?? [],
-                  userType: widget.userType,
-                  enroll: true),
-        )));
+          child: Center(
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+              child: _courses == null
+                  ? const CircularProgressIndicator()
+                  : Column(children: [
+                      SearchBar(search: onSearch),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      _courses!.isEmpty
+                          ? Text(
+                              "There are no courses.",
+                              style: TextStyle(fontSize: Sizes.medium),
+                            )
+                          : CourseList(
+                              courses: _courses ?? [],
+                              userType: widget.userType,
+                              enroll: true),
+                    ]),
+            ),
+          ),
+        ));
   }
 }

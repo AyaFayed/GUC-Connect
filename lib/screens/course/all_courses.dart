@@ -23,6 +23,15 @@ class _AllCoursesState extends State<AllCourses> {
   List<Course>? _originalCourses;
   UserType? _userType;
 
+  onSearch(String courseName) {
+    setState(() {
+      _courses = _originalCourses
+          ?.where((course) =>
+              course.name.toLowerCase().contains(courseName.toLowerCase()))
+          .toList();
+    });
+  }
+
   Future<void> _getData() async {
     List<Course> coursesData = await _courseController.getAllCourses();
     UserType userTypeData = await _userController.getCurrentUserType();
@@ -31,15 +40,6 @@ class _AllCoursesState extends State<AllCourses> {
       _courses = coursesData;
       _originalCourses = coursesData;
       _userType = userTypeData;
-    });
-  }
-
-  onSearch(String courseName) {
-    setState(() {
-      _courses = _originalCourses
-          ?.where((course) =>
-              course.name.toLowerCase().contains(courseName.toLowerCase()))
-          .toList();
     });
   }
 
@@ -71,9 +71,6 @@ class _AllCoursesState extends State<AllCourses> {
                             courses: _courses ?? [],
                             userType: _userType ?? UserType.student,
                             enroll: false),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
                   ])));
   }
 }

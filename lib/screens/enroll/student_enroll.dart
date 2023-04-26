@@ -31,8 +31,8 @@ class _StudentEnrollState extends State<StudentEnroll> {
   List<Group>? _groups;
   List<Tutorial>? _tutorials;
 
-  List<DropdownMenuEntry>? groups;
-  List<DropdownMenuEntry>? tutorials;
+  List<DropdownMenuItem>? groups;
+  List<DropdownMenuItem>? tutorials;
 
   Future<void> enroll() async {
     if (selectedGroupId.isEmpty || selectedTutorialId.isEmpty) {
@@ -72,14 +72,18 @@ class _StudentEnrollState extends State<StudentEnroll> {
       _groups = groupsData;
       _tutorials = tutorialsData;
       groups = _groups!
-          .map((group) => DropdownMenuEntry(
-              label: group.number.toString(), value: group.id))
-          .cast<DropdownMenuEntry>()
+          .map((group) => DropdownMenuItem(
+                value: group.id,
+                child: Text(group.number.toString()),
+              ))
+          .cast<DropdownMenuItem>()
           .toList();
       tutorials = _tutorials!
-          .map((tutorial) => DropdownMenuEntry(
-              label: tutorial.number.toString(), value: tutorial.id))
-          .cast<DropdownMenuEntry>()
+          .map((tutorial) => DropdownMenuItem(
+                value: tutorial.id,
+                child: Text(tutorial.number.toString()),
+              ))
+          .cast<DropdownMenuItem>()
           .toList();
     });
   }
@@ -105,19 +109,27 @@ class _StudentEnrollState extends State<StudentEnroll> {
               const SizedBox(height: 20.0),
               groups == null
                   ? const CircularProgressIndicator()
-                  : DropdownMenu(
-                      label: const Text('Select group'),
-                      dropdownMenuEntries: groups ?? [],
-                      onSelected: (value) => selectedGroupId = value as String,
+                  : DropdownButton(
+                      hint: const Text('Select group'),
+                      value:
+                          selectedGroupId.isNotEmpty ? selectedGroupId : null,
+                      items: groups ?? [],
+                      onChanged: (value) => setState(() {
+                        selectedGroupId = value as String;
+                      }),
                     ),
               const SizedBox(height: 20.0),
               tutorials == null
                   ? const CircularProgressIndicator()
-                  : DropdownMenu(
-                      label: const Text('Select tutorial'),
-                      dropdownMenuEntries: tutorials ?? [],
-                      onSelected: (value) =>
-                          selectedTutorialId = value as String),
+                  : DropdownButton(
+                      hint: const Text('Select tutorial'),
+                      items: tutorials ?? [],
+                      value: selectedTutorialId.isNotEmpty
+                          ? selectedTutorialId
+                          : null,
+                      onChanged: (value) => setState(() {
+                            selectedTutorialId = value as String;
+                          })),
               const SizedBox(
                 height: 12.0,
               ),

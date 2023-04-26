@@ -3,7 +3,8 @@ import 'package:guc_scheduling_app/theme/colors.dart';
 
 class SearchBar extends StatefulWidget {
   final void Function(String) search;
-  const SearchBar({super.key, required this.search});
+  final String? text;
+  const SearchBar({super.key, required this.search, this.text});
 
   @override
   State<SearchBar> createState() => _SearchBarState();
@@ -26,7 +27,7 @@ class _SearchBarState extends State<SearchBar> {
               borderRadius: BorderRadius.circular(50),
               borderSide: BorderSide.none),
           hintStyle: TextStyle(fontSize: 14, color: AppColors.dark),
-          hintText: "Search courses"),
+          hintText: widget.text ?? "Search courses"),
     );
   }
 }
