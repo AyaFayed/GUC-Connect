@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/course_controller.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/course_widgets/course_list.dart';
+import 'package:guc_scheduling_app/widgets/search_bar.dart';
 
 import '../../models/course/course_model.dart';
 
@@ -18,6 +20,7 @@ class _AllCoursesState extends State<AllCourses> {
   final UserController _userController = UserController();
 
   List<Course>? _courses;
+  List<Course>? _originalCourses;
   UserType? _userType;
 
   Future<void> _getData() async {
@@ -26,7 +29,17 @@ class _AllCoursesState extends State<AllCourses> {
 
     setState(() {
       _courses = coursesData;
+      _originalCourses = coursesData;
       _userType = userTypeData;
+    });
+  }
+
+  onSearch(String courseName) {
+    setState(() {
+      _courses = _originalCourses
+          ?.where((course) =>
+              course.name.toLowerCase().contains(courseName.toLowerCase()))
+          .toList();
     });
   }
 
@@ -45,8 +58,15 @@ class _AllCoursesState extends State<AllCourses> {
             child: _courses == null || _userType == null
                 ? const CircularProgressIndicator()
                 : Column(children: [
+                    SearchBar(search: onSearch),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
                     _courses!.isEmpty
-                        ? const Text("There are no courses.")
+                        ? Text(
+                            "There are no courses.",
+                            style: TextStyle(fontSize: Sizes.medium),
+                          )
                         : CourseList(
                             courses: _courses ?? [],
                             userType: _userType ?? UserType.student,

@@ -10,5 +10,6 @@ class AppColors {
   static Color error = Colors.red;
   static Color selected = Colors.black;
   static Color unselected = Colors.grey;
+  static Color lightGrey = Colors.grey[300]!;
   static Color bottomNavbar = const Color.fromARGB(255, 235, 235, 235);
 }
