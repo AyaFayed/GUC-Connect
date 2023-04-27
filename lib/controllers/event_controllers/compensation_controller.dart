@@ -112,10 +112,8 @@ class CompensationController {
     Group? group = await Database.getGroup(groupId);
 
     if (group != null) {
-      return (await _helper.getEventsFromList(
-                  group.compensationLectures, EventType.compensationLectures)
-              as List<dynamic>)
-          .cast<CompensationLecture>();
+      return await Database.getCompensationLectureListFromIds(
+          group.compensationLectures);
     } else {
       return [];
     }
@@ -145,9 +143,8 @@ class CompensationController {
     Tutorial? tutorial = await Database.getTutorial(tutorialId);
 
     if (tutorial != null) {
-      return (await _helper.getEventsFromList(tutorial.compensationTutorials,
-              EventType.compensationTutorials) as List<dynamic>)
-          .cast<CompensationTutorial>();
+      return await Database.getCompensationTutorialListFromIds(
+          tutorial.compensationTutorials);
     } else {
       return [];
     }

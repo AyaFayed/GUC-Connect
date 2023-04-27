@@ -59,3 +59,9 @@ class DisplayEvent {
       required this.description,
       required this.file});
 }
+
+class CalendarEvent {
+  String id;
+  DateTime date;
+  CalendarEvent({required this.id, required this.date});
+}

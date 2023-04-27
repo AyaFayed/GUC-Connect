@@ -18,9 +18,7 @@ class ScheduleEventsController {
 
   Future<bool> isConflictingWithQuiz(
       List<String> ids, DateTime start, DateTime end) async {
-    List<Quiz> quizzes = (await _helper.getEventsFromList(
-            ids, EventType.quizzes) as List<dynamic>)
-        .cast<Quiz>();
+    List<Quiz> quizzes = await Database.getQuizListFromIds(ids);
     for (Quiz quiz in quizzes) {
       DateTime startGap = start.subtract(const Duration(minutes: 15));
       DateTime endGap = start.add(const Duration(minutes: 15));
@@ -38,9 +36,7 @@ class ScheduleEventsController {
   Future<bool> isConflictingWithCompensationLecture(
       List<String> ids, DateTime start, DateTime end) async {
     List<CompensationLecture> compensationLectures =
-        (await _helper.getEventsFromList(ids, EventType.compensationLectures)
-                as List<dynamic>)
-            .cast<CompensationLecture>();
+        await Database.getCompensationLectureListFromIds(ids);
     for (CompensationLecture compensationLecture in compensationLectures) {
       DateTime startGap = start.subtract(const Duration(minutes: 15));
       DateTime endGap = start.add(const Duration(minutes: 15));
@@ -60,9 +56,7 @@ class ScheduleEventsController {
   Future<bool> isConflictingWithCompensationTutorial(
       List<String> ids, DateTime start, DateTime end) async {
     List<CompensationTutorial> compensationTutorials =
-        (await _helper.getEventsFromList(ids, EventType.compensationTutorials)
-                as List<dynamic>)
-            .cast<CompensationTutorial>();
+        await Database.getCompensationTutorialListFromIds(ids);
     for (CompensationTutorial compensationTutorial in compensationTutorials) {
       DateTime startGap = start.subtract(const Duration(minutes: 15));
       DateTime endGap = start.add(const Duration(minutes: 15));

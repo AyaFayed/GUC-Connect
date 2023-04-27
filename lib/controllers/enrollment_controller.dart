@@ -76,10 +76,10 @@ class EnrollmentController {
         quizzes: [],
         assignments: [],
         compensationLectures: []);
-    courses.add(newCourse);
-    await Database.users
-        .doc(_auth.currentUser?.uid)
-        .update({'courses': courses.map((course) => course.toJson())});
+
+    await Database.users.doc(_auth.currentUser?.uid).update({
+      'courses': FieldValue.arrayUnion([newCourse.toJson()])
+    });
 
     await addInstructorToCourse(courseId, InstructorType.professors);
   }
@@ -96,10 +96,10 @@ class EnrollmentController {
         tutorials: [],
         announcements: [],
         compensationTutorials: []);
-    courses.add(newCourse);
-    await Database.users
-        .doc(_auth.currentUser?.uid)
-        .update({'courses': courses.map((course) => course.toJson())});
+
+    await Database.users.doc(_auth.currentUser?.uid).update({
+      'courses': FieldValue.arrayUnion([newCourse.toJson()])
+    });
 
     await addInstructorToCourse(courseId, InstructorType.tas);
   }
@@ -107,15 +107,10 @@ class EnrollmentController {
   Future addStudentToDivision(
       String divisionId, DivisionType divisionType) async {
     final docDivision = _database.collection(divisionType.name).doc(divisionId);
-    final divisionSnapshot = await docDivision.get();
 
-    if (divisionSnapshot.exists) {
-      final division = divisionSnapshot.data();
-      List<String> students =
-          (division!['students'] as List<dynamic>).cast<String>();
-      students.add(_auth.currentUser?.uid ?? '');
-      await docDivision.update({'students': students});
-    }
+    await docDivision.update({
+      'students': FieldValue.arrayUnion([_auth.currentUser?.uid ?? ''])
+    });
   }
 
   Future removeStudentFromDivision(
@@ -145,10 +140,10 @@ class EnrollmentController {
       }
       StudentCourse newCourse =
           StudentCourse(id: courseId, group: groupId, tutorial: tutorialId);
-      courses.add(newCourse);
-      await Database.users
-          .doc(_auth.currentUser?.uid)
-          .update({'courses': courses.map((course) => course.toJson())});
+
+      await Database.users.doc(_auth.currentUser?.uid).update({
+        'courses': FieldValue.arrayUnion([newCourse.toJson()])
+      });
 
       await addStudentToDivision(groupId, DivisionType.groups);
 

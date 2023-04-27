@@ -56,9 +56,7 @@ class QuizController {
     Group? group = await Database.getGroup(groupId);
 
     if (group != null) {
-      return (await _helper.getEventsFromList(group.quizzes, EventType.quizzes)
-              as List<dynamic>)
-          .cast<Quiz>();
+      return await Database.getQuizListFromIds(group.quizzes);
     } else {
       return [];
     }

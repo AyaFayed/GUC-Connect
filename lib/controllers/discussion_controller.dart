@@ -41,12 +41,9 @@ class DiscussionController {
   }
 
   Future addPostToCourse(String postId, String courseId) async {
-    Course? course = await Database.getCourse(courseId);
-    if (course != null) {
-      List<String> posts = course.posts;
-      posts.add(postId);
-      await Database.courses.doc(courseId).update({'posts': posts});
-    }
+    await Database.courses.doc(courseId).update({
+      'posts': FieldValue.arrayUnion([postId])
+    });
   }
 
   Future<Reply?> addReplyToPost(String content, String postId) async {

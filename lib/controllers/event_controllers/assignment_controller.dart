@@ -45,9 +45,7 @@ class AssignmentController {
     Group? group = await Database.getGroup(groupId);
 
     if (group != null) {
-      return (await _helper.getEventsFromList(
-              group.assignments, EventType.assignments) as List<dynamic>)
-          .cast<Assignment>();
+      return await Database.getAssignmentListFromIds(group.assignments);
     } else {
       return [];
     }

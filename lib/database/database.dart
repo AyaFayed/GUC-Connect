@@ -258,21 +258,112 @@ class Database {
     return allCompensationTutorials;
   }
 
+  static Future<List<Quiz>> getQuizListFromIds(List<String> eventIds) async {
+    List<Quiz?> quizzesNull = await Future.wait(eventIds.map((String eventId) {
+      return Database.getQuiz(eventId);
+    }));
+
+    List<Quiz> quizzes = [];
+
+    for (Quiz? quiz in quizzesNull) {
+      if (quiz != null) {
+        quizzes.add(quiz);
+      }
+    }
+    return quizzes;
+  }
+
+  static Future<List<Announcement>> getAnnouncementListFromIds(
+      List<String> eventIds) async {
+    List<Announcement?> announcementsNull =
+        await Future.wait(eventIds.map((String eventId) {
+      return Database.getAnnouncement(eventId);
+    }));
+
+    List<Announcement> announcements = [];
+
+    for (Announcement? announcement in announcementsNull) {
+      if (announcement != null) {
+        announcements.add(announcement);
+      }
+    }
+    return announcements;
+  }
+
+  static Future<List<Assignment>> getAssignmentListFromIds(
+      List<String> eventIds) async {
+    List<Assignment?> assignmentsNull =
+        await Future.wait(eventIds.map((String eventId) {
+      return Database.getAssignment(eventId);
+    }));
+
+    List<Assignment> assignments = [];
+
+    for (Assignment? assignment in assignmentsNull) {
+      if (assignment != null) {
+        assignments.add(assignment);
+      }
+    }
+    return assignments;
+  }
+
+  static Future<List<CompensationLecture>> getCompensationLectureListFromIds(
+      List<String> eventIds) async {
+    List<CompensationLecture?> compensationLecturesNull =
+        await Future.wait(eventIds.map((String eventId) {
+      return Database.getCompensationLecture(eventId);
+    }));
+
+    List<CompensationLecture> compensationLectures = [];
+
+    for (CompensationLecture? compensationLecture in compensationLecturesNull) {
+      if (compensationLecture != null) {
+        compensationLectures.add(compensationLecture);
+      }
+    }
+    return compensationLectures;
+  }
+
+  static Future<List<CompensationTutorial>> getCompensationTutorialListFromIds(
+      List<String> eventIds) async {
+    List<CompensationTutorial?> compensationTutorialsNull =
+        await Future.wait(eventIds.map((String eventId) {
+      return Database.getCompensationTutorial(eventId);
+    }));
+
+    List<CompensationTutorial> compensationTutorials = [];
+
+    for (CompensationTutorial? compensationTutorial
+        in compensationTutorialsNull) {
+      if (compensationTutorial != null) {
+        compensationTutorials.add(compensationTutorial);
+      }
+    }
+    return compensationTutorials;
+  }
+
   static Future<List<Group>> getGroupListFromIds(List<String> ids) async {
+    List<Group?> groupsNull = await Future.wait(ids.map((String id) {
+      return Database.getGroup(id);
+    }));
+
     List<Group> groups = [];
-    for (String groupId in ids) {
-      Group? group = await getGroup(groupId);
+    for (Group? group in groupsNull) {
       if (group != null) {
         groups.add(group);
       }
     }
+
     return groups;
   }
 
   static Future<List<Tutorial>> getTutorialListFromIds(List<String> ids) async {
+    List<Tutorial?> tutorialsNull = await Future.wait(ids.map((String id) {
+      return Database.getTutorial(id);
+    }));
+
     List<Tutorial> tutorials = [];
-    for (String tutorialId in ids) {
-      Tutorial? tutorial = await getTutorial(tutorialId);
+    for (Tutorial? tutorial in tutorialsNull) {
       if (tutorial != null) {
         tutorials.add(tutorial);
       }
@@ -281,9 +372,12 @@ class Database {
   }
 
   static Future<List<Course>> getCourseListFromIds(List<String> ids) async {
+    List<Course?> coursesNull = await Future.wait(ids.map((String id) {
+      return Database.getCourse(id);
+    }));
+
     List<Course> courses = [];
-    for (String courseId in ids) {
-      Course? course = await getCourse(courseId);
+    for (Course? course in coursesNull) {
       if (course != null) {
         courses.add(course);
       }
@@ -292,9 +386,11 @@ class Database {
   }
 
   static Future<List<Post>> getPostListFromIds(List<String> ids) async {
+    List<Post?> postsNull = await Future.wait(ids.map((String id) {
+      return Database.getPost(id);
+    }));
     List<Post> posts = [];
-    for (String postId in ids) {
-      Post? post = await getPost(postId);
+    for (Post? post in postsNull) {
       if (post != null) {
         posts.add(post);
       }

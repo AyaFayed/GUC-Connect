@@ -50,9 +50,7 @@ class AnnouncementController {
     Group? group = await Database.getGroup(groupId);
 
     if (group != null) {
-      return (await _helper.getEventsFromList(
-              group.announcements, EventType.announcements) as List<dynamic>)
-          .cast<Announcement>();
+      return await Database.getAnnouncementListFromIds(group.announcements);
     } else {
       return [];
     }
@@ -62,9 +60,7 @@ class AnnouncementController {
     Tutorial? tutorial = await Database.getTutorial(tutorialId);
 
     if (tutorial != null) {
-      return (await _helper.getEventsFromList(
-              tutorial.announcements, EventType.announcements) as List<dynamic>)
-          .cast<Announcement>();
+      return await Database.getAnnouncementListFromIds(tutorial.announcements);
     } else {
       return [];
     }
