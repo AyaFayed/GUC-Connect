@@ -1,6 +1,5 @@
 import 'package:guc_scheduling_app/controllers/event_controllers/assignment_controller.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/compensation_controller.dart';
-import 'package:guc_scheduling_app/controllers/event_controllers/event_controllers_helper.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/quiz_controller.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/database/database.dart';
@@ -13,7 +12,6 @@ import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 
 class ScheduleEventsController {
-  final EventsControllerHelper _helper = EventsControllerHelper();
   final UserController _user = UserController();
 
   Future<bool> isConflictingWithQuiz(
