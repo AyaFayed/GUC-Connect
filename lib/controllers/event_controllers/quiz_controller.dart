@@ -54,8 +54,8 @@ class QuizController {
       await _helper.addEventToInstructor(
           courseId, docQuiz.id, EventType.quizzes);
 
-      await _helper.addEventInDivisions(docQuiz.id, EventType.quizzes,
-          DivisionType.groups, groupIds, courseName, title);
+      await _helper.addEventInDivisions(courseName, docQuiz.id,
+          EventType.quizzes, DivisionType.groups, groupIds, courseName, title);
     }
   }
 

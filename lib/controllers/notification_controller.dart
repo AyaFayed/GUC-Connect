@@ -10,7 +10,7 @@ class NotificationController {
 
   Future createNotification(
       List<String> userIds,
-      String courseName,
+      String? courseName,
       String title,
       String body,
       String eventId,

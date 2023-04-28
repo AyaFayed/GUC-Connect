@@ -1,6 +1,7 @@
 import 'package:guc_scheduling_app/controllers/event_controllers/assignment_controller.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/compensation_controller.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/quiz_controller.dart';
+import 'package:guc_scheduling_app/controllers/notification_controller.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/models/divisions/group_model.dart';
@@ -10,9 +11,12 @@ import 'package:guc_scheduling_app/models/events/compensation/compensation_tutor
 import 'package:guc_scheduling_app/models/events/quiz_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/shared/helper.dart';
 
 class ScheduleEventsController {
   final UserController _user = UserController();
+  final NotificationController _notificationController =
+      NotificationController();
 
   Future<bool> isConflictingWithQuiz(
       List<String> ids, DateTime start, DateTime end) async {
@@ -209,6 +213,14 @@ class ScheduleEventsController {
     }
 
     await _user.notifyUsers(studentIds, courseName, '$title was updated.');
+
+    await _notificationController.createNotification(
+        studentIds,
+        courseName,
+        courseName,
+        '$title was updated.',
+        eventId,
+        getNotificationTypeFromEventType(eventType));
   }
 
   Future<int> canScheduleEvent(

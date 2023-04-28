@@ -45,6 +45,7 @@ class AnnouncementController {
           courseId, docAnnouncement.id, EventType.announcements);
 
       await _helper.addEventInDivisions(
+          courseName,
           docAnnouncement.id,
           EventType.announcements,
           DivisionType.groups,
@@ -53,6 +54,7 @@ class AnnouncementController {
           title);
 
       await _helper.addEventInDivisions(
+          courseName,
           docAnnouncement.id,
           EventType.announcements,
           DivisionType.tutorials,

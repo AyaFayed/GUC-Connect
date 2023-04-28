@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:guc_scheduling_app/controllers/notification_controller.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
@@ -12,6 +13,7 @@ import 'package:guc_scheduling_app/models/user/professor_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/models/user/ta_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/shared/helper.dart';
 
 import '../../models/events/assignment_model.dart';
 import '../../models/events/quiz_model.dart';
@@ -20,8 +22,11 @@ class EventsControllerHelper {
   final FirebaseFirestore _database = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final UserController _user = UserController();
+  final NotificationController _notificationController =
+      NotificationController();
 
   Future addEventInDivisions(
+      String courseName,
       String eventId,
       EventType eventType,
       DivisionType divisionType,
@@ -69,6 +74,14 @@ class EventsControllerHelper {
     }
 
     await _user.notifyUsers(studentIds, notificationTitle, notificationBody);
+
+    await _notificationController.createNotification(
+        studentIds,
+        courseName,
+        notificationTitle,
+        notificationBody,
+        eventId,
+        getNotificationTypeFromEventType(eventType));
   }
 
   List<String> getTAEventsList(TACourse course, EventType eventType) {

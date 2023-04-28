@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:guc_scheduling_app/controllers/notification_controller.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
@@ -11,6 +12,8 @@ import 'package:guc_scheduling_app/shared/helper.dart';
 class DiscussionController {
   final UserController _user = UserController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final NotificationController _notificationController =
+      NotificationController();
 
   Future<Post?> addPost(String content, String? file, String courseId) async {
     final docPost = Database.posts.doc();
@@ -34,7 +37,7 @@ class DiscussionController {
 
       await addPostToCourse(docPost.id, courseId);
 
-      await notifyUsersAboutPost(content, courseId);
+      await notifyUsersAboutPost(docPost.id, content, courseId);
 
       return post;
     }
@@ -48,7 +51,8 @@ class DiscussionController {
     });
   }
 
-  Future notifyUsersAboutPost(String content, String courseId) async {
+  Future notifyUsersAboutPost(
+      String postId, String content, String courseId) async {
     Course? course = await Database.getCourse(courseId);
     if (course != null) {
       String body = 'New post : $content';
@@ -59,6 +63,9 @@ class DiscussionController {
           course.groups, DivisionType.groups));
 
       await _user.notifyUsers(userIds, course.name, body);
+
+      await _notificationController.createNotification(userIds, course.name,
+          course.name, body, postId, NotificationType.post);
     }
   }
 
@@ -81,6 +88,14 @@ class DiscussionController {
 
       await _user.notifyUser(post.authorId,
           '${currentUser.name} replied to your post', post.content);
+
+      await _notificationController.createNotification(
+          [post.authorId],
+          null,
+          '${currentUser.name} replied to your post',
+          post.content,
+          postId,
+          NotificationType.reply);
 
       return reply;
     }

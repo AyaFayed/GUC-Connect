@@ -58,6 +58,7 @@ class CompensationController {
           courseId, doccompensationLecture.id, EventType.compensationLectures);
 
       await _helper.addEventInDivisions(
+          courseName,
           doccompensationLecture.id,
           EventType.compensationLectures,
           DivisionType.groups,
@@ -110,6 +111,7 @@ class CompensationController {
           EventType.compensationTutorials);
 
       await _helper.addEventInDivisions(
+          courseName,
           doccompensationTutorial.id,
           EventType.compensationTutorials,
           DivisionType.tutorials,

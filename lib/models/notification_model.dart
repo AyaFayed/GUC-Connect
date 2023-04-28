@@ -3,7 +3,7 @@ import 'package:guc_scheduling_app/shared/helper.dart';
 
 class NotificationModel {
   String id;
-  String courseName;
+  String? courseName;
   String title;
   String body;
   DateTime createdAt;
@@ -12,7 +12,7 @@ class NotificationModel {
 
   NotificationModel({
     required this.id,
-    required this.courseName,
+    this.courseName,
     required this.title,
     required this.body,
     required this.createdAt,

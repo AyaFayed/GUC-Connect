@@ -42,8 +42,14 @@ class AssignmentController {
       await _helper.addEventToInstructor(
           courseId, docAssignment.id, EventType.assignments);
 
-      await _helper.addEventInDivisions(docAssignment.id, EventType.assignments,
-          DivisionType.groups, groupIds, courseName, title);
+      await _helper.addEventInDivisions(
+          courseName,
+          docAssignment.id,
+          EventType.assignments,
+          DivisionType.groups,
+          groupIds,
+          courseName,
+          title);
     }
   }
 

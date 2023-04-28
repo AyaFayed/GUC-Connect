@@ -81,6 +81,21 @@ NotificationType getNotificationTypeFromString(String notificationType) {
   }
 }
 
+NotificationType getNotificationTypeFromEventType(EventType eventType) {
+  switch (eventType) {
+    case EventType.announcements:
+      return NotificationType.announcement;
+    case EventType.assignments:
+      return NotificationType.assignment;
+    case EventType.quizzes:
+      return NotificationType.quiz;
+    case EventType.compensationLectures:
+      return NotificationType.compensationLecture;
+    case EventType.compensationTutorials:
+      return NotificationType.compensationTutorial;
+  }
+}
+
 String abbreviateDay(Day day) {
   switch (day) {
     case Day.saturday:
