@@ -66,7 +66,7 @@ class _HomeState extends State<Home> {
       );
 
       AndroidNotificationDetails androidPlatformChannelSpecifics =
-          AndroidNotificationDetails('Courses', 'Courses',
+          AndroidNotificationDetails('courses', 'courses',
               importance: Importance.high,
               styleInformation: bigTextStyleInformation,
               priority: Priority.high,

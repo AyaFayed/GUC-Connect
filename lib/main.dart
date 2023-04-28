@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/theme/themes.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('Handling a background message ${message.messageId}');
@@ -19,6 +20,8 @@ Future<void> main() async {
 
   FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  await dotenv.load(fileName: ".env");
 
 // Plugin must be initialized before using
   await FlutterDownloader.initialize(
