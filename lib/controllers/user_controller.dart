@@ -23,23 +23,35 @@ class UserController {
 
     switch (type) {
       case UserType.student:
-        user =
-            Student(id: uid, token: token, name: name, type: type, courses: []);
+        user = Student(
+            id: uid,
+            token: token,
+            name: name,
+            type: type,
+            courses: [],
+            notifications: []);
         break;
       case UserType.professor:
         user = Professor(
-            id: uid, token: token, name: name, type: type, courses: []);
+            id: uid,
+            token: token,
+            name: name,
+            type: type,
+            courses: [],
+            notifications: []);
         break;
       case UserType.ta:
-        user = TA(id: uid, token: token, name: name, type: type, courses: []);
+        user = TA(
+            id: uid,
+            token: token,
+            name: name,
+            type: type,
+            courses: [],
+            notifications: []);
         break;
       default:
         user = UserModel(
-          id: uid,
-          token: token,
-          name: name,
-          type: type,
-        );
+            id: uid, token: token, name: name, type: type, notifications: []);
         break;
     }
     final json = user.toJson();
