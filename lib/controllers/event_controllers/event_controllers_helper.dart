@@ -12,6 +12,7 @@ import 'package:guc_scheduling_app/models/user/professor_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/models/user/ta_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/services/messaging_service.dart';
 
 import '../../models/events/assignment_model.dart';
 import '../../models/events/quiz_model.dart';
@@ -20,6 +21,7 @@ class EventsControllerHelper {
   final FirebaseFirestore _database = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final UserController _user = UserController();
+  final MessagingService _messaging = MessagingService();
 
   Future addEventInDivisions(String eventId, EventType eventType,
       DivisionType divisionType, List<String> divisions) async {

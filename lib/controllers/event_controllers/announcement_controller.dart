@@ -6,14 +6,12 @@ import 'package:guc_scheduling_app/models/divisions/group_model.dart';
 import 'package:guc_scheduling_app/models/divisions/tutorial_model.dart';
 import 'package:guc_scheduling_app/models/events/announcement_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
-import 'package:guc_scheduling_app/services/messaging_service.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 
 class AnnouncementController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final EventsControllerHelper _helper = EventsControllerHelper();
   final UserController _user = UserController();
-  final MessagingService _messaging = MessagingService();
 
   Future createAnnouncement(String courseId, String title, String description,
       String? file, List<String> groups, List<String> tutorials) async {
@@ -34,11 +32,6 @@ class AnnouncementController {
           createdAt: DateTime.now());
 
       final json = announcement.toJson();
-
-      // await _messaging.sendPushNotification(
-      //     '',
-      //     'Ann 1',
-      //     'Announcement');
 
       await docAnnouncement.set(json);
 

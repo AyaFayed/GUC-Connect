@@ -4,10 +4,12 @@ import 'package:guc_scheduling_app/models/user/professor_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/models/user/ta_model.dart';
 import 'package:guc_scheduling_app/models/user/user_model.dart';
+import 'package:guc_scheduling_app/services/messaging_service.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 
 class UserController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final MessagingService _messaging = MessagingService();
 
   // user creation:
   Future createUser(String? uid, String name, UserType type) async {
@@ -17,19 +19,24 @@ class UserController {
     // ignore: prefer_typing_uninitialized_variables
     final user;
 
+    String? token = await _messaging.getToken();
+
     switch (type) {
       case UserType.student:
-        user = Student(id: uid, name: name, type: type, courses: []);
+        user =
+            Student(id: uid, token: token, name: name, type: type, courses: []);
         break;
       case UserType.professor:
-        user = Professor(id: uid, name: name, type: type, courses: []);
+        user = Professor(
+            id: uid, token: token, name: name, type: type, courses: []);
         break;
       case UserType.ta:
-        user = TA(id: uid, name: name, type: type, courses: []);
+        user = TA(id: uid, token: token, name: name, type: type, courses: []);
         break;
       default:
         user = UserModel(
           id: uid,
+          token: token,
           name: name,
           type: type,
         );

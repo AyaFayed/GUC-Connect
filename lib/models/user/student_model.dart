@@ -6,6 +6,7 @@ class Student extends UserModel {
 
   Student(
       {required super.id,
+      required super.token,
       required super.name,
       required super.type,
       required this.courses});
@@ -18,6 +19,7 @@ class Student extends UserModel {
 
   static Student fromJson(Map<String, dynamic> json) => Student(
       id: json['id'],
+      token: json['token'],
       name: json['name'],
       type: getUserTypeFromString(json['type']),
       courses: (json['courses'] as List<dynamic>)

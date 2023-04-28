@@ -6,6 +6,7 @@ class TA extends UserModel {
 
   TA(
       {required super.id,
+      required super.token,
       required super.name,
       required super.type,
       required this.courses});
@@ -18,6 +19,7 @@ class TA extends UserModel {
 
   static TA fromJson(Map<String, dynamic> json) => TA(
       id: json['id'],
+      token: json['token'],
       name: json['name'],
       type: getUserTypeFromString(json['type']),
       courses: (json['courses'] as List<dynamic>)

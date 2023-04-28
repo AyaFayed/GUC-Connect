@@ -6,6 +6,7 @@ class Professor extends UserModel {
 
   Professor({
     required super.id,
+    required super.token,
     required super.name,
     required super.type,
     required this.courses,
@@ -19,6 +20,7 @@ class Professor extends UserModel {
 
   static Professor fromJson(Map<String, dynamic> json) => Professor(
         id: json['id'],
+        token: json['token'],
         name: json['name'],
         type: getUserTypeFromString(json['type']),
         courses: (json['courses'] as List<dynamic>)
