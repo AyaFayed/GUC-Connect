@@ -46,6 +46,10 @@ dependencies:
   flutter_downloader: ^1.10.2
   path_provider: ^2.0.5
   table_calendar: ^3.0.8
+  firebase_messaging: ^14.4.1
+  flutter_local_notifications: ^12.0.0
+  http: ^0.13.5
+  firebase_analytics: ^10.2.1
 
 dev_dependencies:
   flutter_test:

@@ -1,10 +1,13 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/screens/Course/my_courses.dart';
 import 'package:guc_scheduling_app/screens/admin/admin_home.dart';
 import 'package:guc_scheduling_app/screens/calendar/calendar.dart';
 import 'package:guc_scheduling_app/screens/notifications/notifications.dart';
 import 'package:guc_scheduling_app/screens/settings/settings.dart';
+import 'package:guc_scheduling_app/services/messaging_service.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 
@@ -21,12 +24,63 @@ class _HomeState extends State<Home> {
   final UserController _userController = UserController();
   UserType? _currentUserType;
 
+  final MessagingService _messaging = MessagingService();
+
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
   static const List<Widget> _widgetOptions = <Widget>[
     MyCourses(),
     Notifications(),
     Calendar(),
     Settings(),
   ];
+
+  initInfo() {
+    var androidInitialize =
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
+    var iOSInitialize = const DarwinInitializationSettings();
+    var initializationSettings =
+        InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (details) async {
+        try {
+          if (details.payload != null && details.payload!.isNotEmpty) {
+          } else {}
+        } catch (e) {}
+        return;
+      },
+    );
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print(".............onMessage...............");
+      print(
+          "onMessage: ${message.notification?.title}/${message.notification?.body}");
+
+      BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
+        message.notification!.body.toString(),
+        htmlFormatBigText: true,
+        contentTitle: message.notification!.title.toString(),
+        htmlFormatContentTitle: true,
+      );
+
+      AndroidNotificationDetails androidPlatformChannelSpecifics =
+          AndroidNotificationDetails('Courses', 'Courses',
+              importance: Importance.high,
+              styleInformation: bigTextStyleInformation,
+              priority: Priority.high,
+              playSound: true);
+
+      NotificationDetails platformChannelSpecifics = NotificationDetails(
+          android: androidPlatformChannelSpecifics,
+          iOS: const DarwinNotificationDetails());
+
+      await flutterLocalNotificationsPlugin.show(0, message.notification?.title,
+          message.notification?.body, platformChannelSpecifics,
+          payload: message.data['body']);
+    });
+  }
 
   Future<void> _onItemTapped(int index) async {
     setState(() {
@@ -44,6 +98,9 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    _messaging.requestPermission();
+    _messaging.setToken();
+    initInfo();
     _getData();
   }
 
