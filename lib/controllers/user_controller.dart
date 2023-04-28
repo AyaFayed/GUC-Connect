@@ -83,4 +83,19 @@ class UserController {
         await Database.getDocumentData(Database.users, _auth.currentUser?.uid);
     return userDoc;
   }
+
+  Future notifyUser(String uid, String title, String body) async {
+    UserModel? user = await Database.getUser(uid);
+    if (user?.token != null) {
+      await _messaging.sendPushNotification(user?.token ?? '', body, title);
+    }
+  }
+
+  Future notifyUsers(List<String> uids, String title, String body) async {
+    List<Future> notifying = [];
+    for (String uid in uids) {
+      notifying.add(notifyUser(uid, title, body));
+    }
+    await Future.wait(notifying);
+  }
 }
