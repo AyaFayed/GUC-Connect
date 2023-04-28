@@ -112,5 +112,11 @@ class DisplayEvent {
 class CalendarEvent {
   DateTime date;
   DisplayEvent event;
-  CalendarEvent({required this.date, required this.event});
+  String courseName;
+  String courseId;
+  CalendarEvent(
+      {required this.date,
+      required this.courseName,
+      required this.courseId,
+      required this.event});
 }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/database/database.dart';
+import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/models/divisions/group_model.dart';
 import 'package:guc_scheduling_app/models/divisions/tutorial_model.dart';
 import 'package:guc_scheduling_app/models/events/compensation/compensation_lecture_model.dart';
@@ -127,8 +128,8 @@ class EventsControllerHelper {
     }
   }
 
-  Future<List<CalendarEvent>> getCalendarEventsFromList(
-      List<String> eventIds, EventType eventType) async {
+  Future<List<CalendarEvent>> getCalendarEventsFromList(String courseName,
+      String courseId, List<String> eventIds, EventType eventType) async {
     switch (eventType) {
       case EventType.announcements:
         return [];
@@ -137,32 +138,49 @@ class EventsControllerHelper {
             await Database.getAssignmentListFromIds(eventIds);
         return assignments
             .map((assignment) => CalendarEvent(
-                date: assignment.deadline,
-                event: DisplayEvent.fromAssignment(assignment)))
+                date: DateTime(assignment.deadline.year,
+                    assignment.deadline.month, assignment.deadline.day),
+                event: DisplayEvent.fromAssignment(assignment),
+                courseId: courseId,
+                courseName: courseName))
             .toList();
       case EventType.quizzes:
         List<Quiz> quizzes = await Database.getQuizListFromIds(eventIds);
         return quizzes
             .map((quiz) => CalendarEvent(
-                date: quiz.start, event: DisplayEvent.fromQuiz(quiz)))
+                date:
+                    DateTime(quiz.start.year, quiz.start.month, quiz.start.day),
+                event: DisplayEvent.fromQuiz(quiz),
+                courseId: courseId,
+                courseName: courseName))
             .toList();
       case EventType.compensationLectures:
         List<CompensationLecture> compensationLectures =
             await Database.getCompensationLectureListFromIds(eventIds);
         return compensationLectures
             .map((compensationLecture) => CalendarEvent(
-                date: compensationLecture.start,
+                date: DateTime(
+                    compensationLecture.start.year,
+                    compensationLecture.start.month,
+                    compensationLecture.start.day),
                 event:
-                    DisplayEvent.fromCompensationLecture(compensationLecture)))
+                    DisplayEvent.fromCompensationLecture(compensationLecture),
+                courseId: courseId,
+                courseName: courseName))
             .toList();
       case EventType.compensationTutorials:
         List<CompensationTutorial> compensationTutorials =
             await Database.getCompensationTutorialListFromIds(eventIds);
         return compensationTutorials
             .map((compensationTutorial) => CalendarEvent(
-                date: compensationTutorial.start,
-                event: DisplayEvent.fromCompensationTutorial(
-                    compensationTutorial)))
+                date: DateTime(
+                    compensationTutorial.start.year,
+                    compensationTutorial.start.month,
+                    compensationTutorial.start.day),
+                event:
+                    DisplayEvent.fromCompensationTutorial(compensationTutorial),
+                courseId: courseId,
+                courseName: courseName))
             .toList();
     }
   }
@@ -263,72 +281,78 @@ class EventsControllerHelper {
 
   Future<Map<DateTime, List<CalendarEvent>>> getMyCalendarEvents() async {
     UserType userType = await _user.getCurrentUserType();
-    List<CalendarEvent> events = [];
+    List<Future<List<CalendarEvent>>> calendarEvents = [];
     if (userType == UserType.student) {
       Student? student =
           await Database.getStudent(_auth.currentUser?.uid ?? "");
       if (student != null) {
-        List<String> quizzes = [];
-        List<String> assignments = [];
-        List<String> compensationLectures = [];
-        List<String> compensationTutorials = [];
         for (StudentCourse course in student.courses) {
+          Course? courseData = await Database.getCourse(course.id);
           Group? group = await Database.getGroup(course.group);
           Tutorial? tutorial = await Database.getTutorial(course.tutorial);
           if (group != null) {
-            assignments.addAll(group.assignments);
-            quizzes.addAll(group.quizzes);
-            compensationLectures.addAll(group.compensationLectures);
+            calendarEvents.add(getCalendarEventsFromList(courseData?.name ?? '',
+                courseData?.id ?? '', group.quizzes, EventType.quizzes));
+            calendarEvents.add(getCalendarEventsFromList(
+                courseData?.name ?? '',
+                courseData?.id ?? '',
+                group.assignments,
+                EventType.assignments));
+            calendarEvents.add(getCalendarEventsFromList(
+                courseData?.name ?? '',
+                courseData?.id ?? '',
+                group.compensationLectures,
+                EventType.compensationLectures));
           }
           if (tutorial != null) {
-            compensationTutorials.addAll(tutorial.compensationTutorials);
+            calendarEvents.add(getCalendarEventsFromList(
+                courseData?.name ?? '',
+                courseData?.id ?? '',
+                tutorial.compensationTutorials,
+                EventType.compensationTutorials));
           }
         }
-        events.addAll(
-            await getCalendarEventsFromList(quizzes, EventType.quizzes));
-        events.addAll(await getCalendarEventsFromList(
-            assignments, EventType.assignments));
-        events.addAll(await getCalendarEventsFromList(
-            compensationLectures, EventType.compensationLectures));
-        events.addAll(await getCalendarEventsFromList(
-            compensationTutorials, EventType.compensationTutorials));
       }
     } else if (userType == UserType.professor) {
       Professor? professor =
           await Database.getProfessor(_auth.currentUser?.uid ?? "");
       if (professor != null) {
-        List<String> quizzes = [];
-        List<String> assignments = [];
-        List<String> compensationLectures = [];
         for (ProfessorCourse course in professor.courses) {
-          assignments.addAll(course.assignments);
-          quizzes.addAll(course.quizzes);
-          compensationLectures.addAll(course.compensationLectures);
+          Course? courseData = await Database.getCourse(course.id);
+          calendarEvents.add(getCalendarEventsFromList(courseData?.name ?? '',
+              courseData?.id ?? '', course.quizzes, EventType.quizzes));
+          calendarEvents.add(getCalendarEventsFromList(courseData?.name ?? '',
+              courseData?.id ?? '', course.assignments, EventType.assignments));
+          calendarEvents.add(getCalendarEventsFromList(
+              courseData?.name ?? '',
+              courseData?.id ?? '',
+              course.compensationLectures,
+              EventType.compensationLectures));
         }
-        events.addAll(
-            await getCalendarEventsFromList(quizzes, EventType.quizzes));
-        events.addAll(await getCalendarEventsFromList(
-            assignments, EventType.assignments));
-        events.addAll(await getCalendarEventsFromList(
-            compensationLectures, EventType.compensationLectures));
       }
     } else if (userType == UserType.ta) {
       TA? ta = await Database.getTa(_auth.currentUser?.uid ?? "");
       if (ta != null) {
-        List<String> compensationTutorials = [];
         for (TACourse course in ta.courses) {
-          compensationTutorials.addAll(course.compensationTutorials);
+          Course? courseData = await Database.getCourse(course.id);
+          calendarEvents.add(getCalendarEventsFromList(
+              courseData?.name ?? '',
+              courseData?.id ?? '',
+              course.compensationTutorials,
+              EventType.compensationTutorials));
         }
-        events.addAll(await getCalendarEventsFromList(
-            compensationTutorials, EventType.compensationTutorials));
       }
     }
+
+    List<List<CalendarEvent>> events = await Future.wait(calendarEvents);
     Map<DateTime, List<CalendarEvent>> eventsMap = {};
-    for (CalendarEvent event in events) {
-      if (eventsMap[event.date] != null) {
-        eventsMap[event.date]?.add(event);
-      } else {
-        eventsMap[event.date] = [event];
+    for (List<CalendarEvent> eventList in events) {
+      for (CalendarEvent event in eventList) {
+        if (eventsMap[event.date] != null) {
+          eventsMap[event.date]?.add(event);
+        } else {
+          eventsMap[event.date] = [event];
+        }
       }
     }
     return eventsMap;
