@@ -9,6 +9,7 @@ class Professor extends UserModel {
     required super.token,
     required super.name,
     required super.type,
+    required super.notifications,
     required this.courses,
   });
 
@@ -23,6 +24,7 @@ class Professor extends UserModel {
         token: json['token'],
         name: json['name'],
         type: getUserTypeFromString(json['type']),
+        notifications: (json['notifications'] as List<dynamic>).cast<String>(),
         courses: (json['courses'] as List<dynamic>)
             .map((course) => ProfessorCourse.fromJson(course))
             .toList(),
