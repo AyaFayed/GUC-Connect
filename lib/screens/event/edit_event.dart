@@ -97,18 +97,20 @@ class _EditEventState extends State<EditEvent> {
               case EventType.announcements:
                 break;
               case EventType.assignments:
-                await _assignmentController.deleteAssignment(widget.eventId);
+                await _assignmentController.deleteAssignment(
+                    widget.eventId, widget.courseName);
                 break;
               case EventType.quizzes:
-                await _quizController.deleteQuiz(widget.eventId);
+                await _quizController.deleteQuiz(
+                    widget.eventId, widget.courseName);
                 break;
               case EventType.compensationLectures:
-                await _compensationController
-                    .deleteCompensationLecture(widget.eventId);
+                await _compensationController.deleteCompensationLecture(
+                    widget.eventId, widget.courseName);
                 break;
               case EventType.compensationTutorials:
-                await _compensationController
-                    .deleteCompensationTutorial(widget.eventId);
+                await _compensationController.deleteCompensationTutorial(
+                    widget.eventId, widget.courseName);
                 break;
             }
             if (context.mounted) {

@@ -253,8 +253,14 @@ class EventsControllerHelper {
     }
   }
 
-  Future removeEventFromDivisions(String eventId, EventType eventType,
-      DivisionType divisionType, List<String> divisions) async {
+  Future removeEventFromDivisions(
+      String eventId,
+      EventType eventType,
+      DivisionType divisionType,
+      List<String> divisions,
+      String title,
+      String body) async {
+    List<String> studentIds = [];
     for (String divisionId in divisions) {
       final docDivision =
           _database.collection(divisionType.name).doc(divisionId);
@@ -262,8 +268,10 @@ class EventsControllerHelper {
 
       if (divisionSnapshot.exists) {
         final division = divisionSnapshot.data();
+        studentIds
+            .addAll((division?['students'] as List<dynamic>).cast<String>());
         List<String> events =
-            (division![eventType.name] as List<dynamic>).cast<String>();
+            (division?[eventType.name] as List<dynamic>).cast<String>();
         events.remove(eventId);
 
         switch (eventType) {
@@ -288,6 +296,7 @@ class EventsControllerHelper {
         }
       }
     }
+    await _user.notifyUsers(studentIds, title, body);
   }
 
   Future<Map<DateTime, List<CalendarEvent>>> getMyCalendarEvents() async {

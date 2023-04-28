@@ -112,24 +112,32 @@ class AnnouncementController {
     return announcements;
   }
 
-  Future deleteAnnouncement(String announcementId) async {
+  Future deleteAnnouncement(String courseName, String announcementId) async {
     UserType userType = await _user.getCurrentUserType();
 
     if (userType == UserType.professor) {
-      Announcement? assignment = await Database.getAnnouncement(announcementId);
+      Announcement? announcement =
+          await Database.getAnnouncement(announcementId);
 
-      if (assignment != null) {
-        await _helper.removeEventFromDivisions(announcementId,
-            EventType.announcements, DivisionType.groups, assignment.groups);
+      if (announcement != null) {
+        await _helper.removeEventFromDivisions(
+            announcementId,
+            EventType.announcements,
+            DivisionType.groups,
+            announcement.groups,
+            courseName,
+            '${announcement.title} was removed');
 
         await _helper.removeEventFromDivisions(
             announcementId,
             EventType.announcements,
             DivisionType.tutorials,
-            assignment.tutorials);
+            announcement.tutorials,
+            courseName,
+            '${announcement.title} was removed');
 
         await _helper.removeEventFromInstructor(
-            assignment.course, announcementId, EventType.announcements);
+            announcement.course, announcementId, EventType.announcements);
 
         await Database.announcements.doc(announcementId).delete();
       }

@@ -100,7 +100,7 @@ class QuizController {
         .update(Quiz.toJsonUpdate(title, description, file, start, end));
   }
 
-  Future deleteQuiz(String quizId) async {
+  Future deleteQuiz(String courseName, String quizId) async {
     UserType userType = await _user.getCurrentUserType();
 
     if (userType == UserType.professor) {
@@ -108,7 +108,12 @@ class QuizController {
 
       if (quiz != null) {
         await _helper.removeEventFromDivisions(
-            quizId, EventType.quizzes, DivisionType.groups, quiz.groups);
+            quizId,
+            EventType.quizzes,
+            DivisionType.groups,
+            quiz.groups,
+            courseName,
+            '${quiz.title} was removed');
         await _helper.removeEventFromInstructor(
             quiz.course, quizId, EventType.quizzes);
 

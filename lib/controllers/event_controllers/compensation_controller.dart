@@ -233,7 +233,8 @@ class CompensationController {
         Compensation.toJsonUpdate(title, description, file, start, end));
   }
 
-  Future deleteCompensationLecture(String compensationLectureId) async {
+  Future deleteCompensationLecture(
+      String courseName, String compensationLectureId) async {
     UserType userType = await _user.getCurrentUserType();
 
     if (userType == UserType.professor) {
@@ -245,7 +246,9 @@ class CompensationController {
             compensationLectureId,
             EventType.compensationLectures,
             DivisionType.groups,
-            compensationLecture.groups);
+            compensationLecture.groups,
+            courseName,
+            '${compensationLecture.title} was removed');
         await _helper.removeEventFromInstructor(compensationLecture.course,
             compensationLectureId, EventType.compensationLectures);
 
@@ -254,7 +257,8 @@ class CompensationController {
     }
   }
 
-  Future deleteCompensationTutorial(String compensationTutorialId) async {
+  Future deleteCompensationTutorial(
+      String courseName, String compensationTutorialId) async {
     UserType userType = await _user.getCurrentUserType();
 
     if (userType == UserType.ta) {
@@ -266,7 +270,9 @@ class CompensationController {
             compensationTutorialId,
             EventType.compensationTutorials,
             DivisionType.tutorials,
-            compensationTutorial.tutorials);
+            compensationTutorial.tutorials,
+            courseName,
+            '${compensationTutorial.title} was removed');
         await _helper.removeEventFromInstructor(compensationTutorial.course,
             compensationTutorialId, EventType.compensationTutorials);
 
