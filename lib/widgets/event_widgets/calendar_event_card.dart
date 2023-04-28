@@ -16,6 +16,7 @@ class CalendarEventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      borderOnForeground: true,
       child: ListTile(
         title: Text(
           event.title,
