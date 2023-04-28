@@ -136,27 +136,33 @@ class EventsControllerHelper {
         List<Assignment> assignments =
             await Database.getAssignmentListFromIds(eventIds);
         return assignments
-            .map((assignment) =>
-                CalendarEvent(id: assignment.id, date: assignment.deadline))
+            .map((assignment) => CalendarEvent(
+                date: assignment.deadline,
+                event: DisplayEvent.fromAssignment(assignment)))
             .toList();
       case EventType.quizzes:
         List<Quiz> quizzes = await Database.getQuizListFromIds(eventIds);
         return quizzes
-            .map((quiz) => CalendarEvent(id: quiz.id, date: quiz.start))
+            .map((quiz) => CalendarEvent(
+                date: quiz.start, event: DisplayEvent.fromQuiz(quiz)))
             .toList();
       case EventType.compensationLectures:
         List<CompensationLecture> compensationLectures =
             await Database.getCompensationLectureListFromIds(eventIds);
         return compensationLectures
             .map((compensationLecture) => CalendarEvent(
-                id: compensationLecture.id, date: compensationLecture.start))
+                date: compensationLecture.start,
+                event:
+                    DisplayEvent.fromCompensationLecture(compensationLecture)))
             .toList();
       case EventType.compensationTutorials:
         List<CompensationTutorial> compensationTutorials =
             await Database.getCompensationTutorialListFromIds(eventIds);
         return compensationTutorials
             .map((compensationTutorial) => CalendarEvent(
-                id: compensationTutorial.id, date: compensationTutorial.start))
+                date: compensationTutorial.start,
+                event: DisplayEvent.fromCompensationTutorial(
+                    compensationTutorial)))
             .toList();
     }
   }
@@ -255,7 +261,7 @@ class EventsControllerHelper {
     }
   }
 
-  Future<List<CalendarEvent>> getMyCalendarEvents() async {
+  Future<Map<DateTime, List<CalendarEvent>>> getMyCalendarEvents() async {
     UserType userType = await _user.getCurrentUserType();
     List<CalendarEvent> events = [];
     if (userType == UserType.student) {
@@ -317,6 +323,14 @@ class EventsControllerHelper {
             compensationTutorials, EventType.compensationTutorials));
       }
     }
-    return events;
+    Map<DateTime, List<CalendarEvent>> eventsMap = {};
+    for (CalendarEvent event in events) {
+      if (eventsMap[event.date] != null) {
+        eventsMap[event.date]?.add(event);
+      } else {
+        eventsMap[event.date] = [event];
+      }
+    }
+    return eventsMap;
   }
 }

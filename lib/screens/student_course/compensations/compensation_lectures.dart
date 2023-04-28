@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/compensation_controller.dart';
 import 'package:guc_scheduling_app/models/events/compensation/compensation_lecture_model.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
-import 'package:guc_scheduling_app/shared/constants.dart';
-import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/event_list.dart';
 
 class CompensationLectures extends StatefulWidget {
@@ -28,14 +26,7 @@ class _CompensationLecturesState extends State<CompensationLectures> {
 
     List<DisplayEvent> events =
         compensationLectures.map((CompensationLecture compensationLecture) {
-      return DisplayEvent(
-          id: compensationLecture.id,
-          eventType: EventType.compensationLectures,
-          title: compensationLecture.title,
-          subtitle: formatDateRange(
-              compensationLecture.start, compensationLecture.end),
-          description: compensationLecture.description,
-          file: compensationLecture.file);
+      return DisplayEvent.fromCompensationLecture(compensationLecture);
     }).toList();
 
     setState(() {

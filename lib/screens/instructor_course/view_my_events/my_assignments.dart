@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/assignment_controller.dart';
 import 'package:guc_scheduling_app/models/events/assignment_model.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
-import 'package:guc_scheduling_app/shared/constants.dart';
-import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/widgets/drawers/professor_drawer.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/event_list.dart';
 
@@ -27,13 +25,7 @@ class _MyAssignmentsState extends State<MyAssignments> {
         await _assignmentController.getMyAssignments(widget.courseId);
 
     List<DisplayEvent> events = assignments.map((Assignment assignment) {
-      return DisplayEvent(
-          id: assignment.id,
-          eventType: EventType.assignments,
-          title: assignment.title,
-          subtitle: 'Deadline ${formatDate(assignment.deadline)}',
-          description: assignment.description,
-          file: assignment.file);
+      return DisplayEvent.fromAssignment(assignment);
     }).toList();
 
     setState(() {
