@@ -45,7 +45,10 @@ class MessagingService {
   }
 
   Future<void> sendPushNotification(
-      String token, String body, String title) async {
+    String token,
+    String title,
+    String body,
+  ) async {
     String key = 'key=${dotenv.env['FCM_KEY']}';
     try {
       await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),

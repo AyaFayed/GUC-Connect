@@ -12,6 +12,7 @@ import 'package:guc_scheduling_app/models/user/professor_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/models/user/ta_model.dart';
 import 'package:guc_scheduling_app/models/user/user_model.dart';
+import 'package:guc_scheduling_app/shared/constants.dart';
 
 class Database {
   static FirebaseFirestore database = FirebaseFirestore.instance;
@@ -473,5 +474,15 @@ class Database {
     await Future.wait(querySnapshot.docs
         .map((doc) => doc.reference.update({'courses': []}))
         .toList());
+  }
+
+  static Future<List<String>> getDivisionStudentIds(
+      String divisionId, DivisionType divisionType) async {
+    final divisionData = await getDocumentData(
+        divisionType == DivisionType.groups ? groups : tutorials, divisionId);
+    if (divisionData != null) {
+      return divisionData['students'];
+    }
+    return [];
   }
 }

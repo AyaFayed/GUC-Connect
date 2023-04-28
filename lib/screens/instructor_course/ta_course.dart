@@ -24,12 +24,9 @@ class _TACourseState extends State<TACourse> {
   void initState() {
     super.initState();
     _widgetOptions = <Widget>[
-      AddAnnouncement(
-        courseId: widget.courseId,
-      ),
+      AddAnnouncement(courseId: widget.courseId, courseName: widget.courseName),
       ScheduleCompensationTutorial(
-        courseId: widget.courseId,
-      ),
+          courseId: widget.courseId, courseName: widget.courseName),
       AddTutorial(
         courseId: widget.courseId,
       ),

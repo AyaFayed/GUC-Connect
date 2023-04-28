@@ -22,8 +22,15 @@ class QuizController {
     return conflicts;
   }
 
-  Future scheduleQuiz(String courseId, String title, String description,
-      String? file, List<String> groupIds, DateTime start, DateTime end) async {
+  Future scheduleQuiz(
+      String courseId,
+      String courseName,
+      String title,
+      String description,
+      String? file,
+      List<String> groupIds,
+      DateTime start,
+      DateTime end) async {
     UserType userType = await _user.getCurrentUserType();
 
     if (userType == UserType.professor) {
@@ -47,8 +54,8 @@ class QuizController {
       await _helper.addEventToInstructor(
           courseId, docQuiz.id, EventType.quizzes);
 
-      await _helper.addEventInDivisions(
-          docQuiz.id, EventType.quizzes, DivisionType.groups, groupIds);
+      await _helper.addEventInDivisions(docQuiz.id, EventType.quizzes,
+          DivisionType.groups, groupIds, courseName, title);
     }
   }
 

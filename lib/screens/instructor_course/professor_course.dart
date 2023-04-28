@@ -30,9 +30,7 @@ class _ProfessorCourseState extends State<ProfessorCourse> {
     super.initState();
     _selectedIndex = widget.selectedIndex ?? 0;
     _widgetOptions = <Widget>[
-      AddAnnouncement(
-        courseId: widget.courseId,
-      ),
+      AddAnnouncement(courseId: widget.courseId, courseName: widget.courseName),
       ScheduleEvent(
         courseId: widget.courseId,
         courseName: widget.courseName,

@@ -15,7 +15,8 @@ import 'package:quickalert/quickalert.dart';
 
 class ScheduleQuiz extends StatefulWidget {
   final String courseId;
-  const ScheduleQuiz({super.key, required this.courseId});
+  final String courseName;
+  const ScheduleQuiz({super.key, required this.courseId, required this.courseName});
 
   @override
   State<ScheduleQuiz> createState() => _ScheduleQuizState();
@@ -40,6 +41,7 @@ class _ScheduleQuizState extends State<ScheduleQuiz> {
           file.isNotEmpty ? await uploadFile(file.first, task) : null;
       await _quizController.scheduleQuiz(
           widget.courseId,
+           widget.courseName,
           controllerTitle.text,
           controllerDescription.text,
           fileUrl,

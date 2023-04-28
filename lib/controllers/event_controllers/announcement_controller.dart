@@ -13,8 +13,14 @@ class AnnouncementController {
   final EventsControllerHelper _helper = EventsControllerHelper();
   final UserController _user = UserController();
 
-  Future createAnnouncement(String courseId, String title, String description,
-      String? file, List<String> groups, List<String> tutorials) async {
+  Future createAnnouncement(
+      String courseId,
+      String courseName,
+      String title,
+      String description,
+      String? file,
+      List<String> groups,
+      List<String> tutorials) async {
     UserType userType = await _user.getCurrentUserType();
 
     if (userType == UserType.ta || userType == UserType.professor) {
@@ -38,11 +44,21 @@ class AnnouncementController {
       await _helper.addEventToInstructor(
           courseId, docAnnouncement.id, EventType.announcements);
 
-      await _helper.addEventInDivisions(docAnnouncement.id,
-          EventType.announcements, DivisionType.groups, groups);
+      await _helper.addEventInDivisions(
+          docAnnouncement.id,
+          EventType.announcements,
+          DivisionType.groups,
+          groups,
+          courseName,
+          title);
 
-      await _helper.addEventInDivisions(docAnnouncement.id,
-          EventType.announcements, DivisionType.tutorials, tutorials);
+      await _helper.addEventInDivisions(
+          docAnnouncement.id,
+          EventType.announcements,
+          DivisionType.tutorials,
+          tutorials,
+          courseName,
+          title);
     }
   }
 

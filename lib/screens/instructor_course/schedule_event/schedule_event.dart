@@ -44,12 +44,18 @@ class _ScheduleEventState extends State<ScheduleEvent>
             controller: tabController,
             children: [
               SingleChildScrollView(
-                  child: ScheduleQuiz(courseId: widget.courseId)),
+                  child: ScheduleQuiz(
+                courseId: widget.courseId,
+                courseName: widget.courseName,
+              )),
               SingleChildScrollView(
-                  child: ScheduleAssignment(courseId: widget.courseId)),
+                  child: ScheduleAssignment(
+                      courseId: widget.courseId,
+                      courseName: widget.courseName)),
               SingleChildScrollView(
-                  child:
-                      ScheduleCompensationLecture(courseId: widget.courseId)),
+                  child: ScheduleCompensationLecture(
+                      courseId: widget.courseId,
+                      courseName: widget.courseName)),
             ],
           ),
         )

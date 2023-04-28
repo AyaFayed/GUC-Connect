@@ -15,8 +15,10 @@ import 'package:quickalert/quickalert.dart';
 
 class AddAnnouncement extends StatefulWidget {
   final String courseId;
+  final String courseName;
 
-  const AddAnnouncement({super.key, required this.courseId});
+  const AddAnnouncement(
+      {super.key, required this.courseId, required this.courseName});
 
   @override
   State<AddAnnouncement> createState() => _AddAnnouncementState();
@@ -43,6 +45,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
             file.isNotEmpty ? await uploadFile(file.first, task) : null;
         await _announcementsController.createAnnouncement(
           widget.courseId,
+          widget.courseName,
           controllerTitle.text,
           controllerDescription.text,
           fileUrl,

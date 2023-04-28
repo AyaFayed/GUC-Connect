@@ -28,6 +28,7 @@ class CompensationController {
 
   Future scheduleCompensationLecture(
       String courseId,
+      String courseName,
       String title,
       String description,
       String? file,
@@ -56,8 +57,13 @@ class CompensationController {
       await _helper.addEventToInstructor(
           courseId, doccompensationLecture.id, EventType.compensationLectures);
 
-      await _helper.addEventInDivisions(doccompensationLecture.id,
-          EventType.compensationLectures, DivisionType.groups, groupIds);
+      await _helper.addEventInDivisions(
+          doccompensationLecture.id,
+          EventType.compensationLectures,
+          DivisionType.groups,
+          groupIds,
+          courseName,
+          title);
     }
   }
 
@@ -73,6 +79,7 @@ class CompensationController {
 
   Future scheduleCompensationTutorial(
       String courseId,
+      String courseName,
       String title,
       String description,
       String? file,
@@ -102,8 +109,13 @@ class CompensationController {
       await _helper.addEventToInstructor(courseId, doccompensationTutorial.id,
           EventType.compensationTutorials);
 
-      await _helper.addEventInDivisions(doccompensationTutorial.id,
-          EventType.compensationTutorials, DivisionType.tutorials, tutorialIds);
+      await _helper.addEventInDivisions(
+          doccompensationTutorial.id,
+          EventType.compensationTutorials,
+          DivisionType.tutorials,
+          tutorialIds,
+          courseName,
+          title);
     }
   }
 

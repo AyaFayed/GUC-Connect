@@ -12,14 +12,20 @@ class AssignmentController {
   final EventsControllerHelper _helper = EventsControllerHelper();
   final UserController _user = UserController();
 
-  Future scheduleAssignment(String courseId, String title, String description,
-      String? file, List<String> groupIds, DateTime deadline) async {
+  Future scheduleAssignment(
+      String courseId,
+      String courseName,
+      String title,
+      String description,
+      String? file,
+      List<String> groupIds,
+      DateTime deadline) async {
     UserType userType = await _user.getCurrentUserType();
 
     if (userType == UserType.professor) {
       final docAssignment = Database.assignments.doc();
 
-      final quiz = Assignment(
+      final assignment = Assignment(
           id: docAssignment.id,
           creator: _auth.currentUser?.uid ?? '',
           course: courseId,
@@ -29,7 +35,7 @@ class AssignmentController {
           groups: groupIds,
           deadline: deadline);
 
-      final json = quiz.toJson();
+      final json = assignment.toJson();
 
       await docAssignment.set(json);
 
@@ -37,7 +43,7 @@ class AssignmentController {
           courseId, docAssignment.id, EventType.assignments);
 
       await _helper.addEventInDivisions(docAssignment.id, EventType.assignments,
-          DivisionType.groups, groupIds);
+          DivisionType.groups, groupIds, courseName, title);
     }
   }
 

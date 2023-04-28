@@ -15,7 +15,10 @@ import 'package:quickalert/quickalert.dart';
 
 class ScheduleCompensationLecture extends StatefulWidget {
   final String courseId;
-  const ScheduleCompensationLecture({super.key, required this.courseId});
+  final String courseName;
+
+  const ScheduleCompensationLecture(
+      {super.key, required this.courseId, required this.courseName});
 
   @override
   State<ScheduleCompensationLecture> createState() =>
@@ -43,6 +46,7 @@ class _ScheduleCompensationLectureState
           file.isNotEmpty ? await uploadFile(file.first, task) : null;
       await _compensationController.scheduleCompensationLecture(
           widget.courseId,
+          widget.courseName,
           controllerTitle.text,
           controllerDescription.text,
           fileUrl,
