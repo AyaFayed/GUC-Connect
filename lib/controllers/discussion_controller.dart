@@ -46,6 +46,21 @@ class DiscussionController {
     });
   }
 
+  Future notifyUsersAboutPost(String content, String courseId) async {
+    Course? course = await Database.getCourse(courseId);
+    if (course != null) {
+      String body = 'New post : $content';
+      List<String> userIds = [];
+      userIds.addAll(course.professors);
+      userIds.addAll(course.tas);
+      for (String groupId in course.groups) {
+        userIds.addAll(
+            await Database.getDivisionStudentIds(groupId, DivisionType.groups));
+      }
+      await _user.notifyUsers(userIds, course.name, body);
+    }
+  }
+
   Future<Reply?> addReplyToPost(String content, String postId) async {
     UserModel? currentUser =
         await Database.getUser(_auth.currentUser?.uid ?? '');
@@ -62,6 +77,9 @@ class DiscussionController {
       await Database.posts.doc(postId).update({
         'replies': FieldValue.arrayUnion([reply.toJson()])
       });
+
+      await _user.notifyUser(post.authorId,
+          '${currentUser.name} replied to your post', post.content);
 
       return reply;
     }
