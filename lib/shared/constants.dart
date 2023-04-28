@@ -22,4 +22,14 @@ enum DivisionType { groups, tutorials }
 
 enum InstructorType { professors, tas }
 
+enum NotificationType {
+  post,
+  reply,
+  announcement,
+  assignment,
+  quiz,
+  compensationLecture,
+  compensationTutorial
+}
+
 String appName = 'GUC Notifications';

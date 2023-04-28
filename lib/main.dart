@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:guc_scheduling_app/firebase_options.dart';
+import 'package:guc_scheduling_app/screens/notifications/notifications.dart';
 import 'package:guc_scheduling_app/screens/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
@@ -41,6 +42,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: const Wrapper(), title: appName, theme: CustomTheme.lightTheme);
+      home: const Wrapper(),
+      title: appName,
+      theme: CustomTheme.lightTheme,
+    );
   }
 }

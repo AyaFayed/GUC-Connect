@@ -62,6 +62,25 @@ Slot getSlotFromString(String slot) {
   }
 }
 
+NotificationType getNotificationTypeFromString(String notificationType) {
+  switch (notificationType) {
+    case 'post':
+      return NotificationType.post;
+    case 'reply':
+      return NotificationType.reply;
+    case 'announcement':
+      return NotificationType.announcement;
+    case 'assignment':
+      return NotificationType.assignment;
+    case 'quiz':
+      return NotificationType.quiz;
+    case 'compensationLecture':
+      return NotificationType.compensationLecture;
+    default:
+      return NotificationType.compensationTutorial;
+  }
+}
+
 String abbreviateDay(Day day) {
   switch (day) {
     case Day.saturday:
