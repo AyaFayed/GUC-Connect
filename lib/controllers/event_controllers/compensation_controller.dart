@@ -205,32 +205,48 @@ class CompensationController {
     return compensationTutorials;
   }
 
-  static Future editCompensationLecture(
+  static Future<List<String>> editCompensationLecture(
       String compensationLectureId,
       String title,
       String description,
       String? file,
       DateTime start,
       DateTime end) async {
-    final docCompensationLecture =
-        Database.compensationLectures.doc(compensationLectureId);
-
-    await docCompensationLecture.update(
+    await Database.compensationLectures.doc(compensationLectureId).update(
         Compensation.toJsonUpdate(title, description, file, start, end));
+
+    CompensationLecture? compensationLecture =
+        await Database.getCompensationLecture(compensationLectureId);
+    List<String> studentIds = [];
+
+    if (compensationLecture != null) {
+      studentIds = await Database.getDivisionsStudentIds(
+          compensationLecture.groups, DivisionType.groups);
+    }
+
+    return studentIds;
   }
 
-  static Future editCompensationTutorial(
+  static Future<List<String>> editCompensationTutorial(
       String compensationTutorialId,
       String title,
       String description,
       String? file,
       DateTime start,
       DateTime end) async {
-    final docCompensationTutorial =
-        Database.compensationTutorials.doc(compensationTutorialId);
-
-    await docCompensationTutorial.update(
+    await Database.compensationTutorials.doc(compensationTutorialId).update(
         Compensation.toJsonUpdate(title, description, file, start, end));
+
+    CompensationTutorial? compensationTutorial =
+        await Database.getCompensationTutorial(compensationTutorialId);
+    List<String> studentIds = [];
+
+    if (compensationTutorial != null) {
+      studentIds = await Database.getDivisionsStudentIds(
+          compensationTutorial.tutorials, DivisionType.tutorials);
+    }
+
+    return studentIds;
   }
 
   Future deleteCompensationLecture(

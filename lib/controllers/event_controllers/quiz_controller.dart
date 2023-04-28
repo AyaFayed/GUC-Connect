@@ -92,12 +92,21 @@ class QuizController {
     return quizzes;
   }
 
-  static Future editQuiz(String quizId, String title, String description,
-      String? file, DateTime start, DateTime end) async {
-    final docQuiz = Database.quizzes.doc(quizId);
-
-    await docQuiz
+  static Future<List<String>> editQuiz(String quizId, String title,
+      String description, String? file, DateTime start, DateTime end) async {
+    await Database.quizzes
+        .doc(quizId)
         .update(Quiz.toJsonUpdate(title, description, file, start, end));
+
+    Quiz? quiz = await Database.getQuiz(quizId);
+    List<String> studentIds = [];
+
+    if (quiz != null) {
+      studentIds = await Database.getDivisionsStudentIds(
+          quiz.groups, DivisionType.groups);
+    }
+
+    return studentIds;
   }
 
   Future deleteQuiz(String courseName, String quizId) async {

@@ -82,12 +82,21 @@ class AssignmentController {
     return assignments;
   }
 
-  static Future editAssignment(String assignmentId, String title,
+  static Future<List<String>> editAssignment(String assignmentId, String title,
       String description, String? file, DateTime deadline) async {
-    final docAssignment = Database.assignments.doc(assignmentId);
-
-    await docAssignment
+    await Database.assignments
+        .doc(assignmentId)
         .update(Assignment.toJsonUpdate(title, description, file, deadline));
+
+    Assignment? assignment = await Database.getAssignment(assignmentId);
+    List<String> studentIds = [];
+
+    if (assignment != null) {
+      studentIds = await Database.getDivisionsStudentIds(
+          assignment.groups, DivisionType.groups);
+    }
+
+    return studentIds;
   }
 
   Future deleteAssignment(String courseName, String assignmentId) async {

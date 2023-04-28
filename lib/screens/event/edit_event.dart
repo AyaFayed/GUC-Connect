@@ -152,6 +152,7 @@ class _EditEventState extends State<EditEvent> {
         fileUrl = await uploadFile(file, task);
       }
       await _scheduleEventsController.editScheduledEvent(
+          widget.courseName,
           widget.eventType,
           widget.eventId,
           controllerTitle!.text,

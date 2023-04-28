@@ -170,34 +170,45 @@ class ScheduleEventsController {
     return false;
   }
 
-  Future editScheduledEvent(EventType eventType, String eventId, String title,
-      String description, String? file, DateTime start, DateTime? end) async {
+  Future editScheduledEvent(
+      String courseName,
+      EventType eventType,
+      String eventId,
+      String title,
+      String description,
+      String? file,
+      DateTime start,
+      DateTime? end) async {
     UserType userType = await _user.getCurrentUserType();
+
+    List<String> studentIds = [];
 
     switch (eventType) {
       case EventType.announcements:
         break;
       case EventType.assignments:
         if (userType != UserType.professor) return;
-        await AssignmentController.editAssignment(
+        studentIds = await AssignmentController.editAssignment(
             eventId, title, description, file, start);
         break;
       case EventType.quizzes:
         if (userType != UserType.professor) return;
-        await QuizController.editQuiz(
+        studentIds = await QuizController.editQuiz(
             eventId, title, description, file, start, end!);
         break;
       case EventType.compensationLectures:
         if (userType != UserType.professor) return;
-        await CompensationController.editCompensationLecture(
+        studentIds = await CompensationController.editCompensationLecture(
             eventId, title, description, file, start, end!);
         break;
       case EventType.compensationTutorials:
         if (userType != UserType.ta) return;
-        await CompensationController.editCompensationTutorial(
+        studentIds = await CompensationController.editCompensationTutorial(
             eventId, title, description, file, start, end!);
         break;
     }
+
+    await _user.notifyUsers(studentIds, courseName, '$title was updated.');
   }
 
   Future<int> canScheduleEvent(

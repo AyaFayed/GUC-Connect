@@ -485,4 +485,22 @@ class Database {
     }
     return [];
   }
+
+  static Future<List<String>> getDivisionsStudentIds(
+      List<String> divisionIds, DivisionType divisionType) async {
+    List<Future<List<String>>> studentIdListsFuture = [];
+    for (String divisionId in divisionIds) {
+      studentIdListsFuture.add(getDivisionStudentIds(divisionId, divisionType));
+    }
+
+    List<List<String>> studentIdLists = await Future.wait(studentIdListsFuture);
+
+    List<String> studentIds = [];
+
+    for (List<String> list in studentIdLists) {
+      studentIds.addAll(list);
+    }
+
+    return studentIds;
+  }
 }

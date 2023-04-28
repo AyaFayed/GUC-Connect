@@ -34,6 +34,8 @@ class DiscussionController {
 
       await addPostToCourse(docPost.id, courseId);
 
+      await notifyUsersAboutPost(content, courseId);
+
       return post;
     }
 
@@ -53,10 +55,9 @@ class DiscussionController {
       List<String> userIds = [];
       userIds.addAll(course.professors);
       userIds.addAll(course.tas);
-      for (String groupId in course.groups) {
-        userIds.addAll(
-            await Database.getDivisionStudentIds(groupId, DivisionType.groups));
-      }
+      userIds.addAll(await Database.getDivisionsStudentIds(
+          course.groups, DivisionType.groups));
+
       await _user.notifyUsers(userIds, course.name, body);
     }
   }
