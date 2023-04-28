@@ -6,7 +6,7 @@ class UserModel {
   String? token;
   String name;
   UserType type;
-  List<String> notifications;
+  List<UserNotification> notifications;
   UserModel({
     required this.id,
     required this.token,
@@ -20,7 +20,8 @@ class UserModel {
         'token': token,
         'name': name,
         'type': type.name,
-        'notifications': notifications
+        'notifications':
+            notifications.map((notification) => notification.toJson()).toList(),
       };
 
   static UserModel fromJson(Map<String, dynamic> json) => UserModel(
@@ -28,6 +29,20 @@ class UserModel {
         token: json['token'],
         name: json['name'],
         type: getUserTypeFromString(json['type']),
-        notifications: (json['notifications'] as List<dynamic>).cast<String>(),
+        notifications: (json['notifications'] as List<dynamic>)
+            .map((notification) => UserNotification.fromJson(notification))
+            .toList(),
       );
+}
+
+class UserNotification {
+  String id;
+  bool seen;
+
+  UserNotification({required this.id, required this.seen});
+
+  Map<String, dynamic> toJson() => {'id': id, 'seen': seen};
+
+  static UserNotification fromJson(Map<String, dynamic> json) =>
+      UserNotification(id: json['id'], seen: json['seen']);
 }

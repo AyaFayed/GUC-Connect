@@ -8,6 +8,7 @@ import 'package:guc_scheduling_app/models/events/assignment_model.dart';
 import 'package:guc_scheduling_app/models/events/compensation/compensation_lecture_model.dart';
 import 'package:guc_scheduling_app/models/events/compensation/compensation_tutorial_model.dart';
 import 'package:guc_scheduling_app/models/events/quiz_model.dart';
+import 'package:guc_scheduling_app/models/notification_model.dart';
 import 'package:guc_scheduling_app/models/user/professor_model.dart';
 import 'package:guc_scheduling_app/models/user/student_model.dart';
 import 'package:guc_scheduling_app/models/user/ta_model.dart';
@@ -36,6 +37,8 @@ class Database {
       database.collection('quizzes');
   static CollectionReference<Map<String, dynamic>> posts =
       database.collection('posts');
+  static CollectionReference<Map<String, dynamic>> notifications =
+      database.collection('notifications');
 
   static Future<Map<String, dynamic>?> getDocumentData(
       CollectionReference<Map<String, dynamic>> docRef, String? docId) async {
@@ -62,6 +65,33 @@ class Database {
     if (postData != null) {
       Post post = Post.fromJson(postData);
       return post;
+    }
+    return null;
+  }
+
+  static Future<NotificationModel?> getNotification(
+      String notificationId) async {
+    final notificationData =
+        await getDocumentData(notifications, notificationId);
+    if (notificationData != null) {
+      NotificationModel notification =
+          NotificationModel.fromJson(notificationData);
+      return notification;
+    }
+    return null;
+  }
+
+  static Future<NotificationDisplay?> getDisplayNotification(
+      UserNotification userNotification) async {
+    final notificationData =
+        await getDocumentData(notifications, userNotification.id);
+
+    if (notificationData != null) {
+      NotificationModel notification =
+          NotificationModel.fromJson(notificationData);
+      NotificationDisplay notificationDisplay = NotificationDisplay(
+          notification: notification, seen: userNotification.seen);
+      return notificationDisplay;
     }
     return null;
   }
@@ -397,6 +427,23 @@ class Database {
       }
     }
     return posts;
+  }
+
+  static Future<List<NotificationDisplay>>
+      getNotificationListFromUserNotifications(
+          List<UserNotification> userNotifications) async {
+    List<NotificationDisplay?> notificationsNull = await Future.wait(
+        userNotifications.map((UserNotification userNotification) {
+      return Database.getDisplayNotification(userNotification);
+    }));
+
+    List<NotificationDisplay> notifications = [];
+    for (NotificationDisplay? notification in notificationsNull) {
+      if (notification != null) {
+        notifications.add(notification);
+      }
+    }
+    return notifications;
   }
 
   static Future deleteAllGroups() async {
