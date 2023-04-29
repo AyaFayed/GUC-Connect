@@ -75,8 +75,14 @@ class NotificationController {
     UserModel? currentUser =
         await Database.getUser(_auth.currentUser?.uid ?? '');
     if (currentUser != null) {
-      return await Database.getNotificationListFromUserNotifications(
-          currentUser.notifications);
+      List<NotificationDisplay> notifications =
+          await Database.getNotificationListFromUserNotifications(
+              currentUser.notifications);
+
+      notifications.sort(((NotificationDisplay a, NotificationDisplay b) =>
+          b.notification.createdAt.compareTo(a.notification.createdAt)));
+
+      return notifications;
     }
     return [];
   }

@@ -34,15 +34,12 @@ class _NotificationsState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Container(
-            padding:
-                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
-            child: SingleChildScrollView(
-                child: _notifications == null
-                    ? const CircularProgressIndicator()
-                    : Column(children: [
-                        ..._notifications!.map((notification) =>
-                            NotificationCard(displayNotification: notification))
-                      ]))));
+        child: SingleChildScrollView(
+            child: _notifications == null
+                ? const CircularProgressIndicator()
+                : Column(children: [
+                    ..._notifications!.map((notification) =>
+                        NotificationCard(displayNotification: notification))
+                  ])));
   }
 }
