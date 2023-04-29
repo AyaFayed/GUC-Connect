@@ -54,49 +54,51 @@ class _MyCoursesState extends State<MyCourses> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Container(
-            padding:
-                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-            child: _courses == null || _userType == null
-                ? const CircularProgressIndicator()
-                : Column(children: [
-                    SearchBar(search: onSearch, text: 'Search your courses'),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    _courses!.isEmpty
-                        ? Text(
-                            "You haven't enrolled in any courses yet.",
-                            style: TextStyle(fontSize: Sizes.medium),
-                          )
-                        : CourseList(
-                            courses: _courses ?? [],
-                            userType: _userType ?? UserType.student,
-                            enroll: false),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(160, 50),
-                          textStyle: TextStyle(fontSize: Sizes.medium),
-                          backgroundColor: AppColors.secondary,
+    return SingleChildScrollView(
+        child: Center(
+            child: Container(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 15.0, horizontal: 10.0),
+                child: _courses == null || _userType == null
+                    ? const CircularProgressIndicator()
+                    : Column(children: [
+                        SearchBar(
+                            search: onSearch, text: 'Search your courses'),
+                        const SizedBox(
+                          height: 20.0,
                         ),
-                        label: const Text(
-                          'Enroll in new course',
+                        _courses!.isEmpty
+                            ? Text(
+                                "You haven't enrolled in any courses yet.",
+                                style: TextStyle(fontSize: Sizes.medium),
+                              )
+                            : CourseList(
+                                courses: _courses ?? [],
+                                userType: _userType ?? UserType.student,
+                                enroll: false),
+                        const SizedBox(
+                          height: 20.0,
                         ),
-                        icon: const Icon(Icons.add),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Card(
-                                    child: Enroll(
-                                        userType:
-                                            _userType ?? UserType.student)),
-                              ));
-                        }),
-                  ])));
+                        ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(160, 50),
+                              textStyle: TextStyle(fontSize: Sizes.medium),
+                              backgroundColor: AppColors.secondary,
+                            ),
+                            label: const Text(
+                              'Enroll in new course',
+                            ),
+                            icon: const Icon(Icons.add),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Card(
+                                        child: Enroll(
+                                            userType:
+                                                _userType ?? UserType.student)),
+                                  ));
+                            }),
+                      ]))));
   }
 }

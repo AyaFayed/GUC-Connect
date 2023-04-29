@@ -9,9 +9,13 @@ import 'package:guc_scheduling_app/widgets/drawers/student_drawer.dart';
 class StudentCourse extends StatefulWidget {
   final String courseId;
   final String courseName;
+  final int? selectedIndex;
 
   const StudentCourse(
-      {super.key, required this.courseId, required this.courseName});
+      {super.key,
+      required this.courseId,
+      required this.courseName,
+      this.selectedIndex});
 
   @override
   State<StudentCourse> createState() => _StudentCourseState();
@@ -24,6 +28,7 @@ class _StudentCourseState extends State<StudentCourse> {
   @override
   void initState() {
     super.initState();
+    _selectedIndex = widget.selectedIndex ?? 0;
     _widgetOptions = <Widget>[
       Announcements(
         courseId: widget.courseId,

@@ -1,3 +1,5 @@
+import 'package:guc_scheduling_app/controllers/user_controller.dart';
+import 'package:guc_scheduling_app/models/events/announcement_model.dart';
 import 'package:guc_scheduling_app/models/events/assignment_model.dart';
 import 'package:guc_scheduling_app/models/events/compensation/compensation_lecture_model.dart';
 import 'package:guc_scheduling_app/models/events/compensation/compensation_tutorial_model.dart';
@@ -63,6 +65,21 @@ class DisplayEvent {
       required this.subtitle,
       required this.description,
       required this.file});
+
+  static Future<DisplayEvent> fromAnnouncement(
+      Announcement announcement) async {
+    UserController userController = UserController();
+    UserType userType = await userController.getUserType(announcement.creator);
+    String instructorName =
+        await userController.getUserName(announcement.creator);
+    return DisplayEvent(
+        id: announcement.id,
+        eventType: EventType.announcements,
+        title: formatName(instructorName, userType),
+        subtitle: announcement.title,
+        description: announcement.description,
+        file: announcement.file);
+  }
 
   static DisplayEvent fromAssignment(Assignment assignment) {
     return DisplayEvent(

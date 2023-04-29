@@ -9,8 +9,13 @@ import 'package:guc_scheduling_app/widgets/drawers/ta_drawer.dart';
 class TACourse extends StatefulWidget {
   final String courseId;
   final String courseName;
+  final int? selectedIndex;
 
-  const TACourse({super.key, required this.courseId, required this.courseName});
+  const TACourse(
+      {super.key,
+      required this.courseId,
+      required this.courseName,
+      this.selectedIndex});
 
   @override
   State<TACourse> createState() => _TACourseState();
@@ -23,6 +28,7 @@ class _TACourseState extends State<TACourse> {
   @override
   void initState() {
     super.initState();
+    _selectedIndex = widget.selectedIndex ?? 0;
     _widgetOptions = <Widget>[
       AddAnnouncement(courseId: widget.courseId, courseName: widget.courseName),
       ScheduleCompensationTutorial(

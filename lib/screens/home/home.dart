@@ -119,9 +119,7 @@ class _HomeState extends State<Home> {
                   title: Text(appName),
                   elevation: 0.0,
                 ),
-                body: SingleChildScrollView(
-                  child: _widgetOptions.elementAt(_selectedIndex),
-                ),
+                body: _widgetOptions.elementAt(_selectedIndex),
                 bottomNavigationBar: BottomNavigationBar(
                   items: const <BottomNavigationBarItem>[
                     BottomNavigationBarItem(

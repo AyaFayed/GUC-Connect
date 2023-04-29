@@ -30,17 +30,7 @@ class _AnnouncementsState extends State<Announcements> {
 
     List<DisplayEvent> events =
         await Future.wait(announcements.map((Announcement announcement) async {
-      UserType userType =
-          await _userController.getUserType(announcement.creator);
-      String instructorName =
-          await _userController.getUserName(announcement.creator);
-      return DisplayEvent(
-          id: announcement.id,
-          eventType: EventType.announcements,
-          title: formatName(instructorName, userType),
-          subtitle: announcement.title,
-          description: announcement.description,
-          file: announcement.file);
+      return DisplayEvent.fromAnnouncement(announcement);
     }));
     setState(() {
       _events = events;

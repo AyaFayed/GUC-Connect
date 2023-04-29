@@ -1,5 +1,6 @@
 class Post {
   String id;
+  String courseId;
   String content;
   String? file;
   String authorId;
@@ -9,6 +10,7 @@ class Post {
 
   Post(
       {required this.id,
+      required this.courseId,
       required this.content,
       required this.file,
       required this.authorId,
@@ -18,6 +20,7 @@ class Post {
 
   Map<String, dynamic> toJson() => {
         'id': id,
+        'courseId': courseId,
         'content': content,
         'file': file,
         'authorId': authorId,
@@ -28,6 +31,7 @@ class Post {
 
   static Post fromJson(Map<String, dynamic> json) => Post(
         id: json['id'],
+        courseId: json['courseId'],
         content: json['content'],
         file: json['file'],
         authorId: json['authorId'],

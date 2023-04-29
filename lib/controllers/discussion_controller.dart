@@ -24,6 +24,7 @@ class DiscussionController {
     if (currentUser != null) {
       final post = Post(
           id: docPost.id,
+          courseId: courseId,
           content: content,
           file: file,
           authorId: _auth.currentUser?.uid ?? '',

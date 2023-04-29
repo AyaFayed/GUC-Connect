@@ -1,6 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guc_scheduling_app/database/database.dart';
+import 'package:guc_scheduling_app/models/course/course_model.dart';
+import 'package:guc_scheduling_app/models/discussion/post_model.dart';
+import 'package:guc_scheduling_app/models/events/announcement_model.dart';
+import 'package:guc_scheduling_app/models/events/assignment_model.dart';
+import 'package:guc_scheduling_app/models/events/compensation/compensation_lecture_model.dart';
+import 'package:guc_scheduling_app/models/events/compensation/compensation_tutorial_model.dart';
+import 'package:guc_scheduling_app/models/events/event_model.dart';
+import 'package:guc_scheduling_app/models/events/quiz_model.dart';
 import 'package:guc_scheduling_app/models/notification_model.dart';
 import 'package:guc_scheduling_app/models/user/user_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
@@ -85,5 +93,110 @@ class NotificationController {
       return notifications;
     }
     return [];
+  }
+
+  Future<DisplayEvent?> getDisplayEventFromNotification(
+      String eventId, NotificationType notificationType) async {
+    switch (notificationType) {
+      case NotificationType.post:
+        return null;
+      case NotificationType.reply:
+        return null;
+
+      case NotificationType.announcement:
+        Announcement? announcement = await Database.getAnnouncement(eventId);
+        if (announcement != null) {
+          return DisplayEvent.fromAnnouncement(announcement);
+        }
+        return null;
+
+      case NotificationType.assignment:
+        Assignment? assignment = await Database.getAssignment(eventId);
+        if (assignment != null) {
+          return DisplayEvent.fromAssignment(assignment);
+        }
+        return null;
+
+      case NotificationType.quiz:
+        Quiz? quiz = await Database.getQuiz(eventId);
+        if (quiz != null) {
+          return DisplayEvent.fromQuiz(quiz);
+        }
+        return null;
+
+      case NotificationType.compensationLecture:
+        CompensationLecture? compensationLecture =
+            await Database.getCompensationLecture(eventId);
+        if (compensationLecture != null) {
+          return DisplayEvent.fromCompensationLecture(compensationLecture);
+        }
+        return null;
+
+      case NotificationType.compensationTutorial:
+        CompensationTutorial? compensationTutorial =
+            await Database.getCompensationTutorial(eventId);
+        if (compensationTutorial != null) {
+          return DisplayEvent.fromCompensationTutorial(compensationTutorial);
+        }
+        return null;
+    }
+  }
+
+  Future<Course?> getCourseFromNotification(
+      String eventId, NotificationType notificationType) async {
+    switch (notificationType) {
+      case NotificationType.reply:
+      case NotificationType.post:
+        Post? post = await Database.getPost(eventId);
+        if (post != null) {
+          Course? course = await Database.getCourse(post.courseId);
+          return course;
+        }
+
+        return null;
+
+      case NotificationType.announcement:
+        Announcement? announcement = await Database.getAnnouncement(eventId);
+        if (announcement != null) {
+          Course? course = await Database.getCourse(announcement.course);
+          return course;
+        }
+        return null;
+
+      case NotificationType.assignment:
+        Assignment? assignment = await Database.getAssignment(eventId);
+        if (assignment != null) {
+          Course? course = await Database.getCourse(assignment.course);
+          return course;
+        }
+        return null;
+
+      case NotificationType.quiz:
+        Quiz? quiz = await Database.getQuiz(eventId);
+        if (quiz != null) {
+          Course? course = await Database.getCourse(quiz.course);
+          return course;
+        }
+        return null;
+
+      case NotificationType.compensationLecture:
+        CompensationLecture? compensationLecture =
+            await Database.getCompensationLecture(eventId);
+        if (compensationLecture != null) {
+          Course? course = await Database.getCourse(compensationLecture.course);
+          return course;
+        }
+        return null;
+
+      case NotificationType.compensationTutorial:
+        CompensationTutorial? compensationTutorial =
+            await Database.getCompensationTutorial(eventId);
+        if (compensationTutorial != null) {
+          Course? course =
+              await Database.getCourse(compensationTutorial.course);
+          return course;
+        }
+        return null;
+    }
   }
 }
