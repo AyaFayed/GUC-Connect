@@ -44,18 +44,21 @@ class NotificationController {
     List<Future> updates = [];
 
     for (String userId in userIds) {
-      UserModel? user = await Database.getUser(userId);
-      if (user != null) {
-        if (user.notifications.isEmpty) {
-          user.notifications.add(userNotification);
-          updates.add(Database.users.doc(userId).update({
-            'notifications':
-                user.notifications.map((notification) => notification.toJson())
-          }));
-        } else {
-          updates.add(Database.users.doc(userId).update({
-            'notifications': FieldValue.arrayUnion([userNotification.toJson()])
-          }));
+      if (userId != _auth.currentUser?.uid) {
+        UserModel? user = await Database.getUser(userId);
+        if (user != null) {
+          if (user.notifications.isEmpty) {
+            user.notifications.add(userNotification);
+            updates.add(Database.users.doc(userId).update({
+              'notifications': user.notifications
+                  .map((notification) => notification.toJson())
+            }));
+          } else {
+            updates.add(Database.users.doc(userId).update({
+              'notifications':
+                  FieldValue.arrayUnion([userNotification.toJson()])
+            }));
+          }
         }
       }
     }

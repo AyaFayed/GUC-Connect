@@ -106,7 +106,9 @@ class UserController {
   Future notifyUsers(List<String> uids, String title, String body) async {
     List<Future> notifying = [];
     for (String uid in uids) {
-      notifying.add(notifyUser(uid, title, body));
+      if (uid != _auth.currentUser?.uid) {
+        notifying.add(notifyUser(uid, title, body));
+      }
     }
     await Future.wait(notifying);
   }
