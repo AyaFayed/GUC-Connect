@@ -80,6 +80,7 @@ class CourseController {
       case UserType.student:
         Student? student =
             await Database.getStudent(_auth.currentUser?.uid ?? '');
+        print(student);
         List<String> courseIds =
             student?.courses.map((course) => course.id).toList() ?? [];
         List<Course> courses = await Database.getCourseListFromIds(courseIds);

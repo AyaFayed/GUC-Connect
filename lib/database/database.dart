@@ -112,6 +112,7 @@ class Database {
         Student student = Student.fromJson(studentData);
         return student;
       } catch (e) {
+        print(e);
         return null;
       }
     }
@@ -528,7 +529,7 @@ class Database {
     final divisionData = await getDocumentData(
         divisionType == DivisionType.groups ? groups : tutorials, divisionId);
     if (divisionData != null) {
-      return divisionData['students'];
+      return (divisionData['students'] as List<dynamic>).cast<String>();
     }
     return [];
   }

@@ -33,13 +33,9 @@ class EventsControllerHelper {
       List<String> divisions,
       String notificationTitle,
       String notificationBody) async {
-    List<String> studentIds = [];
     for (String divisionId in divisions) {
       final docDivision =
           _database.collection(divisionType.name).doc(divisionId);
-
-      studentIds.addAll(
-          await Database.getDivisionStudentIds(divisionId, divisionType));
 
       switch (eventType) {
         case EventType.announcements:
@@ -72,6 +68,9 @@ class EventsControllerHelper {
           });
       }
     }
+
+    List<String> studentIds =
+        await Database.getDivisionsStudentIds(divisions, divisionType);
 
     await _user.notifyUsers(studentIds, notificationTitle, notificationBody);
 

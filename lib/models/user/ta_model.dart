@@ -23,7 +23,7 @@ class TA extends UserModel {
       token: json['token'],
       name: json['name'],
       type: getUserTypeFromString(json['type']),
-      notifications: (json['notifications'] as List<dynamic>)
+      notifications: ((json['notifications'] ?? []) as List<dynamic>)
           .map((notification) => UserNotification.fromJson(notification))
           .toList(),
       courses: (json['courses'] as List<dynamic>)

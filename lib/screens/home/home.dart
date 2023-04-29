@@ -107,7 +107,11 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return _currentUserType == null
-        ? const CircularProgressIndicator()
+        ? Center(
+            child: Container(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 15.0, horizontal: 10.0),
+                child: const CircularProgressIndicator()))
         : _currentUserType == UserType.admin
             ? const AdminHome()
             : Scaffold(
