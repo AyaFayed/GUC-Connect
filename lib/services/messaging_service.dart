@@ -46,8 +46,8 @@ class MessagingService {
 
   Future<void> sendPushNotification(
     String token,
-    String title,
     String body,
+    String title,
   ) async {
     String key = 'key=${dotenv.env['FCM_KEY']}';
     try {
