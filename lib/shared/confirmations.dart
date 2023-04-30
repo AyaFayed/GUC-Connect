@@ -3,6 +3,8 @@ import 'package:guc_scheduling_app/shared/errors.dart';
 class Confirmations {
   static String updateSuccess = 'This update was completed successfully.';
   static String loading = 'This may take a couple of seconds';
+  static String setReminder = 'Reminder set successfully.';
+  static String disableReminder = 'Reminder turned off successfully.';
   static String unenrollWarning =
       'Are you sure you want to unenroll from this course?';
   static String creationSuccess(String object) =>

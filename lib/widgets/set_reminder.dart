@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
-import 'package:guc_scheduling_app/widgets/buttons/small_btn.dart';
+import 'package:quickalert/quickalert.dart';
 
 class SetReminder extends StatefulWidget {
   final String title;
@@ -17,8 +18,67 @@ class SetReminder extends StatefulWidget {
 class _SetReminderState extends State<SetReminder> {
   final _formKey = GlobalKey<FormState>();
   final controllerDays = TextEditingController();
+  bool _isLoading = false;
 
-  Future<void> setReminder() async {}
+  Future<void> setReminder() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      if (context.mounted) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          confirmBtnColor: AppColors.confirm,
+          text: Confirmations.setReminder,
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          confirmBtnColor: AppColors.confirm,
+          text: Errors.backend,
+        );
+      }
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  Future<void> deleteReminder() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      if (context.mounted) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          confirmBtnColor: AppColors.confirm,
+          text: Confirmations.disableReminder,
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          confirmBtnColor: AppColors.confirm,
+          text: Errors.backend,
+        );
+      }
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +122,14 @@ class _SetReminderState extends State<SetReminder> {
                   const SizedBox(
                     height: 60,
                   ),
-                  LargeBtn(onPressed: setReminder, text: 'Set reminder'),
+                  LargeBtn(
+                      onPressed: _isLoading ? null : setReminder,
+                      text: 'Set reminder'),
                   const SizedBox(
                     height: 10,
                   ),
                   LargeBtn(
-                    onPressed: setReminder,
+                    onPressed: _isLoading ? null : deleteReminder,
                     text: 'Turn off reminder',
                     color: AppColors.primary,
                   ),
