@@ -29,7 +29,9 @@ class UserController {
             name: name,
             type: type,
             courses: [],
-            notifications: []);
+            notifications: [],
+            quizReminder: 1,
+            assignmentReminder: 1);
         break;
       case UserType.professor:
         user = Professor(

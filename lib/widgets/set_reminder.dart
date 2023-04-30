@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/buttons/small_btn.dart';
@@ -61,7 +62,15 @@ class _SetReminderState extends State<SetReminder> {
                   const SizedBox(
                     height: 60,
                   ),
-                  LargeBtn(onPressed: setReminder, text: 'Set reminder')
+                  LargeBtn(onPressed: setReminder, text: 'Set reminder'),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  LargeBtn(
+                    onPressed: setReminder,
+                    text: 'Turn off reminder',
+                    color: AppColors.primary,
+                  ),
                 ]),
           ),
         ),

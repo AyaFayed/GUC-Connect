@@ -3,19 +3,26 @@ import 'package:guc_scheduling_app/shared/helper.dart';
 
 class Student extends UserModel {
   List<StudentCourse> courses;
+  int quizReminder;
+  int assignmentReminder;
 
-  Student(
-      {required super.id,
-      required super.token,
-      required super.name,
-      required super.type,
-      required super.notifications,
-      required this.courses});
+  Student({
+    required super.id,
+    required super.token,
+    required super.name,
+    required super.type,
+    required super.notifications,
+    required this.courses,
+    required this.quizReminder,
+    required this.assignmentReminder,
+  });
 
   @override
   Map<String, dynamic> toJson() => {
         ...super.toJson(),
-        'courses': courses.map((course) => course.toJson()).toList()
+        'courses': courses.map((course) => course.toJson()).toList(),
+        'quizReminder': quizReminder,
+        'assignmentReminder': assignmentReminder
       };
 
   static Student fromJson(Map<String, dynamic> json) => Student(
@@ -28,7 +35,9 @@ class Student extends UserModel {
           .toList(),
       courses: (json['courses'] as List<dynamic>)
           .map((course) => StudentCourse.fromJson(course))
-          .toList());
+          .toList(),
+      quizReminder: json['quizReminder'],
+      assignmentReminder: json['assignmentReminder']);
 }
 
 class StudentCourse {
