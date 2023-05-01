@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:guc_scheduling_app/database/database.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -67,7 +68,7 @@ class MessagingService {
             "notification": <String, dynamic>{
               "title": title,
               "body": body,
-              "android_channel_id": "courses"
+              "android_channel_id": title
             },
             "to": token
           }));
@@ -77,4 +78,33 @@ class MessagingService {
       }
     }
   }
+
+  // Future<void> scheduleNotification(int id, String title, String body,
+  //     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
+  //   var dateTime = DateTime(DateTime.now().year, DateTime.now().month,
+  //       DateTime.now().day, 23, 0, 0);
+  //   tz.initializeTimeZones();
+  //   await flutterLocalNotificationsPlugin.zonedSchedule(
+  //     id,
+  //     title,
+  //     body,
+  //     tz.TZDateTime.from(dateTime, tz.local),
+  //     NotificationDetails(
+  //       android: AndroidNotificationDetails(id.toString(), 'Go To Bed',
+  //           importance: Importance.max,
+  //           priority: Priority.max,
+  //           icon: '@mipmap/ic_launcher'),
+  //       iOS: const DarwinNotificationDetails(
+  //         sound: 'default.wav',
+  //         presentAlert: true,
+  //         presentBadge: true,
+  //         presentSound: true,
+  //       ),
+  //     ),
+  //     uiLocalNotificationDateInterpretation:
+  //         UILocalNotificationDateInterpretation.absoluteTime,
+  //     androidAllowWhileIdle: true,
+  //     matchDateTimeComponents: DateTimeComponents.time,
+  //   );
+  // }
 }

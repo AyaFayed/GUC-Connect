@@ -87,8 +87,8 @@ class DiscussionController {
         'replies': FieldValue.arrayUnion([reply.toJson()])
       });
 
-      await _user.notifyUser(post.authorId,
-          '${currentUser.name} replied to your post', post.content);
+      await _user.notifyUser(
+          post.authorId, '${currentUser.name} replied to your post', content);
 
       await _notificationController.createNotification(
           [post.authorId],
