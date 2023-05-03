@@ -324,23 +324,23 @@ class EventsControllerHelper {
           Tutorial? tutorial = await Database.getTutorial(course.tutorial);
           if (group != null) {
             calendarEvents.add(getCalendarEventsFromList(courseData?.name ?? '',
-                courseData?.id ?? '', group.quizzes, EventType.quizzes));
+                courseData?.id ?? '', group.quizIds, EventType.quizzes));
             calendarEvents.add(getCalendarEventsFromList(
                 courseData?.name ?? '',
                 courseData?.id ?? '',
-                group.assignments,
+                group.assignmentIds,
                 EventType.assignments));
             calendarEvents.add(getCalendarEventsFromList(
                 courseData?.name ?? '',
                 courseData?.id ?? '',
-                group.compensationLectures,
+                group.compensationLectureIds,
                 EventType.compensationLectures));
           }
           if (tutorial != null) {
             calendarEvents.add(getCalendarEventsFromList(
                 courseData?.name ?? '',
                 courseData?.id ?? '',
-                tutorial.compensationTutorials,
+                tutorial.compensationTutorialIds,
                 EventType.compensationTutorials));
           }
         }

@@ -9,24 +9,24 @@ import 'package:guc_scheduling_app/shared/helper.dart';
 
 class Event {
   String id;
-  String creator;
-  String course;
+  String creatorId;
+  String courseId;
   String title;
   String description;
   String? file;
 
   Event(
       {required this.id,
-      required this.creator,
-      required this.course,
+      required this.creatorId,
+      required this.courseId,
       required this.title,
       required this.description,
       required this.file});
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'creator': creator,
-        'course': course,
+        'creatorId': creatorId,
+        'courseId': courseId,
         'title': title,
         'description': description,
         'file': file
@@ -42,8 +42,8 @@ class Event {
 
   static Event fromJson(Map<String, dynamic> json) => Event(
         id: json['id'],
-        creator: json['creator'],
-        course: json['course'],
+        creatorId: json['creatorId'],
+        courseId: json['courseId'],
         title: json['title'],
         description: json['description'],
         file: json['file'],
@@ -69,9 +69,10 @@ class DisplayEvent {
   static Future<DisplayEvent> fromAnnouncement(
       Announcement announcement) async {
     UserController userController = UserController();
-    UserType userType = await userController.getUserType(announcement.creator);
+    UserType userType =
+        await userController.getUserType(announcement.creatorId);
     String instructorName =
-        await userController.getUserName(announcement.creator);
+        await userController.getUserName(announcement.creatorId);
     return DisplayEvent(
         id: announcement.id,
         eventType: EventType.announcements,

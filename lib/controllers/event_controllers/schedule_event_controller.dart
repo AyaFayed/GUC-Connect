@@ -85,7 +85,7 @@ class ScheduleEventsController {
     int conflicts = 0;
     List<Group> groups = await Database.getGroupListFromIds(groupIds);
     for (Group group in groups) {
-      List<String> studentIds = group.students;
+      List<String> studentIds = group.studentIds;
       for (String studentId in studentIds) {
         Student? student = await Database.getStudent(studentId);
 
@@ -112,7 +112,7 @@ class ScheduleEventsController {
     List<Tutorial> tutorials =
         await Database.getTutorialListFromIds(tutorialIds);
     for (Tutorial tutorial in tutorials) {
-      List<String> studentIds = tutorial.students;
+      List<String> studentIds = tutorial.studentIds;
       for (String studentId in studentIds) {
         Student? student = await Database.getStudent(studentId);
 
@@ -138,12 +138,12 @@ class ScheduleEventsController {
     for (StudentCourse course in student.courses) {
       Group? courseGroup = await Database.getGroup(course.group);
       if (courseGroup != null) {
-        List<String> quizzes = courseGroup.quizzes;
+        List<String> quizzes = courseGroup.quizIds;
         if (excludedEventType == EventType.quizzes) {
           quizzes.remove(excludedEventId);
         }
         bool quizConflict = await isConflictingWithQuiz(quizzes, start, end);
-        List<String> compensationLectures = courseGroup.compensationLectures;
+        List<String> compensationLectures = courseGroup.compensationLectureIds;
         if (excludedEventType == EventType.compensationLectures) {
           compensationLectures.remove(excludedEventId);
         }
@@ -157,7 +157,7 @@ class ScheduleEventsController {
               await Database.getTutorial(course.tutorial);
           if (courseTutorial != null) {
             List<String> compensationTutorials =
-                courseTutorial.compensationTutorials;
+                courseTutorial.compensationTutorialIds;
             if (excludedEventType == EventType.compensationTutorials) {
               compensationTutorials.remove(excludedEventId);
             }
@@ -233,19 +233,23 @@ class ScheduleEventsController {
       case EventType.quizzes:
         Quiz? quiz = await Database.getQuiz(eventId);
         int conflicts = await canScheduleGroups(
-            quiz?.groups ?? [], start, end, eventId, eventType);
+            quiz?.groupIds ?? [], start, end, eventId, eventType);
         return conflicts;
       case EventType.compensationLectures:
         CompensationLecture? compensationLecture =
             await Database.getCompensationLecture(eventId);
         int conflicts = await canScheduleGroups(
-            compensationLecture?.groups ?? [], start, end, eventId, eventType);
+            compensationLecture?.groupIds ?? [],
+            start,
+            end,
+            eventId,
+            eventType);
         return conflicts;
       case EventType.compensationTutorials:
         CompensationTutorial? compensationTutorial =
             await Database.getCompensationTutorial(eventId);
         int conflicts = await canScheduleTutorials(
-            compensationTutorial?.tutorials ?? [],
+            compensationTutorial?.tutorialIds ?? [],
             start,
             end,
             eventId,

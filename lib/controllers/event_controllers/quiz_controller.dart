@@ -38,12 +38,12 @@ class QuizController {
 
       final quiz = Quiz(
           id: docQuiz.id,
-          creator: _auth.currentUser?.uid ?? '',
-          course: courseId,
+          creatorId: _auth.currentUser?.uid ?? '',
+          courseId: courseId,
           title: title,
           description: description,
           file: file,
-          groups: groupIds,
+          groupIds: groupIds,
           start: start,
           end: end);
 
@@ -63,7 +63,7 @@ class QuizController {
     Group? group = await Database.getGroup(groupId);
 
     if (group != null) {
-      return await Database.getQuizListFromIds(group.quizzes);
+      return await Database.getQuizListFromIds(group.quizIds);
     } else {
       return [];
     }
@@ -103,7 +103,7 @@ class QuizController {
 
     if (quiz != null) {
       studentIds = await Database.getDivisionsStudentIds(
-          quiz.groups, DivisionType.groups);
+          quiz.groupIds, DivisionType.groups);
     }
 
     return studentIds;
@@ -120,11 +120,11 @@ class QuizController {
             quizId,
             EventType.quizzes,
             DivisionType.groups,
-            quiz.groups,
+            quiz.groupIds,
             courseName,
             '${quiz.title} was removed');
         await _helper.removeEventFromInstructor(
-            quiz.course, quizId, EventType.quizzes);
+            quiz.courseId, quizId, EventType.quizzes);
 
         await Database.quizzes.doc(quizId).delete();
       }

@@ -6,24 +6,24 @@ class Division {
   String courseId;
   int number;
   List<Lecture> lectures;
-  List<String> students;
-  List<String> announcements;
+  List<String> studentIds;
+  List<String> announcementIds;
 
   Division(
       {required this.id,
       required this.courseId,
       required this.number,
       required this.lectures,
-      required this.students,
-      required this.announcements});
+      required this.studentIds,
+      required this.announcementIds});
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'courseId': courseId,
         'number': number,
         'lectures': lectures.map((lecture) => lecture.toJson()).toList(),
-        'students': students,
-        'announcements': announcements
+        'studentIds': studentIds,
+        'announcementIds': announcementIds
       };
 
   static Division fromJson(Map<String, dynamic> json) => Division(
@@ -33,8 +33,9 @@ class Division {
         lectures: (json['lectures'] as List<dynamic>)
             .map((lecture) => Lecture.fromJson(lecture))
             .toList(),
-        students: (json['students'] as List<dynamic>).cast<String>(),
-        announcements: (json['announcements'] as List<dynamic>).cast<String>(),
+        studentIds: (json['studentIds'] as List<dynamic>).cast<String>(),
+        announcementIds:
+            (json['announcementIds'] as List<dynamic>).cast<String>(),
       );
 }
 

@@ -30,11 +30,11 @@ class CourseController {
     final course = Course(
       id: docCourse.id,
       name: name,
-      professors: [],
-      tas: [],
-      groups: [],
-      tutorials: [],
-      posts: [],
+      professorIds: [],
+      taIds: [],
+      groupIds: [],
+      tutorialIds: [],
+      postIds: [],
     );
 
     final json = course.toJson();
@@ -124,38 +124,38 @@ class CourseController {
           await Database.getAllCompensationTutorials();
       List<Future> deleting = [];
       for (Announcement announcement in announcements) {
-        if (announcement.course == courseId) {
+        if (announcement.courseId == courseId) {
           deleting.add(Database.announcements.doc(announcement.id).delete());
         }
       }
       for (Assignment assignment in assignments) {
-        if (assignment.course == courseId) {
+        if (assignment.courseId == courseId) {
           deleting.add(Database.assignments.doc(assignment.id).delete());
         }
       }
       for (Quiz quiz in quizzes) {
-        if (quiz.course == courseId) {
+        if (quiz.courseId == courseId) {
           deleting.add(Database.quizzes.doc(quiz.id).delete());
         }
       }
       for (CompensationLecture compensationLecture in compensationLectures) {
-        if (compensationLecture.course == courseId) {
+        if (compensationLecture.courseId == courseId) {
           deleting.add(Database.compensationLectures
               .doc(compensationLecture.id)
               .delete());
         }
       }
       for (CompensationTutorial compensationTutorial in compensationTutorials) {
-        if (compensationTutorial.course == courseId) {
+        if (compensationTutorial.courseId == courseId) {
           deleting.add(Database.compensationTutorials
               .doc(compensationTutorial.id)
               .delete());
         }
       }
-      List<String> groupIds = course.groups;
+      List<String> groupIds = course.groupIds;
       List<Group> groups = await Database.getGroupListFromIds(groupIds);
       for (Group group in groups) {
-        List<String> studentIds = group.students;
+        List<String> studentIds = group.studentIds;
         for (String studentId in studentIds) {
           Student? student = await Database.getStudent(studentId);
 
@@ -171,12 +171,12 @@ class CourseController {
         deleting.add(Database.groups.doc(group.id).delete());
       }
 
-      List<String> tutorialIds = course.tutorials;
+      List<String> tutorialIds = course.tutorialIds;
       for (String tutorialId in tutorialIds) {
         deleting.add(Database.tutorials.doc(tutorialId).delete());
       }
 
-      List<String> professorIds = course.professors;
+      List<String> professorIds = course.professorIds;
       for (String professorId in professorIds) {
         Professor? professor = await Database.getProfessor(professorId);
 
@@ -190,7 +190,7 @@ class CourseController {
               .update({'courses': courses.map((course) => course.toJson())}));
         }
       }
-      List<String> taIds = course.tas;
+      List<String> taIds = course.taIds;
       for (String taId in taIds) {
         TA? ta = await Database.getTa(taId);
 
@@ -204,7 +204,7 @@ class CourseController {
               .update({'courses': courses.map((course) => course.toJson())}));
         }
       }
-      List<String> postIds = course.posts;
+      List<String> postIds = course.postIds;
       for (String postId in postIds) {
         deleting.add(Database.posts.doc(postId).delete());
       }

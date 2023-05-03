@@ -49,11 +49,11 @@ class DivisionController {
           courseId: courseId,
           number: number,
           lectures: lectures,
-          students: [],
-          announcements: [],
-          quizzes: [],
-          assignments: [],
-          compensationLectures: []);
+          studentIds: [],
+          announcementIds: [],
+          quizIds: [],
+          assignmentIds: [],
+          compensationLectureIds: []);
 
       final json = group.toJson();
 
@@ -96,9 +96,9 @@ class DivisionController {
           courseId: courseId,
           number: number,
           lectures: lectures,
-          students: [],
-          announcements: [],
-          compensationTutorials: []);
+          studentIds: [],
+          announcementIds: [],
+          compensationTutorialIds: []);
 
       final json = tutorial.toJson();
 
@@ -125,7 +125,7 @@ class DivisionController {
   Future<List<Group>> getCourseGroups(String courseId) async {
     Course? course = await Database.getCourse(courseId);
     if (course != null) {
-      List<String> groupIds = course.groups;
+      List<String> groupIds = course.groupIds;
       return await Database.getGroupListFromIds(groupIds);
     }
     return [];
@@ -145,7 +145,7 @@ class DivisionController {
           myGroups = (course['groups'] as List<dynamic>).cast<String>();
         }
       }
-      List<String> allGroups = course.groups;
+      List<String> allGroups = course.groupIds;
 
       for (String groupId in allGroups) {
         if (!myGroups.contains(groupId)) {
@@ -177,7 +177,7 @@ class DivisionController {
     Course? course = await Database.getCourse(courseId);
 
     if (course != null) {
-      List<String> tutorialIds = course.tutorials;
+      List<String> tutorialIds = course.tutorialIds;
       return await Database.getTutorialListFromIds(tutorialIds);
     }
     return [];
@@ -213,7 +213,7 @@ class DivisionController {
           myTutorials = (course['tutorials'] as List<dynamic>).cast<String>();
         }
       }
-      List<String> allTutorials = course.tutorials;
+      List<String> allTutorials = course.tutorialIds;
 
       for (String tutorialId in allTutorials) {
         if (!myTutorials.contains(tutorialId)) {

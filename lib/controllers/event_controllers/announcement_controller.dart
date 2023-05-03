@@ -28,13 +28,13 @@ class AnnouncementController {
 
       final announcement = Announcement(
           id: docAnnouncement.id,
-          creator: _auth.currentUser?.uid ?? '',
-          course: courseId,
+          creatorId: _auth.currentUser?.uid ?? '',
+          courseId: courseId,
           title: title,
           description: description,
           file: file,
-          groups: groups,
-          tutorials: tutorials,
+          groupIds: groups,
+          tutorialIds: tutorials,
           createdAt: DateTime.now());
 
       final json = announcement.toJson();
@@ -68,7 +68,7 @@ class AnnouncementController {
     Group? group = await Database.getGroup(groupId);
 
     if (group != null) {
-      return await Database.getAnnouncementListFromIds(group.announcements);
+      return await Database.getAnnouncementListFromIds(group.announcementIds);
     } else {
       return [];
     }
@@ -78,7 +78,8 @@ class AnnouncementController {
     Tutorial? tutorial = await Database.getTutorial(tutorialId);
 
     if (tutorial != null) {
-      return await Database.getAnnouncementListFromIds(tutorial.announcements);
+      return await Database.getAnnouncementListFromIds(
+          tutorial.announcementIds);
     } else {
       return [];
     }
@@ -126,7 +127,7 @@ class AnnouncementController {
             announcementId,
             EventType.announcements,
             DivisionType.groups,
-            announcement.groups,
+            announcement.groupIds,
             courseName,
             '${announcement.title} was removed');
 
@@ -134,12 +135,12 @@ class AnnouncementController {
             announcementId,
             EventType.announcements,
             DivisionType.tutorials,
-            announcement.tutorials,
+            announcement.tutorialIds,
             courseName,
             '${announcement.title} was removed');
 
         await _helper.removeEventFromInstructor(
-            announcement.course, announcementId, EventType.announcements);
+            announcement.courseId, announcementId, EventType.announcements);
 
         await Database.announcements.doc(announcementId).delete();
       }

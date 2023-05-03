@@ -1,27 +1,27 @@
 import 'package:guc_scheduling_app/models/divisions/division_model.dart';
 
 class Group extends Division {
-  List<String> quizzes;
-  List<String> assignments;
-  List<String> compensationLectures;
+  List<String> quizIds;
+  List<String> assignmentIds;
+  List<String> compensationLectureIds;
 
   Group(
       {required super.id,
       required super.courseId,
       required super.number,
       required super.lectures,
-      required super.students,
-      required super.announcements,
-      required this.quizzes,
-      required this.assignments,
-      required this.compensationLectures});
+      required super.studentIds,
+      required super.announcementIds,
+      required this.quizIds,
+      required this.assignmentIds,
+      required this.compensationLectureIds});
 
   @override
   Map<String, dynamic> toJson() => {
         ...super.toJson(),
-        'quizzes': quizzes,
-        'assignments': assignments,
-        'compensationLectures': compensationLectures,
+        'quizIds': quizIds,
+        'assignmentIds': assignmentIds,
+        'compensationLectureIds': compensationLectureIds,
       };
 
   static Group fromJson(Map<String, dynamic> json) => Group(
@@ -31,11 +31,12 @@ class Group extends Division {
         lectures: (json['lectures'] as List<dynamic>)
             .map((lecture) => Lecture.fromJson(lecture))
             .toList(),
-        students: (json['students'] as List<dynamic>).cast<String>(),
-        announcements: (json['announcements'] as List<dynamic>).cast<String>(),
-        quizzes: (json['quizzes'] as List<dynamic>).cast<String>(),
-        assignments: (json['assignments'] as List<dynamic>).cast<String>(),
-        compensationLectures:
-            (json['compensationLectures'] as List<dynamic>).cast<String>(),
+        studentIds: (json['studentIds'] as List<dynamic>).cast<String>(),
+        announcementIds:
+            (json['announcementIds'] as List<dynamic>).cast<String>(),
+        quizIds: (json['quizIds'] as List<dynamic>).cast<String>(),
+        assignmentIds: (json['assignmentIds'] as List<dynamic>).cast<String>(),
+        compensationLectureIds:
+            (json['compensationLectureIds'] as List<dynamic>).cast<String>(),
       );
 }

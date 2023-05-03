@@ -27,12 +27,12 @@ class AssignmentController {
 
       final assignment = Assignment(
           id: docAssignment.id,
-          creator: _auth.currentUser?.uid ?? '',
-          course: courseId,
+          creatorId: _auth.currentUser?.uid ?? '',
+          courseId: courseId,
           title: title,
           description: description,
           file: file,
-          groups: groupIds,
+          groupIds: groupIds,
           deadline: deadline);
 
       final json = assignment.toJson();
@@ -57,7 +57,7 @@ class AssignmentController {
     Group? group = await Database.getGroup(groupId);
 
     if (group != null) {
-      return await Database.getAssignmentListFromIds(group.assignments);
+      return await Database.getAssignmentListFromIds(group.assignmentIds);
     } else {
       return [];
     }
@@ -99,7 +99,7 @@ class AssignmentController {
 
     if (assignment != null) {
       studentIds = await Database.getDivisionsStudentIds(
-          assignment.groups, DivisionType.groups);
+          assignment.groupIds, DivisionType.groups);
     }
 
     return studentIds;
@@ -116,11 +116,11 @@ class AssignmentController {
             assignmentId,
             EventType.assignments,
             DivisionType.groups,
-            assignment.groups,
+            assignment.groupIds,
             courseName,
             '${assignment.title} was removed');
         await _helper.removeEventFromInstructor(
-            assignment.course, assignmentId, EventType.assignments);
+            assignment.courseId, assignmentId, EventType.assignments);
 
         await Database.assignments.doc(assignmentId).delete();
       }

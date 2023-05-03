@@ -1,25 +1,25 @@
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 
 class Quiz extends Event {
-  List<String> groups;
+  List<String> groupIds;
   DateTime start;
   DateTime end;
 
   Quiz(
       {required super.id,
-      required super.creator,
-      required super.course,
+      required super.creatorId,
+      required super.courseId,
       required super.title,
       required super.description,
       required super.file,
-      required this.groups,
+      required this.groupIds,
       required this.start,
       required this.end});
 
   @override
   Map<String, dynamic> toJson() => {
         ...super.toJson(),
-        'groups': groups,
+        'groupIds': groupIds,
         'start': start.millisecondsSinceEpoch,
         'end': end.millisecondsSinceEpoch,
       };
@@ -34,12 +34,12 @@ class Quiz extends Event {
 
   static Quiz fromJson(Map<String, dynamic> json) => Quiz(
       id: json['id'],
-      creator: json['creator'],
-      course: json['course'],
+      creatorId: json['creatorId'],
+      courseId: json['courseId'],
       title: json['title'],
       description: json['description'],
       file: json['file'],
-      groups: (json['groups'] as List<dynamic>).cast<String>(),
+      groupIds: (json['groupIds'] as List<dynamic>).cast<String>(),
       start: DateTime.fromMillisecondsSinceEpoch(json['start']),
       end: DateTime.fromMillisecondsSinceEpoch(json['end']));
 }

@@ -6,8 +6,8 @@ class Compensation extends Event {
 
   Compensation(
       {required super.id,
-      required super.creator,
-      required super.course,
+      required super.creatorId,
+      required super.courseId,
       required super.title,
       required super.description,
       required super.file,
@@ -31,8 +31,8 @@ class Compensation extends Event {
 
   static Compensation fromJson(Map<String, dynamic> json) => Compensation(
       id: json['id'],
-      creator: json['creator'],
-      course: json['course'],
+      creatorId: json['creatorId'],
+      courseId: json['courseId'],
       title: json['title'],
       description: json['description'],
       file: json['file'],

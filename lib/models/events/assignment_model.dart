@@ -1,23 +1,23 @@
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 
 class Assignment extends Event {
-  List<String> groups;
+  List<String> groupIds;
   DateTime deadline;
 
   Assignment(
       {required super.id,
-      required super.creator,
-      required super.course,
+      required super.creatorId,
+      required super.courseId,
       required super.title,
       required super.description,
       required super.file,
-      required this.groups,
+      required this.groupIds,
       required this.deadline});
 
   @override
   Map<String, dynamic> toJson() => {
         ...super.toJson(),
-        'groups': groups,
+        'groupIds': groupIds,
         'deadline': deadline.millisecondsSinceEpoch,
       };
 
@@ -30,11 +30,11 @@ class Assignment extends Event {
 
   static Assignment fromJson(Map<String, dynamic> json) => Assignment(
       id: json['id'],
-      creator: json['creator'],
-      course: json['course'],
+      creatorId: json['creatorId'],
+      courseId: json['courseId'],
       title: json['title'],
       description: json['description'],
       file: json['file'],
-      groups: (json['groups'] as List<dynamic>).cast<String>(),
+      groupIds: (json['groupIds'] as List<dynamic>).cast<String>(),
       deadline: DateTime.fromMillisecondsSinceEpoch(json['deadline']));
 }

@@ -58,10 +58,10 @@ class DiscussionController {
     if (course != null) {
       String body = 'New post : $content';
       List<String> userIds = [];
-      userIds.addAll(course.professors);
-      userIds.addAll(course.tas);
+      userIds.addAll(course.professorIds);
+      userIds.addAll(course.taIds);
       userIds.addAll(await Database.getDivisionsStudentIds(
-          course.groups, DivisionType.groups));
+          course.groupIds, DivisionType.groups));
 
       await _user.notifyUsers(userIds, course.name, body);
 
@@ -114,7 +114,7 @@ class DiscussionController {
         if (userType != UserType.professor) return;
       }
 
-      List<String> posts = course.posts;
+      List<String> posts = course.postIds;
 
       posts.remove(postId);
 
@@ -162,7 +162,7 @@ class DiscussionController {
     Course? course = await Database.getCourse(courseId);
 
     if (course != null) {
-      List<Post> posts = await Database.getPostListFromIds(course.posts);
+      List<Post> posts = await Database.getPostListFromIds(course.postIds);
       posts.sort(((Post a, Post b) => b.createdAt.compareTo(a.createdAt)));
       for (Post post in posts) {
         post.replies

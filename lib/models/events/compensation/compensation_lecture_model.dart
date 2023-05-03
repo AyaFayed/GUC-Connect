@@ -1,36 +1,36 @@
 import 'package:guc_scheduling_app/models/events/compensation/compensation_model.dart';
 
 class CompensationLecture extends Compensation {
-  List<String> groups;
+  List<String> groupIds;
 
   CompensationLecture({
     required super.id,
-    required super.creator,
-    required super.course,
+    required super.creatorId,
+    required super.courseId,
     required super.title,
     required super.description,
     required super.file,
     required super.start,
     required super.end,
-    required this.groups,
+    required this.groupIds,
   });
 
   @override
   Map<String, dynamic> toJson() => {
         ...super.toJson(),
-        'groups': groups,
+        'groupIds': groupIds,
       };
 
   static CompensationLecture fromJson(Map<String, dynamic> json) =>
       CompensationLecture(
         id: json['id'],
-        creator: json['creator'],
-        course: json['course'],
+        creatorId: json['creatorId'],
+        courseId: json['courseId'],
         title: json['title'],
         description: json['description'],
         file: json['file'],
         start: DateTime.fromMillisecondsSinceEpoch(json['start']),
         end: DateTime.fromMillisecondsSinceEpoch(json['end']),
-        groups: (json['groups'] as List<dynamic>).cast<String>(),
+        groupIds: (json['groupIds'] as List<dynamic>).cast<String>(),
       );
 }

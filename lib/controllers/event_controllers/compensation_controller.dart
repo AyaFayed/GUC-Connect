@@ -41,12 +41,12 @@ class CompensationController {
 
       final compensationLecture = CompensationLecture(
           id: doccompensationLecture.id,
-          creator: _auth.currentUser?.uid ?? '',
-          course: courseId,
+          creatorId: _auth.currentUser?.uid ?? '',
+          courseId: courseId,
           title: title,
           description: description,
           file: file,
-          groups: groupIds,
+          groupIds: groupIds,
           start: start,
           end: end);
 
@@ -94,12 +94,12 @@ class CompensationController {
 
       final compensationTutorial = CompensationTutorial(
           id: doccompensationTutorial.id,
-          creator: _auth.currentUser?.uid ?? '',
-          course: courseId,
+          creatorId: _auth.currentUser?.uid ?? '',
+          courseId: courseId,
           title: title,
           description: description,
           file: file,
-          tutorials: tutorialIds,
+          tutorialIds: tutorialIds,
           start: start,
           end: end);
 
@@ -127,7 +127,7 @@ class CompensationController {
 
     if (group != null) {
       return await Database.getCompensationLectureListFromIds(
-          group.compensationLectures);
+          group.compensationLectureIds);
     } else {
       return [];
     }
@@ -158,7 +158,7 @@ class CompensationController {
 
     if (tutorial != null) {
       return await Database.getCompensationTutorialListFromIds(
-          tutorial.compensationTutorials);
+          tutorial.compensationTutorialIds);
     } else {
       return [];
     }
@@ -223,7 +223,7 @@ class CompensationController {
 
     if (compensationLecture != null) {
       studentIds = await Database.getDivisionsStudentIds(
-          compensationLecture.groups, DivisionType.groups);
+          compensationLecture.groupIds, DivisionType.groups);
     }
 
     return studentIds;
@@ -245,7 +245,7 @@ class CompensationController {
 
     if (compensationTutorial != null) {
       studentIds = await Database.getDivisionsStudentIds(
-          compensationTutorial.tutorials, DivisionType.tutorials);
+          compensationTutorial.tutorialIds, DivisionType.tutorials);
     }
 
     return studentIds;
@@ -264,10 +264,10 @@ class CompensationController {
             compensationLectureId,
             EventType.compensationLectures,
             DivisionType.groups,
-            compensationLecture.groups,
+            compensationLecture.groupIds,
             courseName,
             '${compensationLecture.title} was removed');
-        await _helper.removeEventFromInstructor(compensationLecture.course,
+        await _helper.removeEventFromInstructor(compensationLecture.courseId,
             compensationLectureId, EventType.compensationLectures);
 
         await Database.compensationLectures.doc(compensationLectureId).delete();
@@ -288,10 +288,10 @@ class CompensationController {
             compensationTutorialId,
             EventType.compensationTutorials,
             DivisionType.tutorials,
-            compensationTutorial.tutorials,
+            compensationTutorial.tutorialIds,
             courseName,
             '${compensationTutorial.title} was removed');
-        await _helper.removeEventFromInstructor(compensationTutorial.course,
+        await _helper.removeEventFromInstructor(compensationTutorial.courseId,
             compensationTutorialId, EventType.compensationTutorials);
 
         await Database.compensationTutorials

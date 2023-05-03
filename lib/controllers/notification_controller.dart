@@ -161,7 +161,7 @@ class NotificationController {
       case NotificationType.announcement:
         Announcement? announcement = await Database.getAnnouncement(eventId);
         if (announcement != null) {
-          Course? course = await Database.getCourse(announcement.course);
+          Course? course = await Database.getCourse(announcement.courseId);
           return course;
         }
         return null;
@@ -169,7 +169,7 @@ class NotificationController {
       case NotificationType.assignment:
         Assignment? assignment = await Database.getAssignment(eventId);
         if (assignment != null) {
-          Course? course = await Database.getCourse(assignment.course);
+          Course? course = await Database.getCourse(assignment.courseId);
           return course;
         }
         return null;
@@ -177,7 +177,7 @@ class NotificationController {
       case NotificationType.quiz:
         Quiz? quiz = await Database.getQuiz(eventId);
         if (quiz != null) {
-          Course? course = await Database.getCourse(quiz.course);
+          Course? course = await Database.getCourse(quiz.courseId);
           return course;
         }
         return null;
@@ -186,7 +186,8 @@ class NotificationController {
         CompensationLecture? compensationLecture =
             await Database.getCompensationLecture(eventId);
         if (compensationLecture != null) {
-          Course? course = await Database.getCourse(compensationLecture.course);
+          Course? course =
+              await Database.getCourse(compensationLecture.courseId);
           return course;
         }
         return null;
@@ -196,7 +197,7 @@ class NotificationController {
             await Database.getCompensationTutorial(eventId);
         if (compensationTutorial != null) {
           Course? course =
-              await Database.getCourse(compensationTutorial.course);
+              await Database.getCourse(compensationTutorial.courseId);
           return course;
         }
         return null;
