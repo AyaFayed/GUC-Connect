@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/services/authentication_service.dart';
+import 'package:guc_scheduling_app/services/messaging_service.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/set_reminder_text_button.dart';
@@ -16,6 +17,7 @@ class _SettingsState extends State<Settings> {
   final AuthService _auth = AuthService();
   final UserController _userController = UserController();
   UserType? _currentUserType;
+  final MessagingService _messaging = MessagingService();
 
   Future<void> _getData() async {
     UserType currentUserType = await _userController.getCurrentUserType();
@@ -60,6 +62,7 @@ class _SettingsState extends State<Settings> {
                       ),
                     TextButton.icon(
                       onPressed: () async {
+                        await _messaging.removeToken();
                         await _auth.logout();
                       },
                       icon: const Icon(Icons.logout),
