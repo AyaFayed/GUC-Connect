@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:guc_scheduling_app/database/database.dart';
-import 'package:guc_scheduling_app/models/user/professor_model.dart';
-import 'package:guc_scheduling_app/models/user/student_model.dart';
-import 'package:guc_scheduling_app/models/user/ta_model.dart';
+import 'package:guc_scheduling_app/database/database_references.dart';
+import 'package:guc_scheduling_app/database/reads/user_reads.dart';
+import 'package:guc_scheduling_app/database/writes/user_writes.dart';
 import 'package:guc_scheduling_app/models/user/user_model.dart';
 import 'package:guc_scheduling_app/services/messaging_service.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
@@ -10,69 +9,49 @@ import 'package:guc_scheduling_app/shared/constants.dart';
 class UserController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final MessagingService _messaging = MessagingService();
+  final UserReads _userReads = UserReads();
+  final UserWrites _userWrites = UserWrites();
 
-  // user creation:
   Future createUser(String? uid, String name, UserType type) async {
-    // type : student , ta , professor , admin
-    final docUser = Database.users.doc(uid);
-
-    // ignore: prefer_typing_uninitialized_variables
-    final user;
+    final docUser = DatabaseReferences.users.doc(uid);
 
     String? token = await _messaging.getToken();
 
-    switch (type) {
-      case UserType.student:
-        user = Student(
-            id: uid,
-            token: token,
-            name: name,
-            type: type,
-            courses: [],
-            notifications: [],
-            quizReminder: 1,
-            assignmentReminder: 1);
-        break;
-      case UserType.professor:
-        user = Professor(
-            id: uid,
-            token: token,
-            name: name,
-            type: type,
-            courses: [],
-            notifications: []);
-        break;
-      case UserType.ta:
-        user = TA(
-            id: uid,
-            token: token,
-            name: name,
-            type: type,
-            courses: [],
-            notifications: []);
-        break;
-      default:
-        user = UserModel(
-            id: uid, token: token, name: name, type: type, notifications: []);
-        break;
-    }
+    UserModel user = UserModel(
+        id: docUser.id,
+        tokens: token != null ? [token] : [],
+        name: name,
+        type: type,
+        allowPostNotifications: true,
+        userNotifications: [],
+        courseIds: []);
+
     final json = user.toJson();
     await docUser.set(json);
   }
 
   Future<UserType> getCurrentUserType() async {
-    final userDoc = await getCurrentUser();
+    UserModel? user = await getCurrentUser();
 
-    if (userDoc != null) {
-      final user = UserModel.fromJson(userDoc);
+    if (user != null) {
       return user.type;
     } else {
       return UserType.student;
     }
   }
 
+  Future<bool> isCurrentUserInstructor() async {
+    UserType userType = await getCurrentUserType();
+
+    if (userType == UserType.professor || userType == UserType.ta) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<UserType> getUserType(String uid) async {
-    UserModel? user = await Database.getUser(uid);
+    UserModel? user = await _userReads.getUser(uid);
 
     if (user != null) {
       return user.type;
@@ -82,7 +61,7 @@ class UserController {
   }
 
   Future<String> getUserName(String uid) async {
-    UserModel? user = await Database.getUser(uid);
+    UserModel? user = await _userReads.getUser(uid);
 
     if (user != null) {
       return user.name;
@@ -91,17 +70,21 @@ class UserController {
     }
   }
 
-  Future<Map<String, dynamic>?> getCurrentUser() async {
+  Future<UserModel?> getCurrentUser() async {
     if (_auth.currentUser == null) return null;
-    final userDoc =
-        await Database.getDocumentData(Database.users, _auth.currentUser?.uid);
-    return userDoc;
+    UserModel? user = await _userReads.getUser(_auth.currentUser?.uid ?? '');
+    return user;
   }
 
   Future notifyUser(String uid, String title, String body) async {
-    UserModel? user = await Database.getUser(uid);
-    if (user?.token != null) {
-      await _messaging.sendPushNotification(user?.token ?? '', body, title);
+    UserModel? user = await _userReads.getUser(uid);
+
+    if (user != null) {
+      List<Future> notifying = [];
+      for (String token in user.tokens) {
+        notifying.add(_messaging.sendPushNotification(token, body, title));
+      }
+      await Future.wait(notifying);
     }
   }
 
@@ -113,5 +96,21 @@ class UserController {
       }
     }
     await Future.wait(notifying);
+  }
+
+  Future updateAllowPostNotifications(bool value) async {
+    if (_auth.currentUser == null) return;
+    await _userWrites.updateAllowPostNotifications(
+        _auth.currentUser?.uid ?? '', value);
+  }
+
+  Future addToken(String token) async {
+    if (_auth.currentUser == null) return;
+    await _userWrites.addTokenToUser(_auth.currentUser?.uid ?? '', token);
+  }
+
+  Future removeToken(String token) async {
+    if (_auth.currentUser == null) return;
+    await _userWrites.removeTokenFromUser(_auth.currentUser?.uid ?? '', token);
   }
 }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:guc_scheduling_app/controllers/division_controller.dart';
+import 'package:guc_scheduling_app/controllers/group_controller.dart';
 import 'package:guc_scheduling_app/controllers/enrollment_controller.dart';
-import 'package:guc_scheduling_app/models/divisions/group_model.dart';
-import 'package:guc_scheduling_app/models/divisions/tutorial_model.dart';
+import 'package:guc_scheduling_app/models/group/group_model.dart';
 import 'package:guc_scheduling_app/screens/home/home.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
@@ -22,14 +21,14 @@ class StudentEnroll extends StatefulWidget {
 }
 
 class _StudentEnrollState extends State<StudentEnroll> {
-  final DivisionController _divisionController = DivisionController();
+  final GroupController _groupController = GroupController();
 
   String selectedGroupId = '';
   String selectedTutorialId = '';
   String error = '';
 
   List<Group>? _groups;
-  List<Tutorial>? _tutorials;
+  List<Group>? _tutorials;
 
   List<DropdownMenuItem>? groups;
   List<DropdownMenuItem>? tutorials;
@@ -56,17 +55,11 @@ class _StudentEnrollState extends State<StudentEnroll> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _getData();
-  }
-
   Future<void> _getData() async {
     List<Group> groupsData =
-        await _divisionController.getCourseGroups(widget.courseId);
-    List<Tutorial> tutorialsData =
-        await _divisionController.getCourseTutorials(widget.courseId);
+        await _groupController.getCourseLectureGroups(widget.courseId);
+    List<Group> tutorialsData =
+        await _groupController.getCourseTutorialGroups(widget.courseId);
 
     setState(() {
       _groups = groupsData;
@@ -86,6 +79,12 @@ class _StudentEnrollState extends State<StudentEnroll> {
           .cast<DropdownMenuItem>()
           .toList();
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getData();
   }
 
   @override

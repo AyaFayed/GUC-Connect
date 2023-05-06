@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guc_scheduling_app/controllers/event_controllers/event_controllers_helper.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/callendar_events_controller.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/calendar_event_card.dart';
@@ -13,7 +13,8 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-  final EventsControllerHelper _eventsController = EventsControllerHelper();
+  final CalendarEventsController _calendarEventsController =
+      CalendarEventsController();
   DateTime selectedDay = DateTime.now();
 
   Map<DateTime, List<CalendarEvent>>? _allEvents;
@@ -25,7 +26,7 @@ class _CalendarState extends State<Calendar> {
 
   Future<void> _getData() async {
     Map<DateTime, List<CalendarEvent>> eventsData =
-        await _eventsController.getMyCalendarEvents();
+        await _calendarEventsController.getMyCalendarEvents();
     setState(() {
       _allEvents = eventsData;
       selectedEvents = getEventsfromDay(selectedDay);

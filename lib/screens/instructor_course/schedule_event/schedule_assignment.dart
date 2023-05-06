@@ -130,7 +130,7 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
                   selectedGroupIds: selectedGroupIds,
                   courseId: widget.courseId),
               const SizedBox(height: 40.0),
-              LargeBtn(onPressed: scheduleAssignment, text: 'Add assignment'),
+              LargeBtn(onPressed: scheduleAssignment, text: 'Post assignment'),
             ],
           ),
         ));

@@ -5,14 +5,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/assignment_controller.dart';
-import 'package:guc_scheduling_app/controllers/event_controllers/compensation_controller.dart';
-import 'package:guc_scheduling_app/controllers/event_controllers/quiz_controller.dart';
-import 'package:guc_scheduling_app/controllers/event_controllers/schedule_event_controller.dart';
-import 'package:guc_scheduling_app/database/database.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/scheduled_event_controller.dart';
+import 'package:guc_scheduling_app/database/reads/assignment_reads.dart';
+import 'package:guc_scheduling_app/database/reads/scheduled_event_reads.dart';
 import 'package:guc_scheduling_app/models/events/assignment_model.dart';
-import 'package:guc_scheduling_app/models/events/compensation/compensation_lecture_model.dart';
-import 'package:guc_scheduling_app/models/events/compensation/compensation_tutorial_model.dart';
-import 'package:guc_scheduling_app/models/events/quiz_model.dart';
+import 'package:guc_scheduling_app/models/events/scheduled_event.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
@@ -44,12 +41,12 @@ class EditEvent extends StatefulWidget {
 }
 
 class _EditEventState extends State<EditEvent> {
-  final ScheduleEventsController _scheduleEventsController =
-      ScheduleEventsController();
+  final ScheduledEventsController _scheduleEventsController =
+      ScheduledEventsController();
   final AssignmentController _assignmentController = AssignmentController();
-  final QuizController _quizController = QuizController();
-  final CompensationController _compensationController =
-      CompensationController();
+
+  final ScheduledEventReads _scheduledEventReads = ScheduledEventReads();
+  final AssignmentReads _assignmentReads = AssignmentReads();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -94,23 +91,17 @@ class _EditEventState extends State<EditEvent> {
               text: Confirmations.loading,
             );
             switch (widget.eventType) {
-              case EventType.announcements:
+              case EventType.announcement:
                 break;
-              case EventType.assignments:
+              case EventType.assignment:
                 await _assignmentController.deleteAssignment(
-                    widget.eventId, widget.courseName);
+                    widget.courseName, widget.eventId);
                 break;
-              case EventType.quizzes:
-                await _quizController.deleteQuiz(
-                    widget.eventId, widget.courseName);
-                break;
-              case EventType.compensationLectures:
-                await _compensationController.deleteCompensationLecture(
-                    widget.eventId, widget.courseName);
-                break;
-              case EventType.compensationTutorials:
-                await _compensationController.deleteCompensationTutorial(
-                    widget.eventId, widget.courseName);
+              case EventType.quiz:
+              case EventType.compensationLecture:
+              case EventType.compensationTutorial:
+                await _scheduleEventsController.deleteScheduledEvent(
+                    widget.courseName, widget.eventId);
                 break;
             }
             if (context.mounted) {
@@ -151,7 +142,7 @@ class _EditEventState extends State<EditEvent> {
       if (file != null) {
         fileUrl = await uploadFile(file, task);
       }
-      await _scheduleEventsController.editScheduledEvent(
+      await _scheduleEventsController.editEvent(
           widget.courseName,
           widget.eventType,
           widget.eventId,
@@ -159,7 +150,7 @@ class _EditEventState extends State<EditEvent> {
           controllerDescription!.text,
           fileUrl,
           startDateTime ?? DateTime.now(),
-          widget.eventType == EventType.assignments
+          widget.eventType == EventType.assignment
               ? null
               : startDateTime?.add(
                       Duration(minutes: int.parse(controllerDuration!.text))) ??
@@ -204,14 +195,14 @@ class _EditEventState extends State<EditEvent> {
           error = Errors.required;
         });
       } else {
-        if (widget.eventType == EventType.assignments) {
+        if (widget.eventType == EventType.assignment) {
           await completeScheduling();
           setState(() {
             _disableAllButtons = false;
           });
           return;
         }
-        int conflicts = await _scheduleEventsController.canScheduleEvent(
+        int conflicts = await _scheduleEventsController.canEditScheduledEvent(
             widget.eventType,
             widget.eventId,
             startDateTime ?? DateTime.now(),
@@ -273,46 +264,29 @@ class _EditEventState extends State<EditEvent> {
     DateTime? start;
 
     switch (widget.eventType) {
-      case EventType.announcements:
+      case EventType.announcement:
         break;
-      case EventType.assignments:
-        Assignment? assignment = await Database.getAssignment(widget.eventId);
+      case EventType.assignment:
+        Assignment? assignment =
+            await _assignmentReads.getAssignment(widget.eventId);
         start = assignment?.deadline;
         title = assignment?.title ?? '';
         description = assignment?.description ?? '';
         fileDownloadLink = assignment?.file;
         break;
-      case EventType.quizzes:
-        Quiz? quiz = await Database.getQuiz(widget.eventId);
-        start = quiz?.start;
-        title = quiz?.title ?? '';
-        description = quiz?.description ?? '';
-        duration = quiz!.end.difference(quiz.start).inMinutes.toString();
-        fileDownloadLink = quiz.file;
-        break;
-      case EventType.compensationLectures:
-        CompensationLecture? compensationLecture =
-            await Database.getCompensationLecture(widget.eventId);
-        start = compensationLecture?.start;
-        title = compensationLecture?.title ?? '';
-        description = compensationLecture?.description ?? '';
-        duration = compensationLecture!.end
-            .difference(compensationLecture.start)
+      case EventType.quiz:
+      case EventType.compensationLecture:
+      case EventType.compensationTutorial:
+        ScheduledEvent? scheduledEvent =
+            await _scheduledEventReads.getScheduledEvent(widget.eventId);
+        start = scheduledEvent?.start;
+        title = scheduledEvent?.title ?? '';
+        description = scheduledEvent?.description ?? '';
+        duration = scheduledEvent!.end
+            .difference(scheduledEvent.start)
             .inMinutes
             .toString();
-        fileDownloadLink = compensationLecture.file;
-        break;
-      case EventType.compensationTutorials:
-        CompensationTutorial? compensationTutorial =
-            await Database.getCompensationTutorial(widget.eventId);
-        start = compensationTutorial?.start;
-        title = compensationTutorial?.title ?? '';
-        description = compensationTutorial?.description ?? '';
-        duration = compensationTutorial!.end
-            .difference(compensationTutorial.start)
-            .inMinutes
-            .toString();
-        fileDownloadLink = compensationTutorial.file;
+        fileDownloadLink = scheduledEvent.file;
 
         break;
     }
@@ -378,7 +352,7 @@ class _EditEventState extends State<EditEvent> {
                                 color: AppColors.error, fontSize: 13.0),
                           ),
                           const SizedBox(height: 5.0),
-                          widget.eventType == EventType.assignments
+                          widget.eventType == EventType.assignment
                               ? const SizedBox(height: 0.0)
                               : TextFormField(
                                   keyboardType: TextInputType.number,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guc_scheduling_app/models/divisions/division_model.dart';
+import 'package:guc_scheduling_app/models/group/group_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 

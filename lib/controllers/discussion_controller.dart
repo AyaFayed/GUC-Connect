@@ -1,8 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guc_scheduling_app/controllers/notification_controller.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
-import 'package:guc_scheduling_app/database/database.dart';
+import 'package:guc_scheduling_app/database/database_references.dart';
+import 'package:guc_scheduling_app/database/reads/course_reads.dart';
+import 'package:guc_scheduling_app/database/reads/post_reads.dart';
+import 'package:guc_scheduling_app/database/reads/user_reads.dart';
+import 'package:guc_scheduling_app/database/writes/post_writes.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/models/discussion/post_model.dart';
 import 'package:guc_scheduling_app/models/user/user_model.dart';
@@ -14,12 +17,15 @@ class DiscussionController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final NotificationController _notificationController =
       NotificationController();
+  final CourseReads _courseReads = CourseReads();
+  final UserReads _userReads = UserReads();
+  final PostReads _postReads = PostReads();
+  final PostWrites _postWrites = PostWrites();
 
   Future<Post?> addPost(String content, String? file, String courseId) async {
-    final docPost = Database.posts.doc();
+    final docPost = DatabaseReferences.posts.doc();
 
-    UserModel? currentUser =
-        await Database.getUser(_auth.currentUser?.uid ?? '');
+    UserModel? currentUser = await _user.getCurrentUser();
 
     if (currentUser != null) {
       final post = Post(
@@ -27,7 +33,7 @@ class DiscussionController {
           courseId: courseId,
           content: content,
           file: file,
-          authorId: _auth.currentUser?.uid ?? '',
+          authorId: currentUser.id,
           authorName: formatName(currentUser.name, currentUser.type),
           replies: [],
           createdAt: DateTime.now());
@@ -35,8 +41,6 @@ class DiscussionController {
       final json = post.toJson();
 
       await docPost.set(json);
-
-      await addPostToCourse(docPost.id, courseId);
 
       await notifyUsersAboutPost(docPost.id, content, courseId);
 
@@ -46,22 +50,18 @@ class DiscussionController {
     return null;
   }
 
-  Future addPostToCourse(String postId, String courseId) async {
-    await Database.courses.doc(courseId).update({
-      'posts': FieldValue.arrayUnion([postId])
-    });
-  }
-
   Future notifyUsersAboutPost(
       String postId, String content, String courseId) async {
-    Course? course = await Database.getCourse(courseId);
+    Course? course = await _courseReads.getCourse(courseId);
+
     if (course != null) {
       String body = 'New post : $content';
-      List<String> userIds = [];
-      userIds.addAll(course.professorIds);
-      userIds.addAll(course.taIds);
-      userIds.addAll(await Database.getDivisionsStudentIds(
-          course.groupIds, DivisionType.groups));
+      List<UserModel> users =
+          await _userReads.getAllUserIdsEnrolledInACourse(courseId);
+
+      users.removeWhere((user) => user.allowPostNotifications == false);
+
+      List<String> userIds = users.map((user) => user.id).toList();
 
       await _user.notifyUsers(userIds, course.name, body);
 
@@ -71,21 +71,18 @@ class DiscussionController {
   }
 
   Future<Reply?> addReplyToPost(String content, String postId) async {
-    UserModel? currentUser =
-        await Database.getUser(_auth.currentUser?.uid ?? '');
+    UserModel? currentUser = await _user.getCurrentUser();
 
-    Post? post = await Database.getPost(postId);
+    Post? post = await _postReads.getPost(postId);
 
     if (currentUser != null && post != null) {
       Reply reply = Reply(
           content: content,
-          authorId: _auth.currentUser?.uid ?? '',
+          authorId: currentUser.id,
           authorName: formatName(currentUser.name, currentUser.type),
           createdAt: DateTime.now());
 
-      await Database.posts.doc(postId).update({
-        'replies': FieldValue.arrayUnion([reply.toJson()])
-      });
+      await _postWrites.addReplyToPost(postId, reply);
 
       await _user.notifyUser(
           post.authorId, '${currentUser.name} replied to your post', content);
@@ -104,28 +101,12 @@ class DiscussionController {
     return null;
   }
 
-  Future deletePost(String postId, String courseId) async {
-    Post? post = await Database.getPost(postId);
-    Course? course = await Database.getCourse(courseId);
-
-    if (post != null && course != null) {
-      if (post.authorId != _auth.currentUser?.uid) {
-        UserType userType = await _user.getCurrentUserType();
-        if (userType != UserType.professor) return;
-      }
-
-      List<String> posts = course.postIds;
-
-      posts.remove(postId);
-
-      await Database.courses.doc(courseId).update({'posts': posts});
-
-      await Database.posts.doc(postId).delete();
-    }
+  Future deletePost(String postId) async {
+    await _postWrites.deletePost(postId);
   }
 
   Future<bool> canDeletePost(String postId) async {
-    Post? post = await Database.getPost(postId);
+    Post? post = await _postReads.getPost(postId);
 
     if (post != null) {
       if (post.authorId != _auth.currentUser?.uid) {
@@ -139,7 +120,7 @@ class DiscussionController {
   }
 
   Future deleteReply(String postId, Reply reply) async {
-    Post? post = await Database.getPost(postId);
+    Post? post = await _postReads.getPost(postId);
 
     if (post != null) {
       if (reply.authorId != _auth.currentUser?.uid) {
@@ -154,23 +135,17 @@ class DiscussionController {
           r.createdAt == reply.createdAt &&
           r.content == reply.content);
 
-      await Database.posts.doc(postId).update({'replies': replies});
+      await _postWrites.updatePostReplies(postId, replies);
     }
   }
 
   Future<List<Post>> getCoursePosts(String courseId) async {
-    Course? course = await Database.getCourse(courseId);
+    return await _postReads.getCoursePosts(courseId);
+  }
 
-    if (course != null) {
-      List<Post> posts = await Database.getPostListFromIds(course.postIds);
-      posts.sort(((Post a, Post b) => b.createdAt.compareTo(a.createdAt)));
-      for (Post post in posts) {
-        post.replies
-            .sort(((Reply a, Reply b) => a.createdAt.compareTo(b.createdAt)));
-      }
-      return posts;
-    }
-
-    return [];
+  Future<List<Post>> getMyPosts(String courseId) async {
+    if (_auth.currentUser == null) return [];
+    return await _postReads.getUserPosts(
+        courseId, _auth.currentUser?.uid ?? '');
   }
 }

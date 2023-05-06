@@ -1,16 +1,14 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:guc_scheduling_app/database/database.dart';
+import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MessagingService {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final UserController _userController = UserController();
 
   void requestPermission() async {
     NotificationSettings settings = await _messaging.requestPermission(
@@ -40,9 +38,17 @@ class MessagingService {
   Future<void> setToken() async {
     String? token = await getToken();
 
-    await Database.users
-        .doc(_auth.currentUser?.uid ?? '')
-        .update({'token': token});
+    if (token != null) {
+      await _userController.addToken(token);
+    }
+  }
+
+  Future<void> removeToken() async {
+    String? token = await getToken();
+
+    if (token != null) {
+      await _userController.removeToken(token);
+    }
   }
 
   Future<void> sendPushNotification(
@@ -64,6 +70,39 @@ class MessagingService {
               'status': 'done',
               'body': body,
               'title': title
+            },
+            "notification": <String, dynamic>{
+              "title": title,
+              "body": body,
+              "android_channel_id": title
+            },
+            "to": token
+          }));
+    } catch (e) {
+      if (kDebugMode) {
+        print("error push notification");
+      }
+    }
+  }
+
+  Future<void> sendReminder(
+      String token, String body, String title, DateTime dateTime) async {
+    String key = 'key=${dotenv.env['FCM_KEY']}';
+    try {
+      await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': key
+          },
+          body: jsonEncode(<String, dynamic>{
+            'priority': 'high',
+            'data': <String, dynamic>{
+              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+              'status': 'done',
+              'body': body,
+              'title': title,
+              "isScheduled": "true",
+              "scheduledTime": dateTime
             },
             "notification": <String, dynamic>{
               "title": title,

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
-import 'package:guc_scheduling_app/models/divisions/division_model.dart';
+import 'package:guc_scheduling_app/models/group/group_model.dart';
 import 'package:guc_scheduling_app/services/storage_service.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:path/path.dart';
@@ -62,6 +62,28 @@ Slot getSlotFromString(String slot) {
   }
 }
 
+GroupType getGroupTypeFromString(String groupType) {
+  if (groupType == GroupType.lectureGroup.name) {
+    return GroupType.lectureGroup;
+  }
+  return GroupType.tutorialGroup;
+}
+
+EventType getEventTypeFromString(String eventType) {
+  switch (eventType) {
+    case 'announcement':
+      return EventType.announcement;
+    case 'assignment':
+      return EventType.assignment;
+    case 'quiz':
+      return EventType.quiz;
+    case 'compensationLecture':
+      return EventType.compensationLecture;
+    default:
+      return EventType.compensationTutorial;
+  }
+}
+
 NotificationType getNotificationTypeFromString(String notificationType) {
   switch (notificationType) {
     case 'post':
@@ -83,15 +105,15 @@ NotificationType getNotificationTypeFromString(String notificationType) {
 
 NotificationType getNotificationTypeFromEventType(EventType eventType) {
   switch (eventType) {
-    case EventType.announcements:
+    case EventType.announcement:
       return NotificationType.announcement;
-    case EventType.assignments:
+    case EventType.assignment:
       return NotificationType.assignment;
-    case EventType.quizzes:
+    case EventType.quiz:
       return NotificationType.quiz;
-    case EventType.compensationLectures:
+    case EventType.compensationLecture:
       return NotificationType.compensationLecture;
-    case EventType.compensationTutorials:
+    case EventType.compensationTutorial:
       return NotificationType.compensationTutorial;
   }
 }
@@ -211,15 +233,30 @@ String formatName(String name, UserType userType) {
 
 String formatEventType(EventType eventType) {
   switch (eventType) {
-    case EventType.announcements:
+    case EventType.announcement:
       return 'announcement';
-    case EventType.assignments:
+    case EventType.assignment:
       return 'assignment';
-    case EventType.quizzes:
+    case EventType.quiz:
       return 'quiz';
-    case EventType.compensationLectures:
+    case EventType.compensationLecture:
       return 'compensation lecture';
-    case EventType.compensationTutorials:
+    case EventType.compensationTutorial:
+      return 'compensation tutorial';
+  }
+}
+
+String formatEventTypePlural(EventType eventType) {
+  switch (eventType) {
+    case EventType.announcement:
+      return 'announcements';
+    case EventType.assignment:
+      return 'assignments';
+    case EventType.quiz:
+      return 'quizzes';
+    case EventType.compensationLecture:
+      return 'compensation lectures';
+    case EventType.compensationTutorial:
       return 'compensation tutorials';
   }
 }

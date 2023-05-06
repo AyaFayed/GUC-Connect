@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:guc_scheduling_app/controllers/division_controller.dart';
-import 'package:guc_scheduling_app/models/divisions/tutorial_model.dart';
+import 'package:guc_scheduling_app/controllers/group_controller.dart';
+import 'package:guc_scheduling_app/models/group/group_model.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -17,11 +17,9 @@ class TutorialsDropdown extends StatefulWidget {
 }
 
 class _TutorialsDropdownState extends State<TutorialsDropdown> {
-  final DivisionController _divisionController = DivisionController();
+  final GroupController _divisionController = GroupController();
 
   String error = '';
-
-  List<Tutorial>? _myTutorials;
 
   List<MultiSelectItem<String>> tutorials = [];
 
@@ -32,50 +30,33 @@ class _TutorialsDropdownState extends State<TutorialsDropdown> {
   }
 
   Future<void> _getData() async {
-    List<Tutorial> otherTutorials =
-        await _divisionController.getOtherCourseTutorials(widget.courseId);
-
-    List<Tutorial> myTutorials =
-        await _divisionController.getMyCourseTutorials(widget.courseId);
+    List<Group> allTutorials =
+        await _divisionController.getCourseTutorialGroups(widget.courseId);
 
     setState(() {
-      _myTutorials = myTutorials;
-
-      tutorials = myTutorials
+      tutorials = allTutorials
           .map((tutorial) => MultiSelectItem<String>(
                 tutorial.id,
-                'Tutorial ${tutorial.number.toString()} ${formatLectures(tutorial.lectures)}',
+                'Tutorial ${tutorial.number.toString()} ${formatLectures(tutorial.lectureSlots)}',
               ))
           .toList();
-
-      tutorials.addAll(otherTutorials
-          .map((tutorial) => MultiSelectItem<String>(
-                tutorial.id,
-                'Tutorial ${tutorial.number.toString()} ${formatLectures(tutorial.lectures)}',
-              ))
-          .toList());
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return _myTutorials == null
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : MultiSelectDialogField(
-            items: tutorials,
-            title: const Text('Select tutorials'),
-            searchable: true,
-            validator: (val) =>
-                val == null || val.isEmpty ? Errors.tutorial : null,
-            listType: MultiSelectListType.LIST,
-            onConfirm: (values) {
-              setState(() {
-                widget.selectedTutorialIds.clear();
-                widget.selectedTutorialIds.addAll(values);
-              });
-            },
-          );
+    return MultiSelectDialogField(
+      items: tutorials,
+      title: const Text('Select tutorials'),
+      searchable: true,
+      validator: (val) => val == null || val.isEmpty ? Errors.tutorial : null,
+      listType: MultiSelectListType.LIST,
+      onConfirm: (values) {
+        setState(() {
+          widget.selectedTutorialIds.clear();
+          widget.selectedTutorialIds.addAll(values);
+        });
+      },
+    );
   }
 }

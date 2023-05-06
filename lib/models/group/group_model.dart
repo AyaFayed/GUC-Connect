@@ -1,41 +1,46 @@
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 
-class Division {
+class Group {
   String id;
   String courseId;
+  String instructorId;
   int number;
-  List<Lecture> lectures;
+  GroupType type;
+  List<Lecture> lectureSlots;
   List<String> studentIds;
-  List<String> announcementIds;
 
-  Division(
-      {required this.id,
-      required this.courseId,
-      required this.number,
-      required this.lectures,
-      required this.studentIds,
-      required this.announcementIds});
+  Group({
+    required this.id,
+    required this.courseId,
+    required this.instructorId,
+    required this.number,
+    required this.type,
+    required this.lectureSlots,
+    required this.studentIds,
+  });
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'courseId': courseId,
+        'instructorId': instructorId,
         'number': number,
-        'lectures': lectures.map((lecture) => lecture.toJson()).toList(),
+        'type': type.name,
+        'lectureSlots':
+            lectureSlots.map((lecture) => lecture.toJson()).toList(),
         'studentIds': studentIds,
-        'announcementIds': announcementIds
       };
 
-  static Division fromJson(Map<String, dynamic> json) => Division(
+  static Group fromJson(Map<String, dynamic> json) => Group(
         id: json['id'],
         courseId: json['courseId'],
+        instructorId: json['instructorId'],
         number: json['number'],
-        lectures: (json['lectures'] as List<dynamic>)
+        type: getGroupTypeFromString(json['type']),
+        lectureSlots: (json['lectureSlots'] as List<dynamic>)
             .map((lecture) => Lecture.fromJson(lecture))
             .toList(),
         studentIds: (json['studentIds'] as List<dynamic>).cast<String>(),
-        announcementIds:
-            (json['announcementIds'] as List<dynamic>).cast<String>(),
       );
 }
 

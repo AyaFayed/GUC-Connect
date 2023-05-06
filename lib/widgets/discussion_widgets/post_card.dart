@@ -49,7 +49,7 @@ class _PostCardState extends State<PostCard> {
 
   void completeDeletingPost() async {
     try {
-      await _discussionController.deletePost(widget.post.id, widget.courseId);
+      await _discussionController.deletePost(widget.post.id);
       await widget.getData();
       if (mounted) {
         Navigator.pop(context);

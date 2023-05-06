@@ -7,6 +7,7 @@ class NotificationModel {
   String title;
   String body;
   DateTime createdAt;
+  // the id of the event that this notification is about
   String eventId;
   NotificationType notificationType;
 

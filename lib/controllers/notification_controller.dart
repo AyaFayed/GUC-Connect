@@ -1,20 +1,35 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:guc_scheduling_app/database/database.dart';
+import 'package:guc_scheduling_app/controllers/user_controller.dart';
+import 'package:guc_scheduling_app/database/database_references.dart';
+import 'package:guc_scheduling_app/database/reads/announcement_reads.dart';
+import 'package:guc_scheduling_app/database/reads/assignment_reads.dart';
+import 'package:guc_scheduling_app/database/reads/course_reads.dart';
+import 'package:guc_scheduling_app/database/reads/notification_reads.dart';
+import 'package:guc_scheduling_app/database/reads/post_reads.dart';
+import 'package:guc_scheduling_app/database/reads/scheduled_event_reads.dart';
+import 'package:guc_scheduling_app/database/reads/user_reads.dart';
+import 'package:guc_scheduling_app/database/writes/user_writes.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/models/discussion/post_model.dart';
 import 'package:guc_scheduling_app/models/events/announcement_model.dart';
 import 'package:guc_scheduling_app/models/events/assignment_model.dart';
-import 'package:guc_scheduling_app/models/events/compensation/compensation_lecture_model.dart';
-import 'package:guc_scheduling_app/models/events/compensation/compensation_tutorial_model.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
-import 'package:guc_scheduling_app/models/events/quiz_model.dart';
-import 'package:guc_scheduling_app/models/notification_model.dart';
+import 'package:guc_scheduling_app/models/events/scheduled_event.dart';
+import 'package:guc_scheduling_app/models/notification/notification_model.dart';
 import 'package:guc_scheduling_app/models/user/user_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 
 class NotificationController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final UserController _user = UserController();
+  final UserReads _userReads = UserReads();
+  final UserWrites _userWrites = UserWrites();
+  final NotificationReads _notificationReads = NotificationReads();
+  final AssignmentReads _assignmentReads = AssignmentReads();
+  final AnnouncementReads _announcementReads = AnnouncementReads();
+  final PostReads _postReads = PostReads();
+  final ScheduledEventReads _scheduledEventReads = ScheduledEventReads();
+  final CourseReads _courseReads = CourseReads();
 
   Future createNotification(
       List<String> userIds,
@@ -23,7 +38,7 @@ class NotificationController {
       String body,
       String eventId,
       NotificationType notificationType) async {
-    final docNotification = Database.notifications.doc();
+    final docNotification = DatabaseReferences.notifications.doc();
 
     final notification = NotificationModel(
         id: docNotification.id,
@@ -38,27 +53,17 @@ class NotificationController {
 
     await docNotification.set(json);
 
-    final userNotification =
+    UserNotification userNotification =
         UserNotification(id: docNotification.id, seen: false);
 
     List<Future> updates = [];
 
     for (String userId in userIds) {
       if (userId != _auth.currentUser?.uid) {
-        UserModel? user = await Database.getUser(userId);
+        UserModel? user = await _userReads.getUser(userId);
         if (user != null) {
-          if (user.notifications.isEmpty) {
-            user.notifications.add(userNotification);
-            updates.add(Database.users.doc(userId).update({
-              'notifications': user.notifications
-                  .map((notification) => notification.toJson())
-            }));
-          } else {
-            updates.add(Database.users.doc(userId).update({
-              'notifications':
-                  FieldValue.arrayUnion([userNotification.toJson()])
-            }));
-          }
+          updates
+              .add(_userWrites.addNotificationToUser(userId, userNotification));
         }
       }
     }
@@ -67,28 +72,24 @@ class NotificationController {
   }
 
   Future markNotificationAsSeen(String notificationId) async {
-    UserModel? currentUser =
-        await Database.getUser(_auth.currentUser?.uid ?? '');
+    UserModel? currentUser = await _user.getCurrentUser();
     if (currentUser != null) {
-      currentUser.notifications
+      currentUser.userNotifications
           .removeWhere((notification) => notification.id == notificationId);
-      currentUser.notifications
+      currentUser.userNotifications
           .add(UserNotification(id: notificationId, seen: true));
 
-      await Database.users.doc(_auth.currentUser?.uid).update({
-        'notifications': currentUser.notifications
-            .map((notification) => notification.toJson())
-      });
+      await _userWrites.markNotificationAsSeen(
+          currentUser.id, currentUser.userNotifications);
     }
   }
 
   Future<List<NotificationDisplay>> getMyNotifications() async {
-    UserModel? currentUser =
-        await Database.getUser(_auth.currentUser?.uid ?? '');
+    UserModel? currentUser = await _user.getCurrentUser();
     if (currentUser != null) {
       List<NotificationDisplay> notifications =
-          await Database.getNotificationListFromUserNotifications(
-              currentUser.notifications);
+          await _notificationReads.getNotificationListFromUserNotifications(
+              currentUser.userNotifications);
 
       notifications.sort(((NotificationDisplay a, NotificationDisplay b) =>
           b.notification.createdAt.compareTo(a.notification.createdAt)));
@@ -107,39 +108,27 @@ class NotificationController {
         return null;
 
       case NotificationType.announcement:
-        Announcement? announcement = await Database.getAnnouncement(eventId);
+        Announcement? announcement =
+            await _announcementReads.getAnnouncement(eventId);
         if (announcement != null) {
           return DisplayEvent.fromAnnouncement(announcement);
         }
         return null;
 
       case NotificationType.assignment:
-        Assignment? assignment = await Database.getAssignment(eventId);
+        Assignment? assignment = await _assignmentReads.getAssignment(eventId);
         if (assignment != null) {
           return DisplayEvent.fromAssignment(assignment);
         }
         return null;
 
       case NotificationType.quiz:
-        Quiz? quiz = await Database.getQuiz(eventId);
-        if (quiz != null) {
-          return DisplayEvent.fromQuiz(quiz);
-        }
-        return null;
-
       case NotificationType.compensationLecture:
-        CompensationLecture? compensationLecture =
-            await Database.getCompensationLecture(eventId);
-        if (compensationLecture != null) {
-          return DisplayEvent.fromCompensationLecture(compensationLecture);
-        }
-        return null;
-
       case NotificationType.compensationTutorial:
-        CompensationTutorial? compensationTutorial =
-            await Database.getCompensationTutorial(eventId);
-        if (compensationTutorial != null) {
-          return DisplayEvent.fromCompensationTutorial(compensationTutorial);
+        ScheduledEvent? scheduledEvent =
+            await _scheduledEventReads.getScheduledEvent(eventId);
+        if (scheduledEvent != null) {
+          return DisplayEvent.fromScheduledEvent(scheduledEvent);
         }
         return null;
     }
@@ -150,54 +139,39 @@ class NotificationController {
     switch (notificationType) {
       case NotificationType.reply:
       case NotificationType.post:
-        Post? post = await Database.getPost(eventId);
+        Post? post = await _postReads.getPost(eventId);
         if (post != null) {
-          Course? course = await Database.getCourse(post.courseId);
+          Course? course = await _courseReads.getCourse(post.courseId);
           return course;
         }
 
         return null;
 
       case NotificationType.announcement:
-        Announcement? announcement = await Database.getAnnouncement(eventId);
+        Announcement? announcement =
+            await _announcementReads.getAnnouncement(eventId);
         if (announcement != null) {
-          Course? course = await Database.getCourse(announcement.courseId);
+          Course? course = await _courseReads.getCourse(announcement.courseId);
           return course;
         }
         return null;
 
       case NotificationType.assignment:
-        Assignment? assignment = await Database.getAssignment(eventId);
+        Assignment? assignment = await _assignmentReads.getAssignment(eventId);
         if (assignment != null) {
-          Course? course = await Database.getCourse(assignment.courseId);
+          Course? course = await _courseReads.getCourse(assignment.courseId);
           return course;
         }
         return null;
 
       case NotificationType.quiz:
-        Quiz? quiz = await Database.getQuiz(eventId);
-        if (quiz != null) {
-          Course? course = await Database.getCourse(quiz.courseId);
-          return course;
-        }
-        return null;
-
       case NotificationType.compensationLecture:
-        CompensationLecture? compensationLecture =
-            await Database.getCompensationLecture(eventId);
-        if (compensationLecture != null) {
-          Course? course =
-              await Database.getCourse(compensationLecture.courseId);
-          return course;
-        }
-        return null;
-
       case NotificationType.compensationTutorial:
-        CompensationTutorial? compensationTutorial =
-            await Database.getCompensationTutorial(eventId);
-        if (compensationTutorial != null) {
+        ScheduledEvent? scheduledEvent =
+            await _scheduledEventReads.getScheduledEvent(eventId);
+        if (scheduledEvent != null) {
           Course? course =
-              await Database.getCourse(compensationTutorial.courseId);
+              await _courseReads.getCourse(scheduledEvent.courseId);
           return course;
         }
         return null;

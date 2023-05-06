@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/notification_controller.dart';
-import 'package:guc_scheduling_app/models/notification_model.dart';
+import 'package:guc_scheduling_app/models/notification/notification_model.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/notification_widgets/notification_card.dart';
 

@@ -36,7 +36,7 @@ class _ProfessorDrawerState extends State<ProfessorDrawer> {
         confirmBtnText: 'Unenroll',
         cancelBtnText: 'Cancel',
         onConfirmBtnTap: () async {
-          await _enrollmentController.professorUnenroll(widget.courseId);
+          await _enrollmentController.instructorUnenroll(widget.courseId);
           if (context.mounted) {
             Navigator.pop(context);
             Navigator.pop(context);

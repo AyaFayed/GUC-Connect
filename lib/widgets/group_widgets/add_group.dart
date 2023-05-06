@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:guc_scheduling_app/controllers/division_controller.dart';
-import 'package:guc_scheduling_app/models/divisions/division_model.dart';
+import 'package:guc_scheduling_app/controllers/group_controller.dart';
+import 'package:guc_scheduling_app/models/group/group_model.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
@@ -11,18 +11,19 @@ import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/buttons/small_icon_btn.dart';
 import 'package:quickalert/quickalert.dart';
 
-class AddTutorial extends StatefulWidget {
+class AddGroup extends StatefulWidget {
   final String courseId;
-  const AddTutorial({super.key, required this.courseId});
+  final GroupType groupType;
+  const AddGroup({super.key, required this.courseId, required this.groupType});
 
   @override
-  State<AddTutorial> createState() => _AddTutorialState();
+  State<AddGroup> createState() => _AddGroupState();
 }
 
-class _AddTutorialState extends State<AddTutorial> {
-  final controllerTutorialNumber = TextEditingController();
+class _AddGroupState extends State<AddGroup> {
+  final controllerGroupNumber = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final DivisionController _divisionController = DivisionController();
+  final GroupController _groupController = GroupController();
 
   static Lecture lecture = Lecture(day: Day.monday, slot: Slot.first);
   static List<Lecture> lectures = [lecture];
@@ -32,14 +33,12 @@ class _AddTutorialState extends State<AddTutorial> {
     )
   ];
 
-  Future<void> addTutorial() async {
+  Future<void> addGroup() async {
     if (_formKey.currentState!.validate()) {
       try {
-        dynamic result = await _divisionController.createTutorial(
-            widget.courseId,
-            int.parse(controllerTutorialNumber.text),
-            lectures);
-        controllerTutorialNumber.clear();
+        dynamic result = await _groupController.createGroup(widget.courseId,
+            int.parse(controllerGroupNumber.text), lectures, widget.groupType);
+        controllerGroupNumber.clear();
         setState(() {
           lecture = Lecture(day: Day.monday, slot: Slot.first);
           lectures = [lecture];
@@ -55,7 +54,10 @@ class _AddTutorialState extends State<AddTutorial> {
               context: context,
               type: QuickAlertType.success,
               confirmBtnColor: AppColors.confirm,
-              text: Confirmations.addSuccess('tutorial'),
+              text: Confirmations.addSuccess(
+                  widget.groupType == GroupType.lectureGroup
+                      ? 'lecture group'
+                      : 'tutorial group'),
             );
           } else {
             QuickAlert.show(
@@ -81,7 +83,7 @@ class _AddTutorialState extends State<AddTutorial> {
 
   @override
   void dispose() {
-    controllerTutorialNumber.dispose();
+    controllerGroupNumber.dispose();
     super.dispose();
   }
 
@@ -100,9 +102,11 @@ class _AddTutorialState extends State<AddTutorial> {
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly
                 ],
-                decoration: const InputDecoration(labelText: 'Tutorial number'),
+                decoration: InputDecoration(
+                    labelText:
+                        '${widget.groupType == GroupType.lectureGroup ? 'Group' : 'Tutorial'} number'),
                 validator: (val) => val!.isEmpty ? Errors.required : null,
-                controller: controllerTutorialNumber,
+                controller: controllerGroupNumber,
               ),
               const SizedBox(height: 20.0),
               ...addLecture,
@@ -132,7 +136,10 @@ class _AddTutorialState extends State<AddTutorial> {
                     )
                   : const SizedBox(height: 0.0),
               const SizedBox(height: 30.0),
-              LargeBtn(onPressed: addTutorial, text: 'Add tutorial'),
+              LargeBtn(
+                  onPressed: addGroup,
+                  text:
+                      'Create ${widget.groupType == GroupType.lectureGroup ? 'group' : 'tutorial'}'),
             ],
           ),
         )));

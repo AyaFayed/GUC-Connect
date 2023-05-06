@@ -3,7 +3,7 @@ import 'package:guc_scheduling_app/controllers/notification_controller.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
-import 'package:guc_scheduling_app/models/notification_model.dart';
+import 'package:guc_scheduling_app/models/notification/notification_model.dart';
 import 'package:guc_scheduling_app/screens/event/event_details.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/professor_course.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/ta_course.dart';

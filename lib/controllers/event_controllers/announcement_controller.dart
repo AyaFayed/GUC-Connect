@@ -1,114 +1,85 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/event_controllers_helper.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
-import 'package:guc_scheduling_app/models/divisions/group_model.dart';
-import 'package:guc_scheduling_app/models/divisions/tutorial_model.dart';
+import 'package:guc_scheduling_app/database/database_references.dart';
+import 'package:guc_scheduling_app/database/reads/announcement_reads.dart';
+import 'package:guc_scheduling_app/database/reads/group_reads.dart';
+import 'package:guc_scheduling_app/database/writes/announcement_writes.dart';
 import 'package:guc_scheduling_app/models/events/announcement_model.dart';
-import 'package:guc_scheduling_app/models/user/student_model.dart';
+import 'package:guc_scheduling_app/models/group/group_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 
 class AnnouncementController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final EventsControllerHelper _helper = EventsControllerHelper();
   final UserController _user = UserController();
+  final AnnouncementReads _announcementReads = AnnouncementReads();
+  final AnnouncementWrites _announcementWrites = AnnouncementWrites();
+  final GroupReads _groupReads = GroupReads();
 
   Future createAnnouncement(
-      String courseId,
-      String courseName,
-      String title,
-      String description,
-      String? file,
-      List<String> groups,
-      List<String> tutorials) async {
-    UserType userType = await _user.getCurrentUserType();
+    String courseId,
+    String courseName,
+    String title,
+    String description,
+    String? file,
+    List<String> groupIds,
+  ) async {
+    bool isCurrentUserInstructor = await _user.isCurrentUserInstructor();
 
-    if (userType == UserType.ta || userType == UserType.professor) {
-      final docAnnouncement = Database.announcements.doc();
+    if (isCurrentUserInstructor) {
+      final docAnnouncement = DatabaseReferences.announcements.doc();
 
       final announcement = Announcement(
           id: docAnnouncement.id,
-          creatorId: _auth.currentUser?.uid ?? '',
+          instructorId: _auth.currentUser?.uid ?? '',
           courseId: courseId,
           title: title,
           description: description,
           file: file,
-          groupIds: groups,
-          tutorialIds: tutorials,
+          groupIds: groupIds,
           createdAt: DateTime.now());
 
       final json = announcement.toJson();
 
       await docAnnouncement.set(json);
 
-      await _helper.addEventToInstructor(
-          courseId, docAnnouncement.id, EventType.announcements);
-
-      await _helper.addEventInDivisions(
-          courseName,
-          docAnnouncement.id,
-          EventType.announcements,
-          DivisionType.groups,
-          groups,
-          courseName,
-          title);
-
-      await _helper.addEventInDivisions(
-          courseName,
-          docAnnouncement.id,
-          EventType.announcements,
-          DivisionType.tutorials,
-          tutorials,
-          courseName,
-          title);
+      await _helper.notifyGroupsAboutEvent(courseName, docAnnouncement.id,
+          EventType.announcement, groupIds, courseName, title);
     }
   }
 
   Future<List<Announcement>> getGroupAnnouncements(String groupId) async {
-    Group? group = await Database.getGroup(groupId);
-
-    if (group != null) {
-      return await Database.getAnnouncementListFromIds(group.announcementIds);
-    } else {
-      return [];
-    }
-  }
-
-  Future<List<Announcement>> getTutorialAnnouncements(String tutorialId) async {
-    Tutorial? tutorial = await Database.getTutorial(tutorialId);
-
-    if (tutorial != null) {
-      return await Database.getAnnouncementListFromIds(
-          tutorial.announcementIds);
-    } else {
-      return [];
-    }
-  }
-
-// my group and my tutorial
-  Future<List<Announcement>> getCourseAnnouncements(String courseId) async {
-    Student? student = await Database.getStudent(_auth.currentUser?.uid ?? '');
-    if (student != null) {
-      for (StudentCourse course in student.courses) {
-        if (courseId == course.id) {
-          List<Announcement> groupAnnouncements =
-              await getGroupAnnouncements(course.group);
-          List<Announcement> tutorialAnnouncements =
-              await getTutorialAnnouncements(course.tutorial);
-          groupAnnouncements.addAll(tutorialAnnouncements);
-          groupAnnouncements.sort(((Announcement a, Announcement b) =>
-              b.createdAt.compareTo(a.createdAt)));
-          return groupAnnouncements;
-        }
-      }
-    }
-    return [];
+    return await _announcementReads.getGroupAnnouncements(groupId);
   }
 
   Future<List<Announcement>> getMyAnnouncements(String courseId) async {
-    List<Announcement> announcements = (await _helper.getEventsofInstructor(
-            courseId, EventType.announcements) as List<dynamic>)
-        .cast<Announcement>();
+    if (_auth.currentUser == null) return [];
+    List<Announcement> announcements = await _announcementReads
+        .getInstructorAnnouncements(_auth.currentUser?.uid ?? '', courseId);
+    announcements.sort(((Announcement a, Announcement b) =>
+        b.createdAt.compareTo(a.createdAt)));
+
+    return announcements;
+  }
+
+  Future<List<Announcement>> getCourseAnnouncements(String courseId) async {
+    if (_auth.currentUser == null) return [];
+
+    Group? studentLectureGroup = await _groupReads.getStudentCourseLectureGroup(
+        courseId, _auth.currentUser?.uid ?? '');
+    Group? studentTutorialGroup = await _groupReads
+        .getStudentCourseTutorialGroup(courseId, _auth.currentUser?.uid ?? '');
+
+    List<Announcement> announcements = [];
+    if (studentLectureGroup != null) {
+      announcements.addAll(await getGroupAnnouncements(studentLectureGroup.id));
+    }
+
+    if (studentTutorialGroup != null) {
+      announcements
+          .addAll(await getGroupAnnouncements(studentTutorialGroup.id));
+    }
     announcements.sort(((Announcement a, Announcement b) =>
         b.createdAt.compareTo(a.createdAt)));
 
@@ -116,33 +87,17 @@ class AnnouncementController {
   }
 
   Future deleteAnnouncement(String courseName, String announcementId) async {
-    UserType userType = await _user.getCurrentUserType();
+    bool isCurrentUserInstructor = await _user.isCurrentUserInstructor();
 
-    if (userType == UserType.professor) {
+    if (isCurrentUserInstructor) {
       Announcement? announcement =
-          await Database.getAnnouncement(announcementId);
+          await _announcementReads.getAnnouncement(announcementId);
 
       if (announcement != null) {
-        await _helper.removeEventFromDivisions(
-            announcementId,
-            EventType.announcements,
-            DivisionType.groups,
-            announcement.groupIds,
-            courseName,
-            '${announcement.title} was removed');
+        await _helper.notifyGroupsAboutRemovedEvent(announcement.groupIds,
+            courseName, '${announcement.title} was removed');
 
-        await _helper.removeEventFromDivisions(
-            announcementId,
-            EventType.announcements,
-            DivisionType.tutorials,
-            announcement.tutorialIds,
-            courseName,
-            '${announcement.title} was removed');
-
-        await _helper.removeEventFromInstructor(
-            announcement.courseId, announcementId, EventType.announcements);
-
-        await Database.announcements.doc(announcementId).delete();
+        await _announcementWrites.deleteAnnouncement(announcementId);
       }
     }
   }

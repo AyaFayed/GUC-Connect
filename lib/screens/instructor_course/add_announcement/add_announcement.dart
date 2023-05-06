@@ -49,8 +49,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
           controllerTitle.text,
           controllerDescription.text,
           fileUrl,
-          _userType == UserType.professor ? selectedGroupIds : [],
-          _userType == UserType.ta ? selectedGroupIds : [],
+          selectedGroupIds,
         );
         controllerTitle.clear();
         controllerDescription.clear();
@@ -121,7 +120,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
                         courseId: widget.courseId),
                     const SizedBox(height: 40.0),
                     LargeBtn(
-                        onPressed: addAnnouncement, text: 'Add announcement'),
+                        onPressed: addAnnouncement, text: 'Send announcement'),
                   ],
                 ),
               )));

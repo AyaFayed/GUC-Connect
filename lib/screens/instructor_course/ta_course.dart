@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/screens/discussion/discussion.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/add_announcement/add_announcement.dart';
-import 'package:guc_scheduling_app/screens/instructor_course/add_division/add_tutorial.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/add_group/add_tutorial_group.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/schedule_event/schedule_compensation_tutorial.dart';
 import 'package:guc_scheduling_app/widgets/bottom_bars/ta_bottom_bar.dart';
 import 'package:guc_scheduling_app/widgets/drawers/ta_drawer.dart';
@@ -33,7 +33,7 @@ class _TACourseState extends State<TACourse> {
       AddAnnouncement(courseId: widget.courseId, courseName: widget.courseName),
       ScheduleCompensationTutorial(
           courseId: widget.courseId, courseName: widget.courseName),
-      AddTutorial(
+      AddTutorialGroup(
         courseId: widget.courseId,
       ),
       Discussion(

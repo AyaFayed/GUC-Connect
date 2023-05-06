@@ -34,7 +34,7 @@ class _TADrawerState extends State<TADrawer> {
         confirmBtnText: 'Unenroll',
         cancelBtnText: 'Cancel',
         onConfirmBtnTap: () async {
-          await _enrollmentController.taUnenroll(widget.courseId);
+          await _enrollmentController.instructorUnenroll(widget.courseId);
           if (context.mounted) {
             Navigator.pop(context);
             Navigator.pop(context);

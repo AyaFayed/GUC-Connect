@@ -11,16 +11,16 @@ enum Slot {
 }
 
 enum EventType {
-  announcements,
-  assignments,
-  quizzes,
-  compensationLectures,
-  compensationTutorials
+  announcement,
+  assignment,
+  quiz,
+  compensationLecture,
+  compensationTutorial
 }
 
-enum DivisionType { groups, tutorials }
+enum GroupType { lectureGroup, tutorialGroup }
 
-enum InstructorType { professors, tas }
+enum InstructorType { professor, ta }
 
 enum NotificationType {
   post,

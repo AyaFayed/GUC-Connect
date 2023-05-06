@@ -1,16 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
-import 'package:guc_scheduling_app/database/database.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/event_controllers_helper.dart';
-import 'package:guc_scheduling_app/models/divisions/group_model.dart';
+import 'package:guc_scheduling_app/database/database_references.dart';
+import 'package:guc_scheduling_app/database/reads/assignment_reads.dart';
+import 'package:guc_scheduling_app/database/reads/group_reads.dart';
+import 'package:guc_scheduling_app/database/writes/assignment_writes.dart';
 import 'package:guc_scheduling_app/models/events/assignment_model.dart';
-import 'package:guc_scheduling_app/models/user/student_model.dart';
+import 'package:guc_scheduling_app/models/group/group_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 
 class AssignmentController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final EventsControllerHelper _helper = EventsControllerHelper();
   final UserController _user = UserController();
+
+  final AssignmentReads _assignmentReads = AssignmentReads();
+  final AssignmentWrites _assignmentWrites = AssignmentWrites();
+  final GroupReads _groupReads = GroupReads();
 
   Future scheduleAssignment(
       String courseId,
@@ -23,11 +29,11 @@ class AssignmentController {
     UserType userType = await _user.getCurrentUserType();
 
     if (userType == UserType.professor) {
-      final docAssignment = Database.assignments.doc();
+      final docAssignment = DatabaseReferences.assignments.doc();
 
       final assignment = Assignment(
           id: docAssignment.id,
-          creatorId: _auth.currentUser?.uid ?? '',
+          instructorId: _auth.currentUser?.uid ?? '',
           courseId: courseId,
           title: title,
           description: description,
@@ -39,90 +45,53 @@ class AssignmentController {
 
       await docAssignment.set(json);
 
-      await _helper.addEventToInstructor(
-          courseId, docAssignment.id, EventType.assignments);
-
-      await _helper.addEventInDivisions(
-          courseName,
-          docAssignment.id,
-          EventType.assignments,
-          DivisionType.groups,
-          groupIds,
-          courseName,
-          title);
+      await _helper.notifyGroupsAboutEvent(courseName, docAssignment.id,
+          EventType.assignment, groupIds, courseName, title);
     }
   }
 
   Future<List<Assignment>> getGroupAssignments(String groupId) async {
-    Group? group = await Database.getGroup(groupId);
-
-    if (group != null) {
-      return await Database.getAssignmentListFromIds(group.assignmentIds);
-    } else {
-      return [];
-    }
+    return await _assignmentReads.getGroupAssignments(groupId);
   }
 
-  Future<List<Assignment>> getAssignments(String courseId) async {
-    Student? student = await Database.getStudent(_auth.currentUser?.uid ?? '');
-    if (student != null) {
-      for (StudentCourse course in student.courses) {
-        if (course.id == courseId) {
-          List<Assignment> assignments =
-              await getGroupAssignments(course.group);
-          assignments.sort(((Assignment a, Assignment b) =>
-              a.deadline.compareTo(b.deadline)));
-          return assignments;
-        }
-      }
-    }
-    return [];
-  }
+  Future<List<Assignment>> getCourseAssignments(String courseId) async {
+    if (_auth.currentUser == null) return [];
 
-  Future<List<Assignment>> getMyAssignments(String courseId) async {
-    List<Assignment> assignments = (await _helper.getEventsofInstructor(
-            courseId, EventType.assignments) as List<dynamic>)
-        .cast<Assignment>();
+    Group? studentLectureGroup = await _groupReads.getStudentCourseLectureGroup(
+        courseId, _auth.currentUser?.uid ?? '');
+
+    List<Assignment> assignments = [];
+    if (studentLectureGroup != null) {
+      assignments.addAll(await getGroupAssignments(studentLectureGroup.id));
+    }
+
     assignments.sort(
         ((Assignment a, Assignment b) => a.deadline.compareTo(b.deadline)));
+
     return assignments;
   }
 
-  static Future<List<String>> editAssignment(String assignmentId, String title,
-      String description, String? file, DateTime deadline) async {
-    await Database.assignments
-        .doc(assignmentId)
-        .update(Assignment.toJsonUpdate(title, description, file, deadline));
-
-    Assignment? assignment = await Database.getAssignment(assignmentId);
-    List<String> studentIds = [];
-
-    if (assignment != null) {
-      studentIds = await Database.getDivisionsStudentIds(
-          assignment.groupIds, DivisionType.groups);
-    }
-
-    return studentIds;
+  Future<List<Assignment>> getMyAssignments(String courseId) async {
+    if (_auth.currentUser == null) return [];
+    List<Assignment> assignments = await _assignmentReads
+        .getInstructorAssignments(_auth.currentUser?.uid ?? '', courseId);
+    assignments.sort(
+        ((Assignment a, Assignment b) => a.deadline.compareTo(b.deadline)));
+    return assignments;
   }
 
   Future deleteAssignment(String courseName, String assignmentId) async {
     UserType userType = await _user.getCurrentUserType();
 
     if (userType == UserType.professor) {
-      Assignment? assignment = await Database.getAssignment(assignmentId);
+      Assignment? assignment =
+          await _assignmentReads.getAssignment(assignmentId);
 
       if (assignment != null) {
-        await _helper.removeEventFromDivisions(
-            assignmentId,
-            EventType.assignments,
-            DivisionType.groups,
-            assignment.groupIds,
-            courseName,
-            '${assignment.title} was removed');
-        await _helper.removeEventFromInstructor(
-            assignment.courseId, assignmentId, EventType.assignments);
+        await _helper.notifyGroupsAboutRemovedEvent(
+            assignment.groupIds, courseName, '${assignment.title} was removed');
 
-        await Database.assignments.doc(assignmentId).delete();
+        await _assignmentWrites.deleteAssignment(assignmentId);
       }
     }
   }
