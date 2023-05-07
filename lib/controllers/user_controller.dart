@@ -103,14 +103,4 @@ class UserController {
     await _userWrites.updateAllowPostNotifications(
         _auth.currentUser?.uid ?? '', value);
   }
-
-  Future addToken(String token) async {
-    if (_auth.currentUser == null) return;
-    await _userWrites.addTokenToUser(_auth.currentUser?.uid ?? '', token);
-  }
-
-  Future removeToken(String token) async {
-    if (_auth.currentUser == null) return;
-    await _userWrites.removeTokenFromUser(_auth.currentUser?.uid ?? '', token);
-  }
 }

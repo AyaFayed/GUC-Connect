@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:guc_scheduling_app/controllers/user_controller.dart';
+import 'package:guc_scheduling_app/database/writes/user_writes.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MessagingService {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
-  final UserController _userController = UserController();
+  final UserWrites _userWrites = UserWrites();
 
   void requestPermission() async {
     NotificationSettings settings = await _messaging.requestPermission(
@@ -39,7 +39,7 @@ class MessagingService {
     String? token = await getToken();
 
     if (token != null) {
-      await _userController.addToken(token);
+      await _userWrites.addToken(token);
     }
   }
 
@@ -47,7 +47,7 @@ class MessagingService {
     String? token = await getToken();
 
     if (token != null) {
-      await _userController.removeToken(token);
+      await _userWrites.removeToken(token);
     }
   }
 

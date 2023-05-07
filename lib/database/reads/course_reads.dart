@@ -17,6 +17,8 @@ class CourseReads {
   }
 
   Future<List<Course>> getCourseListFromIds(List<String> ids) async {
+    if (ids.isEmpty) return [];
+
     QuerySnapshot querySnapshot =
         await _courses.where('id', whereIn: ids).get();
 

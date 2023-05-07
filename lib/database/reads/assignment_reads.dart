@@ -18,6 +18,8 @@ class AssignmentReads {
 
   Future<List<Assignment>> getAssignmentListFromIds(
       List<String> eventIds) async {
+    if (eventIds.isEmpty) return [];
+
     QuerySnapshot querySnapshot =
         await _assignments.where('id', whereIn: eventIds).get();
 

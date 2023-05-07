@@ -20,6 +20,10 @@ class _AuthBtnState extends State<AuthBtn> {
     });
 
     await widget.onPressed();
+
+    setState(() {
+      _isButtonDisabled = false;
+    });
   }
 
   @override

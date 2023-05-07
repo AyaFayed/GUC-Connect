@@ -18,6 +18,8 @@ class AnnouncementReads {
 
   Future<List<Announcement>> getAnnouncementListFromIds(
       List<String> eventIds) async {
+    if (eventIds.isEmpty) return [];
+
     QuerySnapshot querySnapshot =
         await _announcements.where('id', whereIn: eventIds).get();
 

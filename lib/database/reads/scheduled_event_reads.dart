@@ -20,6 +20,8 @@ class ScheduledEventReads {
 
   Future<List<ScheduledEvent>> getScheduledEventListFromIds(
       List<String> eventIds) async {
+    if (eventIds.isEmpty) return [];
+
     QuerySnapshot querySnapshot =
         await _scheduledEvents.where('id', whereIn: eventIds).get();
 
