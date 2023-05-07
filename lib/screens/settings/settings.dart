@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
-import 'package:guc_scheduling_app/screens/authenticate/authenticate.dart';
+import 'package:guc_scheduling_app/models/user/user_model.dart';
 import 'package:guc_scheduling_app/services/authentication_service.dart';
 import 'package:guc_scheduling_app/services/messaging_service.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
-import 'package:guc_scheduling_app/widgets/buttons/set_reminder_text_button.dart';
+import 'package:guc_scheduling_app/widgets/buttons/auth_btn.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -17,13 +17,18 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   final AuthService _auth = AuthService();
   final UserController _userController = UserController();
-  UserType? _currentUserType;
+  UserModel? _currentUser;
   final MessagingService _messaging = MessagingService();
 
+  Future<void> setPostNotifications(bool val) async {
+    await _userController.updateAllowPostNotifications(val);
+    await _getData();
+  }
+
   Future<void> _getData() async {
-    UserType? currentUserType = await _userController.getCurrentUserType();
+    UserModel? currentUser = await _userController.getCurrentUser();
     setState(() {
-      _currentUserType = currentUserType;
+      _currentUser = currentUser;
     });
   }
 
@@ -38,51 +43,35 @@ class _SettingsState extends State<Settings> {
     return SingleChildScrollView(
       child: Center(
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-          child: _currentUserType == null
+          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
+          child: _currentUser == null
               ? const CircularProgressIndicator()
               : Column(
                   children: [
                     const SizedBox(
                       height: 20,
                     ),
-                    if (_currentUserType == UserType.student)
-                      Column(
-                        children: const [
-                          SetReminderTextButton(
-                              title: 'Set reminder for quizzes'),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          SetReminderTextButton(
-                              title: 'Set reminder for assignments'),
-                          SizedBox(
-                            height: 10,
-                          ),
-                        ],
-                      ),
-                    TextButton.icon(
-                      onPressed: () async {
-                        await _messaging.removeToken();
-                        await _auth.logout();
-                        if (context.mounted) {
-                          while (Navigator.canPop(context)) {
-                            Navigator.pop(context);
-                          }
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Authenticate()),
-                          );
-                        }
-                      },
-                      icon: const Icon(Icons.logout),
-                      label: Text(
-                        'Log out',
-                        style: TextStyle(fontSize: Sizes.small),
-                      ),
-                    )
+                    SwitchListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 0),
+                        title: Text(
+                          'Receive post notifications',
+                          style: TextStyle(fontSize: Sizes.small),
+                        ),
+                        subtitle: const Text(
+                          'When you turn this off, you will not get notifications when new posts are added to courses you are enrolled in.',
+                        ),
+                        value: _currentUser?.allowPostNotifications ?? true,
+                        onChanged: setPostNotifications),
+                    const SizedBox(
+                      height: 60,
+                    ),
+                    AuthBtn(
+                        onPressed: () async {
+                          await _messaging.removeToken();
+                          await _auth.logout();
+                        },
+                        text: 'Log out')
                   ],
                 ),
         ),

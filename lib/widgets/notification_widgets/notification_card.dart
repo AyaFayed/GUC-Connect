@@ -40,14 +40,6 @@ class _NotificationCardState extends State<NotificationCard> {
       if (context.mounted) {
         switch (currentUserType) {
           case null:
-            while (Navigator.canPop(context)) {
-              Navigator.pop(context);
-            }
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Authenticate()),
-            );
             break;
           case UserType.student:
             Navigator.push(
