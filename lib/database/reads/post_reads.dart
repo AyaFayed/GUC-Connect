@@ -7,43 +7,59 @@ class PostReads {
       DatabaseReferences.posts;
 
   Future<Post?> getPost(String postId) async {
-    final postData = await DatabaseReferences.getDocumentData(
-        DatabaseReferences.posts, postId);
-    if (postData != null) {
-      Post post = Post.fromJson(postData);
-      return post;
+    try {
+      final postData = await DatabaseReferences.getDocumentData(
+          DatabaseReferences.posts, postId);
+      if (postData != null) {
+        Post post = Post.fromJson(postData);
+        return post;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 
   Future<List<Post>> getAllPosts() async {
-    QuerySnapshot querySnapshot = await _posts.get();
+    try {
+      QuerySnapshot querySnapshot = await _posts.get();
 
-    List<Post> allPosts = querySnapshot.docs
-        .map((doc) => Post.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return allPosts;
+      List<Post> allPosts = querySnapshot.docs
+          .map((doc) => Post.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return allPosts;
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<Post>> getCoursePosts(String courseId) async {
-    QuerySnapshot querySnapshot =
-        await _posts.where('courseId', isEqualTo: courseId).get();
+    try {
+      QuerySnapshot querySnapshot =
+          await _posts.where('courseId', isEqualTo: courseId).get();
 
-    List<Post> posts = querySnapshot.docs
-        .map((doc) => Post.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return posts;
+      List<Post> posts = querySnapshot.docs
+          .map((doc) => Post.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return posts;
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<Post>> getUserPosts(String courseId, String userId) async {
-    QuerySnapshot querySnapshot = await _posts
-        .where('authorId', isEqualTo: userId)
-        .where('courseId', isEqualTo: courseId)
-        .get();
+    try {
+      QuerySnapshot querySnapshot = await _posts
+          .where('authorId', isEqualTo: userId)
+          .where('courseId', isEqualTo: courseId)
+          .get();
 
-    List<Post> posts = querySnapshot.docs
-        .map((doc) => Post.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return posts;
+      List<Post> posts = querySnapshot.docs
+          .map((doc) => Post.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return posts;
+    } catch (e) {
+      return [];
+    }
   }
 }

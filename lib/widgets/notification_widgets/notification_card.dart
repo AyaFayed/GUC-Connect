@@ -4,6 +4,8 @@ import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/models/notification/notification_model.dart';
+import 'package:guc_scheduling_app/screens/authenticate/authenticate.dart';
+import 'package:guc_scheduling_app/screens/authenticate/login.dart';
 import 'package:guc_scheduling_app/screens/event/event_details.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/professor_course.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/ta_course.dart';
@@ -27,7 +29,7 @@ class _NotificationCardState extends State<NotificationCard> {
   final UserController _userController = UserController();
 
   Future<void> redirect() async {
-    UserType currentUserType = await _userController.getCurrentUserType();
+    UserType? currentUserType = await _userController.getCurrentUserType();
     if (widget.displayNotification.notification.notificationType ==
             NotificationType.post ||
         widget.displayNotification.notification.notificationType ==
@@ -37,6 +39,15 @@ class _NotificationCardState extends State<NotificationCard> {
           widget.displayNotification.notification.notificationType);
       if (context.mounted) {
         switch (currentUserType) {
+          case null:
+            while (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Authenticate()),
+            );
+            break;
           case UserType.student:
             Navigator.push(
               context,

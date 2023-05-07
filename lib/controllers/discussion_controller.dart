@@ -110,7 +110,7 @@ class DiscussionController {
 
     if (post != null) {
       if (post.authorId != _auth.currentUser?.uid) {
-        UserType userType = await _user.getCurrentUserType();
+        UserType? userType = await _user.getCurrentUserType();
         if (userType != UserType.professor) return false;
       }
       return true;
@@ -124,7 +124,7 @@ class DiscussionController {
 
     if (post != null) {
       if (reply.authorId != _auth.currentUser?.uid) {
-        UserType userType = await _user.getCurrentUserType();
+        UserType? userType = await _user.getCurrentUserType();
         if (userType != UserType.professor) return;
       }
 

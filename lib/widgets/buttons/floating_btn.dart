@@ -20,9 +20,11 @@ class _FloatingBtnState extends State<FloatingBtn> {
 
     await widget.onPressed();
 
-    setState(() {
-      _isButtonDisabled = false;
-    });
+    if (context.mounted) {
+      setState(() {
+        _isButtonDisabled = false;
+      });
+    }
   }
 
   @override

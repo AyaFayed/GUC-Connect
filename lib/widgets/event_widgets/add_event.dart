@@ -50,7 +50,7 @@ class _AddEventState extends State<AddEvent> {
   }
 
   Future<void> _getData() async {
-    UserType userType = await _userController.getCurrentUserType();
+    UserType? userType = await _userController.getCurrentUserType();
 
     setState(() {
       _userType = userType;
@@ -79,7 +79,6 @@ class _AddEventState extends State<AddEvent> {
               minLines: 1,
               maxLines: 7,
               decoration: const InputDecoration(labelText: 'Description'),
-              validator: (val) => val!.isEmpty ? Errors.required : null,
               controller: widget.controllerDescription,
             ),
             const SizedBox(height: 20.0),

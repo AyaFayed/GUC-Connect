@@ -36,7 +36,7 @@ class _MyAnnouncementsState extends State<MyAnnouncements> {
       return DisplayEvent.fromAnnouncement(announcement);
     }));
 
-    UserType currentUserType = await _userController.getCurrentUserType();
+    UserType? currentUserType = await _userController.getCurrentUserType();
     setState(() {
       _events = events;
       _currentUserType = currentUserType;

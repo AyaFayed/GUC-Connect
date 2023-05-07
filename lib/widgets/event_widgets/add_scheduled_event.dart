@@ -148,49 +148,53 @@ class _AddScheduledEventState extends State<AddScheduledEvent> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              const SizedBox(height: 7.0),
-              DateTimeSelector(onConfirm: setDateTime, dateTime: startDateTime),
-              error.isNotEmpty
-                  ? const SizedBox(
-                      height: 5.0,
-                    )
-                  : const SizedBox(
-                      height: 0.0,
-                    ),
-              Text(
-                error,
-                style: TextStyle(color: AppColors.error, fontSize: 13.0),
-              ),
-              const SizedBox(height: 5.0),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
+    return SingleChildScrollView(
+        child: Container(
+            padding:
+                const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  const SizedBox(height: 7.0),
+                  DateTimeSelector(
+                      onConfirm: setDateTime, dateTime: startDateTime),
+                  error.isNotEmpty
+                      ? const SizedBox(
+                          height: 5.0,
+                        )
+                      : const SizedBox(
+                          height: 0.0,
+                        ),
+                  Text(
+                    error,
+                    style: TextStyle(color: AppColors.error, fontSize: 13.0),
+                  ),
+                  const SizedBox(height: 5.0),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    decoration:
+                        const InputDecoration(labelText: 'Duration in minutes'),
+                    validator: (val) => val!.isEmpty ? Errors.duration : null,
+                    controller: controllerDuration,
+                  ),
+                  const SizedBox(height: 20.0),
+                  AddEvent(
+                      controllerTitle: controllerTitle,
+                      controllerDescription: controllerDescription,
+                      file: file,
+                      selectedGroupIds: selectedGroupIds,
+                      courseId: widget.courseId),
+                  const SizedBox(height: 40.0),
+                  LargeBtn(
+                      onPressed: scheduleEvent,
+                      text:
+                          'Schedule ${widget.eventType == EventType.quiz ? 'quiz' : 'compensation'}'),
                 ],
-                decoration:
-                    const InputDecoration(labelText: 'Duration in minutes'),
-                validator: (val) => val!.isEmpty ? Errors.duration : null,
-                controller: controllerDuration,
               ),
-              const SizedBox(height: 20.0),
-              AddEvent(
-                  controllerTitle: controllerTitle,
-                  controllerDescription: controllerDescription,
-                  file: file,
-                  selectedGroupIds: selectedGroupIds,
-                  courseId: widget.courseId),
-              const SizedBox(height: 40.0),
-              LargeBtn(
-                  onPressed: scheduleEvent,
-                  text: 'Schedule ${formatEventType(widget.eventType)}'),
-            ],
-          ),
-        ));
+            )));
   }
 }

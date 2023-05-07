@@ -80,7 +80,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
   }
 
   Future<void> _getData() async {
-    UserType userType = await _userController.getCurrentUserType();
+    UserType? userType = await _userController.getCurrentUserType();
 
     setState(() {
       _userType = userType;

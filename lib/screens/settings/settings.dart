@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
+import 'package:guc_scheduling_app/screens/authenticate/authenticate.dart';
 import 'package:guc_scheduling_app/services/authentication_service.dart';
 import 'package:guc_scheduling_app/services/messaging_service.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
@@ -20,7 +21,7 @@ class _SettingsState extends State<Settings> {
   final MessagingService _messaging = MessagingService();
 
   Future<void> _getData() async {
-    UserType currentUserType = await _userController.getCurrentUserType();
+    UserType? currentUserType = await _userController.getCurrentUserType();
     setState(() {
       _currentUserType = currentUserType;
     });
@@ -64,6 +65,16 @@ class _SettingsState extends State<Settings> {
                       onPressed: () async {
                         await _messaging.removeToken();
                         await _auth.logout();
+                        if (context.mounted) {
+                          while (Navigator.canPop(context)) {
+                            Navigator.pop(context);
+                          }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Authenticate()),
+                          );
+                        }
                       },
                       icon: const Icon(Icons.logout),
                       label: Text(

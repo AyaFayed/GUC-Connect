@@ -7,36 +7,44 @@ class UserReads {
       DatabaseReferences.users;
 
   Future<UserModel?> getUser(String userId) async {
-    final userIdData = await DatabaseReferences.getDocumentData(
-        DatabaseReferences.users, userId);
-    if (userIdData != null) {
-      try {
+    try {
+      final userIdData = await DatabaseReferences.getDocumentData(
+          DatabaseReferences.users, userId);
+      if (userIdData != null) {
         UserModel user = UserModel.fromJson(userIdData);
         return user;
-      } catch (e) {
-        return null;
       }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 
   Future<List<UserModel>> getAllUsers() async {
-    QuerySnapshot querySnapshot = await _users.get();
+    try {
+      QuerySnapshot querySnapshot = await _users.get();
 
-    List<UserModel> allUsers = querySnapshot.docs
-        .map((doc) => UserModel.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return allUsers;
+      List<UserModel> allUsers = querySnapshot.docs
+          .map((doc) => UserModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return allUsers;
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<UserModel>> getAllUserIdsEnrolledInACourse(
       String courseId) async {
-    QuerySnapshot querySnapshot =
-        await _users.where('courseIds', arrayContains: courseId).get();
+    try {
+      QuerySnapshot querySnapshot =
+          await _users.where('courseIds', arrayContains: courseId).get();
 
-    List<UserModel> users = querySnapshot.docs
-        .map((doc) => UserModel.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return users;
+      List<UserModel> users = querySnapshot.docs
+          .map((doc) => UserModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return users;
+    } catch (e) {
+      return [];
+    }
   }
 }

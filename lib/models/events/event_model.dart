@@ -74,7 +74,8 @@ class DisplayEvent {
       Announcement announcement) async {
     UserController userController = UserController();
     UserType userType =
-        await userController.getUserType(announcement.instructorId);
+        await userController.getUserType(announcement.instructorId) ??
+            UserType.student;
     String instructorName =
         await userController.getUserName(announcement.instructorId);
     return DisplayEvent(

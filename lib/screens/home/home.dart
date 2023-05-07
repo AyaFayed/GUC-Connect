@@ -4,6 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/screens/Course/my_courses.dart';
 import 'package:guc_scheduling_app/screens/admin/admin_home.dart';
+import 'package:guc_scheduling_app/screens/authenticate/authenticate.dart';
 import 'package:guc_scheduling_app/screens/calendar/calendar.dart';
 import 'package:guc_scheduling_app/screens/notifications/notifications.dart';
 import 'package:guc_scheduling_app/screens/settings/settings.dart';
@@ -91,7 +92,18 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> _getData() async {
-    UserType currentUserType = await _userController.getCurrentUserType();
+    UserType? currentUserType = await _userController.getCurrentUserType();
+    if (currentUserType == null) {
+      if (context.mounted) {
+        while (Navigator.canPop(context)) {
+          Navigator.pop(context);
+        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Authenticate()),
+        );
+      }
+    }
     setState(() {
       _currentUserType = currentUserType;
     });

@@ -52,7 +52,7 @@ class AuthService {
   }
 
   Future addAdmin(String email, String password) async {
-    UserType currentUserType = await _user.getCurrentUserType();
+    UserType? currentUserType = await _user.getCurrentUserType();
     if (currentUserType != UserType.admin) return;
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(

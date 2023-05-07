@@ -22,9 +22,11 @@ class _SmallBtnState extends State<SmallBtn> {
 
     await widget.onPressed();
 
-    setState(() {
-      _isButtonDisabled = false;
-    });
+    if (context.mounted) {
+      setState(() {
+        _isButtonDisabled = false;
+      });
+    }
   }
 
   @override

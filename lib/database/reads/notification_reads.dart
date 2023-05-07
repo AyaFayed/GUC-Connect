@@ -4,44 +4,56 @@ import 'package:guc_scheduling_app/models/user/user_model.dart';
 
 class NotificationReads {
   Future<NotificationModel?> getNotification(String notificationId) async {
-    final notificationData = await DatabaseReferences.getDocumentData(
-        DatabaseReferences.notifications, notificationId);
-    if (notificationData != null) {
-      NotificationModel notification =
-          NotificationModel.fromJson(notificationData);
-      return notification;
+    try {
+      final notificationData = await DatabaseReferences.getDocumentData(
+          DatabaseReferences.notifications, notificationId);
+      if (notificationData != null) {
+        NotificationModel notification =
+            NotificationModel.fromJson(notificationData);
+        return notification;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 
   Future<NotificationDisplay?> getDisplayNotification(
       UserNotification userNotification) async {
-    final notificationData = await DatabaseReferences.getDocumentData(
-        DatabaseReferences.notifications, userNotification.id);
+    try {
+      final notificationData = await DatabaseReferences.getDocumentData(
+          DatabaseReferences.notifications, userNotification.id);
 
-    if (notificationData != null) {
-      NotificationModel notification =
-          NotificationModel.fromJson(notificationData);
-      NotificationDisplay notificationDisplay = NotificationDisplay(
-          notification: notification, seen: userNotification.seen);
-      return notificationDisplay;
+      if (notificationData != null) {
+        NotificationModel notification =
+            NotificationModel.fromJson(notificationData);
+        NotificationDisplay notificationDisplay = NotificationDisplay(
+            notification: notification, seen: userNotification.seen);
+        return notificationDisplay;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 
   Future<List<NotificationDisplay>> getNotificationListFromUserNotifications(
       List<UserNotification> userNotifications) async {
-    List<NotificationDisplay?> notificationsNull = await Future.wait(
-        userNotifications.map((UserNotification userNotification) {
-      return getDisplayNotification(userNotification);
-    }));
+    try {
+      List<NotificationDisplay?> notificationsNull = await Future.wait(
+          userNotifications.map((UserNotification userNotification) {
+        return getDisplayNotification(userNotification);
+      }));
 
-    List<NotificationDisplay> notifications = [];
-    for (NotificationDisplay? notification in notificationsNull) {
-      if (notification != null) {
-        notifications.add(notification);
+      List<NotificationDisplay> notifications = [];
+      for (NotificationDisplay? notification in notificationsNull) {
+        if (notification != null) {
+          notifications.add(notification);
+        }
       }
+      return notifications;
+    } catch (e) {
+      return [];
     }
-    return notifications;
   }
 }

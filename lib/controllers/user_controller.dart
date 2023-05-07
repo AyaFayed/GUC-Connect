@@ -30,18 +30,18 @@ class UserController {
     await docUser.set(json);
   }
 
-  Future<UserType> getCurrentUserType() async {
+  Future<UserType?> getCurrentUserType() async {
     UserModel? user = await getCurrentUser();
 
     if (user != null) {
       return user.type;
     } else {
-      return UserType.student;
+      return null;
     }
   }
 
   Future<bool> isCurrentUserInstructor() async {
-    UserType userType = await getCurrentUserType();
+    UserType? userType = await getCurrentUserType();
 
     if (userType == UserType.professor || userType == UserType.ta) {
       return true;
@@ -50,13 +50,13 @@ class UserController {
     }
   }
 
-  Future<UserType> getUserType(String uid) async {
+  Future<UserType?> getUserType(String uid) async {
     UserModel? user = await _userReads.getUser(uid);
 
     if (user != null) {
       return user.type;
     } else {
-      return UserType.student;
+      return null;
     }
   }
 

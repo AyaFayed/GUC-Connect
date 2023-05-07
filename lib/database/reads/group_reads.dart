@@ -8,108 +8,140 @@ class GroupReads {
       DatabaseReferences.groups;
 
   Future<Group?> getGroup(String groupId) async {
-    final groupData =
-        await DatabaseReferences.getDocumentData(_groups, groupId);
-    if (groupData != null) {
-      Group group = Group.fromJson(groupData);
-      return group;
+    try {
+      final groupData =
+          await DatabaseReferences.getDocumentData(_groups, groupId);
+      if (groupData != null) {
+        Group group = Group.fromJson(groupData);
+        return group;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 
   Future<List<Group>> getAllGroups() async {
-    QuerySnapshot querySnapshot = await _groups.get();
+    try {
+      QuerySnapshot querySnapshot = await _groups.get();
 
-    List<Group> allGroups = querySnapshot.docs
-        .map((doc) => Group.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return allGroups;
+      List<Group> allGroups = querySnapshot.docs
+          .map((doc) => Group.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return allGroups;
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<String>> getGroupsStudentIds(List<String> groupIds) async {
-    List<Future<Group?>> groupFutures = [];
+    try {
+      List<Future<Group?>> groupFutures = [];
 
-    for (String groupId in groupIds) {
-      groupFutures.add(getGroup(groupId));
-    }
-
-    List<Group?> groups = await Future.wait(groupFutures);
-
-    List<String> studentIds = [];
-
-    for (Group? group in groups) {
-      if (group != null) {
-        studentIds.addAll(group.studentIds);
+      for (String groupId in groupIds) {
+        groupFutures.add(getGroup(groupId));
       }
-    }
 
-    return studentIds;
+      List<Group?> groups = await Future.wait(groupFutures);
+
+      List<String> studentIds = [];
+
+      for (Group? group in groups) {
+        if (group != null) {
+          studentIds.addAll(group.studentIds);
+        }
+      }
+
+      return studentIds;
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<Group?> getStudentCourseLectureGroup(
       String courseId, String studentId) async {
-    QuerySnapshot querySnapshot = await _groups
-        .where('courseId', isEqualTo: courseId)
-        .where('type', isEqualTo: GroupType.lectureGroup)
-        .where('studentIds', arrayContains: studentId)
-        .get();
+    try {
+      QuerySnapshot querySnapshot = await _groups
+          .where('courseId', isEqualTo: courseId)
+          .where('type', isEqualTo: GroupType.lectureGroup.name)
+          .where('studentIds', arrayContains: studentId)
+          .get();
 
-    List<Group> groups = querySnapshot.docs
-        .map((doc) => Group.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
+      List<Group> groups = querySnapshot.docs
+          .map((doc) => Group.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
 
-    return groups.isEmpty ? null : groups.first;
+      return groups.isEmpty ? null : groups.first;
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<Group?> getStudentCourseTutorialGroup(
       String courseId, String studentId) async {
-    QuerySnapshot querySnapshot = await _groups
-        .where('courseId', isEqualTo: courseId)
-        .where('type', isEqualTo: GroupType.tutorialGroup)
-        .where('studentIds', arrayContains: studentId)
-        .get();
+    try {
+      QuerySnapshot querySnapshot = await _groups
+          .where('courseId', isEqualTo: courseId)
+          .where('type', isEqualTo: GroupType.tutorialGroup.name)
+          .where('studentIds', arrayContains: studentId)
+          .get();
 
-    List<Group> groups = querySnapshot.docs
-        .map((doc) => Group.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
+      List<Group> groups = querySnapshot.docs
+          .map((doc) => Group.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
 
-    return groups.isEmpty ? null : groups.first;
+      return groups.isEmpty ? null : groups.first;
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<List<Group>> getAllStudentGroups(String studentId) async {
-    QuerySnapshot querySnapshot =
-        await _groups.where('studentIds', arrayContains: studentId).get();
+    try {
+      QuerySnapshot querySnapshot =
+          await _groups.where('studentIds', arrayContains: studentId).get();
 
-    List<Group> groups = querySnapshot.docs
-        .map((doc) => Group.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
+      List<Group> groups = querySnapshot.docs
+          .map((doc) => Group.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
 
-    return groups;
+      return groups;
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<Group>> getCourseLectureGroups(String courseId) async {
-    QuerySnapshot querySnapshot = await _groups
-        .where('courseId', isEqualTo: courseId)
-        .where('type', isEqualTo: GroupType.lectureGroup)
-        .get();
+    try {
+      QuerySnapshot querySnapshot = await _groups
+          .where('courseId', isEqualTo: courseId)
+          .where('type', isEqualTo: GroupType.lectureGroup.name)
+          .get();
 
-    List<Group> groups = querySnapshot.docs
-        .map((doc) => Group.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
+      List<Group> groups = querySnapshot.docs
+          .map((doc) => Group.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
 
-    return groups;
+      return groups;
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<Group>> getCourseTutorialGroups(String courseId) async {
-    QuerySnapshot querySnapshot = await _groups
-        .where('courseId', isEqualTo: courseId)
-        .where('type', isEqualTo: GroupType.tutorialGroup)
-        .get();
+    try {
+      QuerySnapshot querySnapshot = await _groups
+          .where('courseId', isEqualTo: courseId)
+          .where('type', isEqualTo: GroupType.tutorialGroup.name)
+          .get();
 
-    List<Group> groups = querySnapshot.docs
-        .map((doc) => Group.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
+      List<Group> groups = querySnapshot.docs
+          .map((doc) => Group.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
 
-    return groups;
+      return groups;
+    } catch (e) {
+      return [];
+    }
   }
 }

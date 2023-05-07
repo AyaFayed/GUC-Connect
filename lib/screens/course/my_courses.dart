@@ -36,7 +36,7 @@ class _MyCoursesState extends State<MyCourses> {
 
   Future<void> _getData() async {
     List<Course> coursesData = await _courseController.getMyCourses();
-    UserType userTypeData = await _userController.getCurrentUserType();
+    UserType? userTypeData = await _userController.getCurrentUserType();
 
     setState(() {
       _courses = coursesData;

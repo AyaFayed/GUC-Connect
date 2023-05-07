@@ -7,57 +7,81 @@ class AnnouncementReads {
       DatabaseReferences.announcements;
 
   Future<Announcement?> getAnnouncement(String announcementId) async {
-    final announcementData = await DatabaseReferences.getDocumentData(
-        DatabaseReferences.announcements, announcementId);
-    if (announcementData != null) {
-      Announcement announcement = Announcement.fromJson(announcementData);
-      return announcement;
+    try {
+      final announcementData = await DatabaseReferences.getDocumentData(
+          DatabaseReferences.announcements, announcementId);
+      if (announcementData != null) {
+        Announcement announcement = Announcement.fromJson(announcementData);
+        return announcement;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 
   Future<List<Announcement>> getAnnouncementListFromIds(
       List<String> eventIds) async {
     if (eventIds.isEmpty) return [];
 
-    QuerySnapshot querySnapshot =
-        await _announcements.where('id', whereIn: eventIds).get();
+    try {
+      QuerySnapshot querySnapshot =
+          await _announcements.where('id', whereIn: eventIds).get();
 
-    List<Announcement> announcements = querySnapshot.docs
-        .map((doc) => Announcement.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return announcements;
+      List<Announcement> announcements = querySnapshot.docs
+          .map((doc) =>
+              Announcement.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return announcements;
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<Announcement>> getAllAnnouncements() async {
-    QuerySnapshot querySnapshot = await _announcements.get();
+    try {
+      QuerySnapshot querySnapshot = await _announcements.get();
 
-    List<Announcement> allAnnouncements = querySnapshot.docs
-        .map((doc) => Announcement.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return allAnnouncements;
+      List<Announcement> allAnnouncements = querySnapshot.docs
+          .map((doc) =>
+              Announcement.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return allAnnouncements;
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<Announcement>> getInstructorAnnouncements(
       String instructorId, String courseId) async {
-    QuerySnapshot querySnapshot = await _announcements
-        .where('courseId', isEqualTo: courseId)
-        .where('instructorId', isEqualTo: instructorId)
-        .get();
+    try {
+      QuerySnapshot querySnapshot = await _announcements
+          .where('courseId', isEqualTo: courseId)
+          .where('instructorId', isEqualTo: instructorId)
+          .get();
 
-    List<Announcement> announcements = querySnapshot.docs
-        .map((doc) => Announcement.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return announcements;
+      List<Announcement> announcements = querySnapshot.docs
+          .map((doc) =>
+              Announcement.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return announcements;
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<Announcement>> getGroupAnnouncements(String groupId) async {
-    QuerySnapshot querySnapshot =
-        await _announcements.where('groupIds', arrayContains: groupId).get();
+    try {
+      QuerySnapshot querySnapshot =
+          await _announcements.where('groupIds', arrayContains: groupId).get();
 
-    List<Announcement> announcements = querySnapshot.docs
-        .map((doc) => Announcement.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return announcements;
+      List<Announcement> announcements = querySnapshot.docs
+          .map((doc) =>
+              Announcement.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return announcements;
+    } catch (e) {
+      return [];
+    }
   }
 }

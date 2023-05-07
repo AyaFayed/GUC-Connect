@@ -53,20 +53,13 @@ class CourseController {
   }
 
   Future<List<Course>> getEnrollCourses() async {
-    List<Course> allCourses = await _courseReads.getAllCourses();
-
-    List<Course> myCourses = await getMyCourses();
-
-    Iterable<String> myCourseIds = myCourses.map((course) => course.id);
-
-    List<Course> enrollCourses = [];
-
-    for (Course course in allCourses) {
-      if (!myCourseIds.contains(course.id)) {
-        enrollCourses.add(course);
-      }
+    UserModel? currentUser = await _user.getCurrentUser();
+    if (currentUser != null) {
+      List<Course> courses =
+          await _courseReads.getEnrollCourseList(currentUser.courseIds);
+      return courses;
     }
-    return enrollCourses;
+    return [];
   }
 
   Future<List<Course>> getMyCourses() async {
@@ -80,20 +73,20 @@ class CourseController {
   }
 
   Future editCourse(String courseId, String name) async {
-    UserType currentUserType = await _user.getCurrentUserType();
+    UserType? currentUserType = await _user.getCurrentUserType();
     if (currentUserType != UserType.admin) return;
     await _courseWrites.updateCourseName(courseId, name);
   }
 
   Future deleteCourse(String courseId) async {
-    UserType currentUserType = await _user.getCurrentUserType();
+    UserType? currentUserType = await _user.getCurrentUserType();
     if (currentUserType != UserType.admin) return;
     await clearCourse(courseId);
     await _courseWrites.deleteCourse(courseId);
   }
 
   Future clearCourse(String courseId) async {
-    UserType currentUserType = await _user.getCurrentUserType();
+    UserType? currentUserType = await _user.getCurrentUserType();
     if (currentUserType != UserType.admin) return;
     List<Future> deleting = [
       _announcementWrites.deleteCourseAnnouncements(courseId),
@@ -110,7 +103,7 @@ class CourseController {
   }
 
   Future clearCourseList(List<String> courseIds) async {
-    UserType currentUserType = await _user.getCurrentUserType();
+    UserType? currentUserType = await _user.getCurrentUserType();
     if (currentUserType != UserType.admin) return;
     List<Future> clearing = [];
     for (String courseId in courseIds) {
@@ -121,7 +114,7 @@ class CourseController {
   }
 
   Future clearAllCoursesData() async {
-    UserType currentUserType = await _user.getCurrentUserType();
+    UserType? currentUserType = await _user.getCurrentUserType();
     if (currentUserType != UserType.admin) return;
     await Future.wait([
       _announcementWrites.deleteAllAnnouncements(),

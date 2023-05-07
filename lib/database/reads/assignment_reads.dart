@@ -7,68 +7,93 @@ class AssignmentReads {
       DatabaseReferences.assignments;
 
   Future<Assignment?> getAssignment(String assignmentId) async {
-    final assignmentData = await DatabaseReferences.getDocumentData(
-        DatabaseReferences.assignments, assignmentId);
-    if (assignmentData != null) {
-      Assignment assignment = Assignment.fromJson(assignmentData);
-      return assignment;
+    try {
+      final assignmentData = await DatabaseReferences.getDocumentData(
+          DatabaseReferences.assignments, assignmentId);
+      if (assignmentData != null) {
+        Assignment assignment = Assignment.fromJson(assignmentData);
+        return assignment;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 
   Future<List<Assignment>> getAssignmentListFromIds(
       List<String> eventIds) async {
-    if (eventIds.isEmpty) return [];
+    try {
+      if (eventIds.isEmpty) return [];
 
-    QuerySnapshot querySnapshot =
-        await _assignments.where('id', whereIn: eventIds).get();
+      QuerySnapshot querySnapshot =
+          await _assignments.where('id', whereIn: eventIds).get();
 
-    List<Assignment> assignments = querySnapshot.docs
-        .map((doc) => Assignment.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return assignments;
+      List<Assignment> assignments = querySnapshot.docs
+          .map((doc) => Assignment.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return assignments;
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<Assignment>> getAllAssignments() async {
-    QuerySnapshot querySnapshot = await _assignments.get();
+    try {
+      QuerySnapshot querySnapshot = await _assignments.get();
 
-    List<Assignment> allAssignments = querySnapshot.docs
-        .map((doc) => Assignment.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return allAssignments;
+      List<Assignment> allAssignments = querySnapshot.docs
+          .map((doc) => Assignment.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return allAssignments;
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<Assignment>> getInstructorAssignments(
       String instructorId, String courseId) async {
-    QuerySnapshot querySnapshot = await _assignments
-        .where('courseId', isEqualTo: courseId)
-        .where('instructorId', isEqualTo: instructorId)
-        .get();
+    try {
+      QuerySnapshot querySnapshot = await _assignments
+          .where('courseId', isEqualTo: courseId)
+          .where('instructorId', isEqualTo: instructorId)
+          .get();
 
-    List<Assignment> assignments = querySnapshot.docs
-        .map((doc) => Assignment.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return assignments;
+      List<Assignment> assignments = querySnapshot.docs
+          .map((doc) => Assignment.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return assignments;
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<Assignment>> getAllInstructorAssignments(
       String instructorId) async {
-    QuerySnapshot querySnapshot =
-        await _assignments.where('instructorId', isEqualTo: instructorId).get();
+    try {
+      QuerySnapshot querySnapshot = await _assignments
+          .where('instructorId', isEqualTo: instructorId)
+          .get();
 
-    List<Assignment> assignments = querySnapshot.docs
-        .map((doc) => Assignment.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return assignments;
+      List<Assignment> assignments = querySnapshot.docs
+          .map((doc) => Assignment.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return assignments;
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<Assignment>> getGroupAssignments(String groupId) async {
-    QuerySnapshot querySnapshot =
-        await _assignments.where('groupIds', arrayContains: groupId).get();
+    try {
+      QuerySnapshot querySnapshot =
+          await _assignments.where('groupIds', arrayContains: groupId).get();
 
-    List<Assignment> assignments = querySnapshot.docs
-        .map((doc) => Assignment.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    return assignments;
+      List<Assignment> assignments = querySnapshot.docs
+          .map((doc) => Assignment.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return assignments;
+    } catch (e) {
+      return [];
+    }
   }
 }

@@ -21,9 +21,16 @@ class _AuthBtnState extends State<AuthBtn> {
 
     await widget.onPressed();
 
-    setState(() {
-      _isButtonDisabled = false;
-    });
+    if (context.mounted) {
+      setState(() {
+        _isButtonDisabled = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

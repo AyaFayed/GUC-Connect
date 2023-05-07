@@ -26,7 +26,7 @@ class AssignmentController {
       String? file,
       List<String> groupIds,
       DateTime deadline) async {
-    UserType userType = await _user.getCurrentUserType();
+    UserType? userType = await _user.getCurrentUserType();
 
     if (userType == UserType.professor) {
       final docAssignment = DatabaseReferences.assignments.doc();
@@ -81,7 +81,7 @@ class AssignmentController {
   }
 
   Future deleteAssignment(String courseName, String assignmentId) async {
-    UserType userType = await _user.getCurrentUserType();
+    UserType? userType = await _user.getCurrentUserType();
 
     if (userType == UserType.professor) {
       Assignment? assignment =
