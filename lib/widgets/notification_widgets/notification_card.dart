@@ -43,6 +43,7 @@ class _NotificationCardState extends State<NotificationCard> {
             while (Navigator.canPop(context)) {
               Navigator.pop(context);
             }
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Authenticate()),

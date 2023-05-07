@@ -69,6 +69,7 @@ class _SettingsState extends State<Settings> {
                           while (Navigator.canPop(context)) {
                             Navigator.pop(context);
                           }
+                          Navigator.pop(context);
                           Navigator.push(
                             context,
                             MaterialPageRoute(

@@ -93,17 +93,7 @@ class _HomeState extends State<Home> {
 
   Future<void> _getData() async {
     UserType? currentUserType = await _userController.getCurrentUserType();
-    if (currentUserType == null) {
-      if (context.mounted) {
-        while (Navigator.canPop(context)) {
-          Navigator.pop(context);
-        }
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Authenticate()),
-        );
-      }
-    }
+
     setState(() {
       _currentUserType = currentUserType;
     });
