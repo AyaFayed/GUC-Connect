@@ -59,7 +59,7 @@ class _SettingsState extends State<Settings> {
                           style: TextStyle(fontSize: Sizes.small),
                         ),
                         subtitle: const Text(
-                          'When you turn this off, you will not get notifications when new posts are added to courses you are enrolled in.',
+                          'When you turn this off, you will not get push notifications when new posts are added to courses you are enrolled in.',
                         ),
                         value: _currentUser?.allowPostNotifications ?? true,
                         onChanged: setPostNotifications),
