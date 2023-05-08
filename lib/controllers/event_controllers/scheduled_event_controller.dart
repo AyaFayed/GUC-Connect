@@ -120,8 +120,6 @@ class ScheduledEventsController {
 
       await docScheduledEvent.set(json);
 
-      print('yes');
-
       await _helper.notifyGroupsAboutEvent(
           courseName,
           docScheduledEvent.id,

@@ -33,6 +33,8 @@ class EventsControllerHelper {
 
     await _user.notifyUsers(studentIds, notificationTitle, notificationBody);
 
+    await sendReminders(studentIds, eventId, 2);
+
     await _notificationController.createNotification(
         studentIds,
         courseName,
@@ -92,6 +94,21 @@ class EventsControllerHelper {
           course?.name ?? 'Reminder',
           'Reminder for ${event.title}',
           DateTime.now().add(Duration(minutes: 1)));
+    }
+  }
+
+  Future sendReminders(
+      List<String> studentIds, String eventId, int days) async {
+    ScheduledEvent? event =
+        await _scheduledEventReads.getScheduledEvent(eventId);
+    if (event != null) {
+      DateTime reminderDateTime = event.start.subtract(Duration(days: days));
+      Course? course = await _courseReads.getCourse(event.courseId);
+      await _user.remindUsers(
+          studentIds,
+          course?.name ?? 'Reminder',
+          'Reminder for ${event.title}',
+          DateTime.now().add(Duration(minutes: 2)));
     }
   }
 }
