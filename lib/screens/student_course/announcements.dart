@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/event_controllers/announcement_controller.dart';
-import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/models/events/announcement_model.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/event_list.dart';

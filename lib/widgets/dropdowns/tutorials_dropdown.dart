@@ -33,8 +33,6 @@ class _TutorialsDropdownState extends State<TutorialsDropdown> {
     List<Group> allTutorials =
         await _divisionController.getCourseTutorialGroups(widget.courseId);
 
-    print(allTutorials);
-
     setState(() {
       tutorials = allTutorials
           .map((tutorial) => MultiSelectItem<String>(

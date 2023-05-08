@@ -4,14 +4,11 @@ import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/models/notification/notification_model.dart';
-import 'package:guc_scheduling_app/screens/authenticate/authenticate.dart';
-import 'package:guc_scheduling_app/screens/authenticate/login.dart';
 import 'package:guc_scheduling_app/screens/event/event_details.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/professor_course.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/ta_course.dart';
 import 'package:guc_scheduling_app/screens/student_course/student_course.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
-import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 
 class NotificationCard extends StatefulWidget {
@@ -84,7 +81,6 @@ class _NotificationCardState extends State<NotificationCard> {
               widget.displayNotification.notification.eventId,
               widget.displayNotification.notification.notificationType);
       if (context.mounted) {
-        print(displayEvent);
         Navigator.push(
           context,
           MaterialPageRoute(

@@ -3,7 +3,6 @@ import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/models/user/user_model.dart';
 import 'package:guc_scheduling_app/services/authentication_service.dart';
 import 'package:guc_scheduling_app/services/messaging_service.dart';
-import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/auth_btn.dart';
 

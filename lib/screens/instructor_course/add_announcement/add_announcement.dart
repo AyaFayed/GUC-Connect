@@ -66,7 +66,6 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
           );
         }
       } catch (e) {
-        print(e);
         if (context.mounted) {
           QuickAlert.show(
             context: context,

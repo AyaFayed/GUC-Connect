@@ -64,7 +64,7 @@ class UserWrites {
         'tokens': FieldValue.arrayUnion([token])
       });
     } catch (e) {
-      print(e);
+      // print(e);
     }
   }
 
@@ -75,7 +75,7 @@ class UserWrites {
         'tokens': FieldValue.arrayRemove([token])
       });
     } catch (e) {
-      print(e);
+      // print(e);
     }
   }
 }

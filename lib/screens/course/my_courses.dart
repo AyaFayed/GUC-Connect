@@ -42,7 +42,6 @@ class _MyCoursesState extends State<MyCourses> {
       _courses = coursesData;
       _originalCourses = coursesData;
       _userType = userTypeData;
-      print(_courses);
     });
   }
 
