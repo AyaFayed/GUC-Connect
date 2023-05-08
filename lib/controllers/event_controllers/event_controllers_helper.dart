@@ -33,7 +33,7 @@ class EventsControllerHelper {
 
     await _user.notifyUsers(studentIds, notificationTitle, notificationBody);
 
-    await sendReminders(studentIds, eventId, 2);
+    // await sendReminders(studentIds, eventId, 2);
 
     await _notificationController.createNotification(
         studentIds,
