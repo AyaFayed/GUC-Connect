@@ -90,10 +90,8 @@ class EventsControllerHelper {
       DateTime reminderDateTime =
           event.start.subtract(Duration(days: days, hours: hours));
       Course? course = await _courseReads.getCourse(event.courseId);
-      await _user.remindCurrentUser(
-          course?.name ?? 'Reminder',
-          'Reminder for ${event.title}',
-          DateTime.now().add(Duration(minutes: 1)));
+      await _user.remindCurrentUser(course?.name ?? 'Reminder',
+          'Reminder for ${event.title}', reminderDateTime);
     }
   }
 
