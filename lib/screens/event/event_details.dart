@@ -67,15 +67,20 @@ class _EventDetailsState extends State<EventDetails> {
                     widget.event!.description,
                     style: const TextStyle(fontSize: 20),
                   ),
-                  const SizedBox(height: 20.0),
+                  if (widget.event!.description.isNotEmpty)
+                    const SizedBox(height: 20.0),
                   widget.event!.file != null
                       ? DownloadFile(file: widget.event!.file!)
                       : const SizedBox(height: 0.0),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  if (widget.event!.file != null)
+                    const SizedBox(
+                      height: 20,
+                    ),
                   if (_currentUserType == UserType.student)
-                    const SetReminderTextButton(title: 'Set reminder'),
+                    SetReminderTextButton(
+                      title: 'Set reminder',
+                      eventId: widget.event?.id ?? '',
+                    ),
                 ],
               ),
             )),

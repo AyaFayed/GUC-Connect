@@ -102,7 +102,7 @@ class MessagingService {
               'body': body,
               'title': title,
               "isScheduled": "true",
-              "scheduledTime": dateTime
+              "scheduledTime": dateTime.millisecondsSinceEpoch
             },
             "notification": <String, dynamic>{
               "title": title,
@@ -117,33 +117,4 @@ class MessagingService {
       }
     }
   }
-
-  // Future<void> scheduleNotification(int id, String title, String body,
-  //     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
-  //   var dateTime = DateTime(DateTime.now().year, DateTime.now().month,
-  //       DateTime.now().day, 23, 0, 0);
-  //   tz.initializeTimeZones();
-  //   await flutterLocalNotificationsPlugin.zonedSchedule(
-  //     id,
-  //     title,
-  //     body,
-  //     tz.TZDateTime.from(dateTime, tz.local),
-  //     NotificationDetails(
-  //       android: AndroidNotificationDetails(id.toString(), 'Go To Bed',
-  //           importance: Importance.max,
-  //           priority: Priority.max,
-  //           icon: '@mipmap/ic_launcher'),
-  //       iOS: const DarwinNotificationDetails(
-  //         sound: 'default.wav',
-  //         presentAlert: true,
-  //         presentBadge: true,
-  //         presentSound: true,
-  //       ),
-  //     ),
-  //     uiLocalNotificationDateInterpretation:
-  //         UILocalNotificationDateInterpretation.absoluteTime,
-  //     androidAllowWhileIdle: true,
-  //     matchDateTimeComponents: DateTimeComponents.time,
-  //   );
-  // }
 }

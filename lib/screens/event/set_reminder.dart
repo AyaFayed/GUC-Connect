@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/event_controllers_helper.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
@@ -9,7 +10,8 @@ import 'package:quickalert/quickalert.dart';
 
 class SetReminder extends StatefulWidget {
   final String title;
-  const SetReminder({super.key, required this.title});
+  final String eventId;
+  const SetReminder({super.key, required this.title, required this.eventId});
 
   @override
   State<SetReminder> createState() => _SetReminderState();
@@ -18,6 +20,9 @@ class SetReminder extends StatefulWidget {
 class _SetReminderState extends State<SetReminder> {
   final _formKey = GlobalKey<FormState>();
   final controllerDays = TextEditingController();
+  final controllerHours = TextEditingController();
+  final EventsControllerHelper _eventsController = EventsControllerHelper();
+
   bool _isLoading = false;
 
   Future<void> setReminder() async {
@@ -25,23 +30,31 @@ class _SetReminderState extends State<SetReminder> {
       _isLoading = true;
     });
 
-    try {
-      if (context.mounted) {
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.success,
-          confirmBtnColor: AppColors.confirm,
-          text: Confirmations.setReminder,
-        );
-      }
-    } catch (e) {
-      if (context.mounted) {
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.error,
-          confirmBtnColor: AppColors.confirm,
-          text: Errors.backend,
-        );
+    if (_formKey.currentState!.validate()) {
+      try {
+        await _eventsController.setReminder(widget.eventId,
+            int.parse(controllerDays.text), int.parse(controllerHours.text));
+        setState(() {
+          controllerDays.clear();
+          controllerHours.clear();
+        });
+        if (context.mounted) {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.success,
+            confirmBtnColor: AppColors.confirm,
+            text: Confirmations.setReminder,
+          );
+        }
+      } catch (e) {
+        if (context.mounted) {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            confirmBtnColor: AppColors.confirm,
+            text: Errors.backend,
+          );
+        }
       }
     }
 
@@ -50,34 +63,10 @@ class _SetReminderState extends State<SetReminder> {
     });
   }
 
-  Future<void> deleteReminder() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      if (context.mounted) {
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.success,
-          confirmBtnColor: AppColors.confirm,
-          text: Confirmations.disableReminder,
-        );
-      }
-    } catch (e) {
-      if (context.mounted) {
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.error,
-          confirmBtnColor: AppColors.confirm,
-          text: Errors.backend,
-        );
-      }
+  Future<void> cancel() async {
+    if (context.mounted) {
+      Navigator.pop(context);
     }
-
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override
@@ -115,12 +104,29 @@ class _SetReminderState extends State<SetReminder> {
                       FilteringTextInputFormatter.digitsOnly
                     ],
                     decoration: const InputDecoration(
-                        suffixText: 'days', border: OutlineInputBorder()),
+                        suffixText: 'days',
+                        label: Text('Days'),
+                        border: OutlineInputBorder()),
                     validator: (val) => val!.isEmpty ? Errors.required : null,
                     controller: controllerDays,
                   ),
                   const SizedBox(
-                    height: 60,
+                    height: 20,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    decoration: const InputDecoration(
+                        label: Text('Hours'),
+                        suffixText: 'hours',
+                        border: OutlineInputBorder()),
+                    validator: (val) => val!.isEmpty ? Errors.required : null,
+                    controller: controllerHours,
+                  ),
+                  const SizedBox(
+                    height: 40,
                   ),
                   LargeBtn(
                       onPressed: _isLoading ? null : setReminder,
@@ -129,8 +135,8 @@ class _SetReminderState extends State<SetReminder> {
                     height: 10,
                   ),
                   LargeBtn(
-                    onPressed: _isLoading ? null : deleteReminder,
-                    text: 'Turn off reminder',
+                    onPressed: _isLoading ? null : cancel,
+                    text: 'Cancel',
                     color: AppColors.primary,
                   ),
                 ]),

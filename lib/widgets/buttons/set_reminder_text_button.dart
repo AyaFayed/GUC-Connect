@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
-import 'package:guc_scheduling_app/widgets/set_reminder.dart';
+import 'package:guc_scheduling_app/screens/event/set_reminder.dart';
 
 class SetReminderTextButton extends StatefulWidget {
   final String title;
-  const SetReminderTextButton({super.key, required this.title});
+  final String eventId;
+  const SetReminderTextButton(
+      {super.key, required this.title, required this.eventId});
 
   @override
   State<SetReminderTextButton> createState() => _SetReminderTextButtonState();
@@ -20,7 +22,10 @@ class _SetReminderTextButtonState extends State<SetReminderTextButton> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => SetReminder(title: widget.title)),
+                builder: (context) => SetReminder(
+                      title: widget.title,
+                      eventId: widget.eventId,
+                    )),
           );
         },
         icon: const Icon(Icons.alarm),

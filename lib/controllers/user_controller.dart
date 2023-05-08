@@ -98,6 +98,39 @@ class UserController {
     await Future.wait(notifying);
   }
 
+  Future remindCurrentUser(
+      String title, String body, DateTime reminderDateTime) async {
+    if (_auth.currentUser == null) return;
+
+    await remindUser(
+        _auth.currentUser?.uid ?? '', title, body, reminderDateTime);
+  }
+
+  Future remindUser(
+      String uid, String title, String body, DateTime reminderDateTime) async {
+    UserModel? user = await _userReads.getUser(uid);
+
+    if (user != null) {
+      List<Future> reminding = [];
+      for (String token in user.tokens) {
+        reminding
+            .add(_messaging.sendReminder(token, body, title, reminderDateTime));
+      }
+      await Future.wait(reminding);
+    }
+  }
+
+  Future remindUsers(List<String> uids, String title, String body,
+      DateTime reminderDateTime) async {
+    List<Future> reminding = [];
+    for (String uid in uids) {
+      if (uid != _auth.currentUser?.uid) {
+        reminding.add(remindUser(uid, title, body, reminderDateTime));
+      }
+    }
+    await Future.wait(reminding);
+  }
+
   Future updateAllowPostNotifications(bool value) async {
     if (_auth.currentUser == null) return;
     await _userWrites.updateAllowPostNotifications(
