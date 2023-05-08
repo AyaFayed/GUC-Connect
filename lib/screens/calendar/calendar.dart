@@ -41,10 +41,10 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
-        child: SingleChildScrollView(
+    return SingleChildScrollView(
+      child: Center(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
           child: _allEvents == null
               ? const CircularProgressIndicator()
               : Column(

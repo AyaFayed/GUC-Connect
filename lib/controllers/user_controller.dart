@@ -136,4 +136,17 @@ class UserController {
     await _userWrites.updateAllowPostNotifications(
         _auth.currentUser?.uid ?? '', value);
   }
+
+  Future<int> getNotificationsCount() async {
+    UserModel? currentUser = await getCurrentUser();
+    int count = 0;
+    if (currentUser != null) {
+      for (UserNotification userNotification in currentUser.userNotifications) {
+        if (!userNotification.seen) {
+          count++;
+        }
+      }
+    }
+    return count;
+  }
 }

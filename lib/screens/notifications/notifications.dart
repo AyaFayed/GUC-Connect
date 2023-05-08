@@ -5,7 +5,8 @@ import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/notification_widgets/notification_card.dart';
 
 class Notifications extends StatefulWidget {
-  const Notifications({super.key});
+  final Function openNotification;
+  const Notifications({super.key, required this.openNotification});
 
   @override
   State<Notifications> createState() => _NotificationsState();
@@ -43,7 +44,9 @@ class _NotificationsState extends State<Notifications> {
                 : ListView.separated(
                     itemBuilder: (BuildContext context, int index) =>
                         NotificationCard(
-                            displayNotification: _notifications![index]),
+                      displayNotification: _notifications![index],
+                      openNotification: widget.openNotification,
+                    ),
                     itemCount: _notifications!.length,
                     separatorBuilder: (BuildContext context, int index) =>
                         Divider(

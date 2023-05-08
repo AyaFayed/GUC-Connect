@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/enrollment_controller.dart';
+import 'package:guc_scheduling_app/screens/discussion/my_posts.dart';
 import 'package:guc_scheduling_app/screens/home/home.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_announcements.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_assignments.dart';
@@ -67,6 +68,28 @@ class _ProfessorDrawerState extends State<ProfessorDrawer> {
               widget.courseName,
               style: TextStyle(color: AppColors.light, fontSize: Sizes.medium),
             ),
+          ),
+          if (widget.pop)
+            ListTile(
+              leading: const Icon(
+                Icons.arrow_back,
+              ),
+              title: const Text('Back to course'),
+              onTap: () {
+                Navigator.pop(context);
+                if (widget.pop) Navigator.pop(context);
+              },
+            ),
+          ListTile(
+            leading: const Icon(
+              Icons.home,
+            ),
+            title: const Text('Back to home'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+              if (widget.pop) Navigator.pop(context);
+            },
           ),
           ListTile(
             leading: const Icon(
@@ -144,6 +167,27 @@ class _ProfessorDrawerState extends State<ProfessorDrawer> {
                     courseId: widget.courseId,
                     courseName: widget.courseName,
                   )),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.assessment,
+            ),
+            title: const Text('My posts'),
+            onTap: () {
+              Navigator.pop(context);
+              if (widget.pop) Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Card(
+                    child: MyPosts(
+                      courseId: widget.courseId,
+                      courseName: widget.courseName,
+                    ),
+                  ),
                 ),
               );
             },

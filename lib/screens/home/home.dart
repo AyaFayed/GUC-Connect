@@ -19,6 +19,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
+  int _notificationCount = 0;
 
   final UserController _userController = UserController();
   UserType? _currentUserType;
@@ -26,11 +27,10 @@ class _HomeState extends State<Home> {
   final MessagingService _messaging = MessagingService();
   final NotificationService _notificationService = NotificationService();
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    MyCourses(),
-    Notifications(),
-    Calendar(),
-    Settings(),
+  List<Widget> _widgetOptions = <Widget>[
+    const MyCourses(),
+    const Calendar(),
+    const Settings(),
   ];
 
   Future<void> _onItemTapped(int index) async {
@@ -48,11 +48,27 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void openNotification() {
+    setState(() {
+      _notificationCount--;
+    });
+  }
+
   Future<void> _getData() async {
     UserType? currentUserType = await _userController.getCurrentUserType();
+    int notificationCount = await _userController.getNotificationsCount();
 
     setState(() {
       _currentUserType = currentUserType;
+      _notificationCount = notificationCount;
+      _widgetOptions = <Widget>[
+        const MyCourses(),
+        Notifications(
+          openNotification: openNotification,
+        ),
+        const Calendar(),
+        const Settings(),
+      ];
     });
   }
 
@@ -83,20 +99,26 @@ class _HomeState extends State<Home> {
                 ),
                 body: _widgetOptions.elementAt(_selectedIndex),
                 bottomNavigationBar: BottomNavigationBar(
-                  items: const <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
+                  items: <BottomNavigationBarItem>[
+                    const BottomNavigationBarItem(
                       icon: Icon(Icons.book),
                       label: 'Courses',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.notifications),
+                      icon: _notificationCount > 0
+                          ? Badge(
+                              backgroundColor: AppColors.primary,
+                              label: Text(_notificationCount.toString()),
+                              child: const Icon(Icons.notifications),
+                            )
+                          : const Icon(Icons.notifications),
                       label: 'Notifications',
                     ),
-                    BottomNavigationBarItem(
+                    const BottomNavigationBarItem(
                       icon: Icon(Icons.calendar_month),
                       label: 'Calendar',
                     ),
-                    BottomNavigationBarItem(
+                    const BottomNavigationBarItem(
                       icon: Icon(Icons.settings),
                       label: 'Settings',
                     ),

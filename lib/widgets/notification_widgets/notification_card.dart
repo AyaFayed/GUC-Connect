@@ -13,8 +13,12 @@ import 'package:guc_scheduling_app/theme/sizes.dart';
 
 class NotificationCard extends StatefulWidget {
   final NotificationDisplay displayNotification;
+  final Function openNotification;
 
-  const NotificationCard({super.key, required this.displayNotification});
+  const NotificationCard(
+      {super.key,
+      required this.displayNotification,
+      required this.openNotification});
 
   @override
   State<NotificationCard> createState() => _NotificationCardState();
@@ -111,6 +115,7 @@ class _NotificationCardState extends State<NotificationCard> {
             .markNotificationAsSeen(widget.displayNotification.notification.id);
         setState(() {
           widget.displayNotification.seen = true;
+          widget.openNotification();
         });
         await redirect();
       },
