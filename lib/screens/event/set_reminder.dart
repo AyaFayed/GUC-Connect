@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:guc_scheduling_app/controllers/event_controllers/event_controllers_helper.dart';
+import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
@@ -21,7 +21,7 @@ class _SetReminderState extends State<SetReminder> {
   final _formKey = GlobalKey<FormState>();
   final controllerDays = TextEditingController();
   final controllerHours = TextEditingController();
-  final EventsControllerHelper _eventsController = EventsControllerHelper();
+  final UserController _userController = UserController();
 
   bool _isLoading = false;
 
@@ -32,7 +32,7 @@ class _SetReminderState extends State<SetReminder> {
 
     if (_formKey.currentState!.validate()) {
       try {
-        await _eventsController.setReminder(widget.eventId,
+        await _userController.setReminder(widget.eventId,
             int.parse(controllerDays.text), int.parse(controllerHours.text));
         setState(() {
           controllerDays.clear();

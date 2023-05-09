@@ -50,26 +50,9 @@ class NotificationService {
           android: androidPlatformChannelSpecifics,
           iOS: const DarwinNotificationDetails());
 
-      if (message.data['isScheduled'] == 'true') {
-        notificationsPlugin.zonedSchedule(
-            0,
-            message.notification?.title,
-            message.notification?.body,
-            tz.TZDateTime.from(
-              DateTime.fromMillisecondsSinceEpoch(
-                  int.parse(message.data['scheduledTime'])),
-              tz.local,
-            ),
-            platformChannelSpecifics,
-            payload: message.data['body'],
-            androidAllowWhileIdle: true,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime);
-      } else {
-        await notificationsPlugin.show(0, message.notification?.title,
-            message.notification?.body, platformChannelSpecifics,
-            payload: message.data['body']);
-      }
+      await notificationsPlugin.show(0, message.notification?.title,
+          message.notification?.body, platformChannelSpecifics,
+          payload: message.data['body']);
     });
   }
 

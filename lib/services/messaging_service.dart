@@ -84,37 +84,4 @@ class MessagingService {
       }
     }
   }
-
-  Future<void> sendReminder(
-      String token, String body, String title, DateTime dateTime) async {
-    String key = 'key=${dotenv.env['FCM_KEY']}';
-    try {
-      await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
-          headers: <String, String>{
-            'Content-Type': 'application/json',
-            'Authorization': key
-          },
-          body: jsonEncode(<String, dynamic>{
-            'priority': 'high',
-            'data': <String, dynamic>{
-              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-              'status': 'done',
-              'body': body,
-              'title': title,
-              "isScheduled": "true",
-              "scheduledTime": dateTime.millisecondsSinceEpoch
-            },
-            "notification": <String, dynamic>{
-              "title": title,
-              "body": body,
-              "android_channel_id": title
-            },
-            "to": token
-          }));
-    } catch (e) {
-      if (kDebugMode) {
-        print("error push notification");
-      }
-    }
-  }
 }

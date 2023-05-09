@@ -1,9 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guc_scheduling_app/database/database_references.dart';
+import 'package:guc_scheduling_app/database/reads/course_reads.dart';
+import 'package:guc_scheduling_app/database/reads/scheduled_event_reads.dart';
 import 'package:guc_scheduling_app/database/reads/user_reads.dart';
 import 'package:guc_scheduling_app/database/writes/user_writes.dart';
+import 'package:guc_scheduling_app/models/course/course_model.dart';
+import 'package:guc_scheduling_app/models/events/scheduled_event.dart';
 import 'package:guc_scheduling_app/models/user/user_model.dart';
 import 'package:guc_scheduling_app/services/messaging_service.dart';
+import 'package:guc_scheduling_app/services/notification_service.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 
 class UserController {
@@ -11,6 +16,9 @@ class UserController {
   final MessagingService _messaging = MessagingService();
   final UserReads _userReads = UserReads();
   final UserWrites _userWrites = UserWrites();
+  final CourseReads _courseReads = CourseReads();
+  final NotificationService _notificationService = NotificationService();
+  final ScheduledEventReads _scheduledEventReads = ScheduledEventReads();
 
   Future createUser(String? uid, String name, UserType type) async {
     final docUser = DatabaseReferences.users.doc(uid);
@@ -98,39 +106,6 @@ class UserController {
     await Future.wait(notifying);
   }
 
-  Future remindCurrentUser(
-      String title, String body, DateTime reminderDateTime) async {
-    if (_auth.currentUser == null) return;
-
-    await remindUser(
-        _auth.currentUser?.uid ?? '', title, body, reminderDateTime);
-  }
-
-  Future remindUser(
-      String uid, String title, String body, DateTime reminderDateTime) async {
-    UserModel? user = await _userReads.getUser(uid);
-
-    if (user != null) {
-      List<Future> reminding = [];
-      for (String token in user.tokens) {
-        reminding
-            .add(_messaging.sendReminder(token, body, title, reminderDateTime));
-      }
-      await Future.wait(reminding);
-    }
-  }
-
-  Future remindUsers(List<String> uids, String title, String body,
-      DateTime reminderDateTime) async {
-    List<Future> reminding = [];
-    for (String uid in uids) {
-      if (uid != _auth.currentUser?.uid) {
-        reminding.add(remindUser(uid, title, body, reminderDateTime));
-      }
-    }
-    await Future.wait(reminding);
-  }
-
   Future updateAllowPostNotifications(bool value) async {
     if (_auth.currentUser == null) return;
     await _userWrites.updateAllowPostNotifications(
@@ -148,5 +123,19 @@ class UserController {
       }
     }
     return count;
+  }
+
+  Future setReminder(String eventId, int days, int hours) async {
+    ScheduledEvent? event =
+        await _scheduledEventReads.getScheduledEvent(eventId);
+    if (event != null) {
+      DateTime reminderDateTime =
+          event.start.subtract(Duration(days: days, hours: hours));
+      Course? course = await _courseReads.getCourse(event.courseId);
+      await _notificationService.scheduleLocalNotification(
+          course?.name ?? 'Reminder',
+          'Reminder for ${event.title}',
+          reminderDateTime);
+    }
   }
 }

@@ -1,10 +1,8 @@
 import 'package:guc_scheduling_app/controllers/notification_controller.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/database/reads/assignment_reads.dart';
-import 'package:guc_scheduling_app/database/reads/course_reads.dart';
 import 'package:guc_scheduling_app/database/reads/group_reads.dart';
 import 'package:guc_scheduling_app/database/reads/scheduled_event_reads.dart';
-import 'package:guc_scheduling_app/models/course/course_model.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/models/events/scheduled_event.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
@@ -20,7 +18,6 @@ class EventsControllerHelper {
   final AssignmentReads _assignmentReads = AssignmentReads();
   final GroupReads _groupReads = GroupReads();
   final ScheduledEventReads _scheduledEventReads = ScheduledEventReads();
-  final CourseReads _courseReads = CourseReads();
 
   Future notifyGroupsAboutEvent(
       String courseName,
@@ -80,30 +77,6 @@ class EventsControllerHelper {
                 courseId: courseId,
                 courseName: courseName))
             .toList();
-    }
-  }
-
-  Future setReminder(String eventId, int days, int hours) async {
-    ScheduledEvent? event =
-        await _scheduledEventReads.getScheduledEvent(eventId);
-    if (event != null) {
-      DateTime reminderDateTime =
-          event.start.subtract(Duration(days: days, hours: hours));
-      Course? course = await _courseReads.getCourse(event.courseId);
-      await _user.remindCurrentUser(course?.name ?? 'Reminder',
-          'Reminder for ${event.title}', reminderDateTime);
-    }
-  }
-
-  Future sendReminders(
-      List<String> studentIds, String eventId, int days) async {
-    ScheduledEvent? event =
-        await _scheduledEventReads.getScheduledEvent(eventId);
-    if (event != null) {
-      DateTime reminderDateTime = event.start.subtract(Duration(days: days));
-      Course? course = await _courseReads.getCourse(event.courseId);
-      await _user.remindUsers(studentIds, course?.name ?? 'Reminder',
-          'Reminder for ${event.title}', reminderDateTime);
     }
   }
 }

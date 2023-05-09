@@ -4,7 +4,6 @@ import 'package:guc_scheduling_app/models/group/group_model.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
-import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class GroupsDropdown extends StatefulWidget {
