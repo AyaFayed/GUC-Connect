@@ -25,6 +25,8 @@ class CourseController {
 
   // course creation:
   Future createCourse(String name) async {
+    UserType? currentUserType = await _user.getCurrentUserType();
+    if (currentUserType != UserType.admin) return;
     List<Course> allCourses = await _courseReads.getAllCourses();
     for (Course course in allCourses) {
       if (course.name == name) {
