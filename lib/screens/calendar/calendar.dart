@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guc_scheduling_app/controllers/event_controllers/callendar_events_controller.dart';
+import 'package:guc_scheduling_app/controllers/event_controllers/calendar_events_controller.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/calendar_event_card.dart';
