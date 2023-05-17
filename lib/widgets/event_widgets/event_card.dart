@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/screens/event/edit_event.dart';
 import 'package:guc_scheduling_app/screens/event/event_details.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 
 class EventCard extends StatelessWidget {
@@ -21,9 +22,20 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(
-        event.title,
-        style: TextStyle(fontSize: Sizes.small),
+      title: Row(
+        children: [
+          Text(
+            event.title,
+            style: TextStyle(fontSize: Sizes.small),
+          ),
+          const Spacer(),
+          if (event.createdAt != null)
+            Text(
+              event.createdAt ?? '',
+              style: TextStyle(
+                  color: AppColors.unselected, fontSize: Sizes.xsmall),
+            )
+        ],
       ),
       subtitle: Text(
         event.subtitle,

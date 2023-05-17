@@ -9,7 +9,7 @@ class NotificationService {
 
   initInfo(onclick) {
     var androidInitialize =
-        const AndroidInitializationSettings('assets/app_logo.png');
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
     var iOSInitialize = const DarwinInitializationSettings();
     var initializationSettings =
         InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
@@ -58,7 +58,7 @@ class NotificationService {
 
   sendLocalNotification(String title, String body) async {
     var androidInitialize =
-        const AndroidInitializationSettings('assets/app_logo.png');
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
     var iOSInitialize = const DarwinInitializationSettings();
     var initializationSettings =
         InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
@@ -95,7 +95,7 @@ class NotificationService {
   scheduleLocalNotification(
       String title, String body, DateTime dateTime) async {
     var androidInitialize =
-        const AndroidInitializationSettings('assets/app_logo.png');
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
     var iOSInitialize = const DarwinInitializationSettings();
     var initializationSettings =
         InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
