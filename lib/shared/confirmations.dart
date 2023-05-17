@@ -7,6 +7,8 @@ class Confirmations {
   static String disableReminder = 'Reminder turned off successfully.';
   static String unenrollWarning =
       'Are you sure you want to unenroll from this course?';
+  static String resetPasswordEmail =
+      "Reset password email was sent successfully.";
   static String creationSuccess(String object) =>
       'The $object was created successfully.';
   static String addSuccess(String object) =>

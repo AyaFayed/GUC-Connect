@@ -27,8 +27,8 @@ class AuthService {
       await _user.createUser(user?.uid, name, userType);
 
       return null;
-    } catch (e) {
-      return e.toString();
+    } on FirebaseAuthException catch (e) {
+      return e.message;
     }
   }
 
@@ -70,13 +70,22 @@ class AuthService {
       await _user.createUser(user?.uid, 'admin', UserType.admin);
 
       return null;
-    } catch (e) {
-      return e.toString();
+    } on FirebaseAuthException catch (e) {
+      return e.message;
     }
   }
 
   Future sendVerificationEmail() async {
     final user = _auth.currentUser!;
     await user.sendEmailVerification();
+  }
+
+  Future resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
   }
 }

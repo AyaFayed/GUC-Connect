@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:guc_scheduling_app/screens/authenticate/forgot_password.dart";
 import 'package:guc_scheduling_app/services/authentication_service.dart';
 import "package:guc_scheduling_app/shared/constants.dart";
 import "package:guc_scheduling_app/shared/errors.dart";
@@ -77,7 +78,19 @@ class _LoginState extends State<Login> {
                   style:
                       TextStyle(color: AppColors.error, fontSize: Sizes.xsmall),
                 ),
-                const SizedBox(height: 40.0),
+                const SizedBox(height: 20.0),
+                GestureDetector(
+                  child: Text(
+                    'Forgot Password?',
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontSize: Sizes.small,
+                    ),
+                  ),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const ForgotPassword())),
+                ),
+                const SizedBox(height: 20.0),
                 Text(
                   "Don't have an account?",
                   style: TextStyle(fontSize: Sizes.small),
