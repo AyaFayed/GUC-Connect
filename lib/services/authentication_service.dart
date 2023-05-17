@@ -9,7 +9,6 @@ class AuthService {
   final UserController _user = UserController();
   final NotificationService _notificationService = NotificationService();
 
-  // sign up
   Future signup(String email, String password, String name, bool isTA) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
@@ -32,7 +31,6 @@ class AuthService {
     }
   }
 
-  // log in
   Future login(String email, String password) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(

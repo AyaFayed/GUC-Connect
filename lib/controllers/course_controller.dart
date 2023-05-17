@@ -23,7 +23,6 @@ class CourseController {
   final ScheduledEventWrites _scheduledEventWrites = ScheduledEventWrites();
   final GroupWrites _groupWrites = GroupWrites();
 
-  // course creation:
   Future createCourse(String name) async {
     UserType? currentUserType = await _user.getCurrentUserType();
     if (currentUserType != UserType.admin) return;
