@@ -131,11 +131,16 @@ class UserController {
     if (event != null) {
       DateTime reminderDateTime =
           event.start.subtract(Duration(days: days, hours: hours));
+      if (reminderDateTime
+          .isBefore(DateTime.now().add(const Duration(minutes: 5)))) {
+        return "You need to set a reminder in the future";
+      }
       Course? course = await _courseReads.getCourse(event.courseId);
       await _notificationService.scheduleLocalNotification(
           course?.name ?? 'Reminder',
           'Reminder for ${event.title}',
           reminderDateTime);
+      return null;
     }
   }
 }

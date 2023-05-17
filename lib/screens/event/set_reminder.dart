@@ -32,19 +32,30 @@ class _SetReminderState extends State<SetReminder> {
 
     if (_formKey.currentState!.validate()) {
       try {
-        await _userController.setReminder(widget.eventId,
+        dynamic result = await _userController.setReminder(widget.eventId,
             int.parse(controllerDays.text), int.parse(controllerHours.text));
-        setState(() {
-          controllerDays.clear();
-          controllerHours.clear();
-        });
-        if (context.mounted) {
-          QuickAlert.show(
-            context: context,
-            type: QuickAlertType.success,
-            confirmBtnColor: AppColors.confirm,
-            text: Confirmations.setReminder,
-          );
+        if (result != null) {
+          if (context.mounted) {
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              confirmBtnColor: AppColors.confirm,
+              text: result,
+            );
+          }
+        } else {
+          setState(() {
+            controllerDays.clear();
+            controllerHours.clear();
+          });
+          if (context.mounted) {
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.success,
+              confirmBtnColor: AppColors.confirm,
+              text: Confirmations.setReminder,
+            );
+          }
         }
       } catch (e) {
         if (context.mounted) {
