@@ -32,4 +32,4 @@ enum NotificationType {
   compensationTutorial
 }
 
-String appName = 'GUC Notifications';
+String appName = 'GUC Connect';

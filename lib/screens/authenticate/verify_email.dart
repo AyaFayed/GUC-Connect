@@ -66,63 +66,65 @@ class _VerifyEmailState extends State<VerifyEmail> {
     });
   }
 
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+
+  //   if (!isEmailVerified) {
+  //     sendVerificationEmail();
+  //     timer = Timer.periodic(
+  //         const Duration(seconds: 3), (_) => checkEmailVerified());
+  //   }
+  // }
+
+  // @override
+  // void dispose() {
+  //   timer?.cancel();
+
+  //   super.dispose();
+  // }
+
   @override
-  void initState() {
-    super.initState();
+  Widget build(BuildContext context) => const Home();
 
-    isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-
-    if (!isEmailVerified) {
-      sendVerificationEmail();
-      timer = Timer.periodic(
-          const Duration(seconds: 3), (_) => checkEmailVerified());
-    }
-  }
-
-  @override
-  void dispose() {
-    timer?.cancel();
-
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => isEmailVerified
-      ? const Home()
-      : Scaffold(
-          appBar: AppBar(
-            title: const Text('Verify Email'),
-          ),
-          body: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'A verification email has been sent to your email.',
-                    style: TextStyle(
-                      fontSize: Sizes.medium,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  LargeIconBtn(
-                      onPressed: canResendEmail ? sendVerificationEmail : null,
-                      text: 'Resend email',
-                      icon: Icon(Icons.email, size: Sizes.medium)),
-                  TextButton.icon(
-                      icon: Icon(
-                        Icons.arrow_back,
-                        size: Sizes.medium,
-                      ),
-                      onPressed: () => _auth.logout(),
-                      label: Text(
-                        'Back',
-                        style: TextStyle(fontSize: Sizes.medium),
-                      ))
-                ],
-              )),
-        );
+  // => isEmailVerified
+  //     ? const Home()
+  //     : Scaffold(
+  //         appBar: AppBar(
+  //           title: const Text('Verify Email'),
+  //         ),
+  //         body: Padding(
+  //             padding: const EdgeInsets.all(16),
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                 Text(
+  //                   'A verification email has been sent to your email.',
+  //                   style: TextStyle(
+  //                     fontSize: Sizes.medium,
+  //                   ),
+  //                   textAlign: TextAlign.center,
+  //                 ),
+  //                 const SizedBox(
+  //                   height: 24,
+  //                 ),
+  //                 LargeIconBtn(
+  //                     onPressed: canResendEmail ? sendVerificationEmail : null,
+  //                     text: 'Resend email',
+  //                     icon: Icon(Icons.email, size: Sizes.medium)),
+  //                 TextButton.icon(
+  //                     icon: Icon(
+  //                       Icons.arrow_back,
+  //                       size: Sizes.medium,
+  //                     ),
+  //                     onPressed: () => _auth.logout(),
+  //                     label: Text(
+  //                       'Back',
+  //                       style: TextStyle(fontSize: Sizes.medium),
+  //                     ))
+  //               ],
+  //             )),
+  //       );
 }

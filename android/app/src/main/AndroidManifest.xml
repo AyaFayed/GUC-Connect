@@ -4,7 +4,7 @@
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
    <application
-        android:label="guc_scheduling_app"
+        android:label="GUC Connect"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
