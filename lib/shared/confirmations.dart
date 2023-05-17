@@ -9,6 +9,7 @@ class Confirmations {
       'Are you sure you want to unenroll from this course?';
   static String resetPasswordEmail =
       "Reset password email was sent successfully.";
+  static String verifyEmail = "Verification email was sent successfully.";
   static String creationSuccess(String object) =>
       'The $object was created successfully.';
   static String addSuccess(String object) =>

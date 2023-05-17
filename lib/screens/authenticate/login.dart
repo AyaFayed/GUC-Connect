@@ -78,7 +78,7 @@ class _LoginState extends State<Login> {
                   style:
                       TextStyle(color: AppColors.error, fontSize: Sizes.xsmall),
                 ),
-                const SizedBox(height: 20.0),
+                const SizedBox(height: 10.0),
                 GestureDetector(
                   child: Text(
                     'Forgot Password?',
@@ -90,7 +90,7 @@ class _LoginState extends State<Login> {
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const ForgotPassword())),
                 ),
-                const SizedBox(height: 20.0),
+                const SizedBox(height: 25.0),
                 Text(
                   "Don't have an account?",
                   style: TextStyle(fontSize: Sizes.small),

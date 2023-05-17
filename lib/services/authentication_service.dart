@@ -76,8 +76,13 @@ class AuthService {
   }
 
   Future sendVerificationEmail() async {
-    final user = _auth.currentUser!;
-    await user.sendEmailVerification();
+    try {
+      final user = _auth.currentUser!;
+      await user.sendEmailVerification();
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
   }
 
   Future resetPassword(String email) async {

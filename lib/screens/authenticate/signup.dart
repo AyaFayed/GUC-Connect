@@ -98,6 +98,10 @@ class _SignupState extends State<Signup> {
                       setState(() {
                         _isInstructor = true;
                       });
+                    } else {
+                      setState(() {
+                        _isInstructor = false;
+                      });
                     }
                   },
                 ),

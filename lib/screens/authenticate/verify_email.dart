@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/screens/home/home.dart';
 import 'package:guc_scheduling_app/services/authentication_service.dart';
-import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large__icon_btn.dart';
@@ -35,28 +35,35 @@ class _VerifyEmailState extends State<VerifyEmail> {
   }
 
   Future sendVerificationEmail() async {
-    try {
-      await _auth.sendVerificationEmail();
+    dynamic result = await _auth.sendVerificationEmail();
 
-      setState(() {
-        canResendEmail = false;
-      });
-
-      await Future.delayed(const Duration(seconds: 5));
-
-      setState(() {
-        canResendEmail = true;
-      });
-    } catch (e) {
-      if (context.mounted) {
+    if (context.mounted) {
+      if (result == null) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          confirmBtnColor: AppColors.confirm,
+          text: Confirmations.verifyEmail,
+        );
+      } else {
         QuickAlert.show(
           context: context,
           type: QuickAlertType.error,
           confirmBtnColor: AppColors.confirm,
-          text: Errors.backend,
+          text: result,
         );
       }
     }
+
+    setState(() {
+      canResendEmail = false;
+    });
+
+    await Future.delayed(const Duration(seconds: 5));
+
+    setState(() {
+      canResendEmail = true;
+    });
   }
 
   @override
