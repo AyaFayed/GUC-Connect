@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/screens/authenticate/authenticate.dart';
+import 'package:guc_scheduling_app/screens/authenticate/verify_email.dart';
 import 'package:guc_scheduling_app/screens/home/home.dart';
 
 class Wrapper extends StatefulWidget {
@@ -18,7 +19,7 @@ class _WrapperState extends State<Wrapper> {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return const Home();
+              return const VerifyEmail();
             } else {
               return const Authenticate();
             }

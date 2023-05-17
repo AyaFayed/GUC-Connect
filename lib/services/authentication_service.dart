@@ -74,4 +74,9 @@ class AuthService {
       return e.toString();
     }
   }
+
+  Future sendVerificationEmail() async {
+    final user = _auth.currentUser!;
+    await user.sendEmailVerification();
+  }
 }
