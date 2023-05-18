@@ -68,6 +68,7 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
             QuickAlert.show(
               context: context,
               type: QuickAlertType.success,
+              confirmBtnColor: AppColors.confirm,
               text: Confirmations.addSuccess('assignment'),
             );
           }
@@ -76,6 +77,7 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
             QuickAlert.show(
               context: context,
               type: QuickAlertType.error,
+              confirmBtnColor: AppColors.confirm,
               text: Errors.backend,
             );
           }
