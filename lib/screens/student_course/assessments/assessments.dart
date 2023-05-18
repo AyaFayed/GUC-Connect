@@ -41,16 +41,14 @@ class _AssessmentsState extends State<Assessments>
           child: TabBarView(
             controller: tabController,
             children: [
-              SingleChildScrollView(
-                  child: Quizzes(
+              Quizzes(
                 courseId: widget.courseId,
                 courseName: widget.courseName,
-              )),
-              SingleChildScrollView(
-                  child: Assignments(
+              ),
+              Assignments(
                 courseId: widget.courseId,
                 courseName: widget.courseName,
-              )),
+              ),
             ],
           ),
         )

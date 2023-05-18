@@ -74,13 +74,12 @@ class _MyScheduledEventsState extends State<MyScheduledEvents> {
               ? const Center(child: CircularProgressIndicator())
               : _events!.isEmpty
                   ? const Image(image: AssetImage('assets/images/no_data.png'))
-                  : SingleChildScrollView(
-                      child: EventList(
+                  : EventList(
                       events: _events ?? [],
                       courseName: widget.courseName,
                       editable: true,
                       getData: _getData,
-                    ))),
+                    )),
     );
   }
 }

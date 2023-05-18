@@ -15,8 +15,9 @@ class _QuizzesState extends State<Quizzes> {
   @override
   Widget build(BuildContext context) {
     return ViewScheduledEvents(
-        courseId: widget.courseId,
-        courseName: widget.courseName,
-        eventType: EventType.quiz);
+      courseId: widget.courseId,
+      courseName: widget.courseName,
+      eventType: EventType.quiz,
+    );
   }
 }

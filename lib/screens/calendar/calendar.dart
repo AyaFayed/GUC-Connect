@@ -41,70 +41,77 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Center(
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
-          child: _allEvents == null
-              ? const CircularProgressIndicator()
-              : Column(
-                  children: [
-                    TableCalendar(
-                      focusedDay: selectedDay,
-                      firstDay:
-                          DateTime.now().subtract(const Duration(days: 31)),
-                      lastDay: DateTime.utc(2037, 3, 14),
-                      calendarFormat: CalendarFormat.month,
-                      startingDayOfWeek: StartingDayOfWeek.saturday,
-                      daysOfWeekVisible: true,
+    return RefreshIndicator(
+        onRefresh: _getData,
+        child: SingleChildScrollView(
+          child: Center(
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
+              child: _allEvents == null
+                  ? const CircularProgressIndicator()
+                  : Column(
+                      children: [
+                        TableCalendar(
+                          focusedDay: selectedDay,
+                          firstDay:
+                              DateTime.now().subtract(const Duration(days: 31)),
+                          lastDay: DateTime.utc(2037, 3, 14),
+                          calendarFormat: CalendarFormat.month,
+                          startingDayOfWeek: StartingDayOfWeek.saturday,
+                          daysOfWeekVisible: true,
 
-                      //Day Changed
-                      onDaySelected: (DateTime selectDay, DateTime focusDay) {
-                        setState(() {
-                          selectedDay = selectDay;
-                          selectedEvents = getEventsfromDay(selectDay);
-                        });
-                      },
+                          //Day Changed
+                          onDaySelected:
+                              (DateTime selectDay, DateTime focusDay) {
+                            setState(() {
+                              selectedDay = selectDay;
+                              selectedEvents = getEventsfromDay(selectDay);
+                            });
+                          },
 
-                      selectedDayPredicate: (DateTime date) {
-                        return isSameDay(selectedDay, date);
-                      },
+                          selectedDayPredicate: (DateTime date) {
+                            return isSameDay(selectedDay, date);
+                          },
 
-                      eventLoader: getEventsfromDay,
+                          eventLoader: getEventsfromDay,
 
-                      //To style the Calendar
-                      calendarStyle: CalendarStyle(
-                        isTodayHighlighted: true,
-                        selectedDecoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppColors.dark,
-                            width: 2.0,
+                          //To style the Calendar
+                          calendarStyle: CalendarStyle(
+                            isTodayHighlighted: true,
+                            selectedDecoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: AppColors.dark,
+                                width: 2.0,
+                              ),
+                              color: Colors.transparent,
+                            ),
+                            selectedTextStyle:
+                                const TextStyle(color: Colors.black),
+                            todayTextStyle:
+                                const TextStyle(color: Colors.white),
+                            todayDecoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.dark,
+                            ),
                           ),
-                          color: Colors.transparent,
+                          headerStyle: const HeaderStyle(
+                            formatButtonVisible: false,
+                            titleCentered: true,
+                          ),
                         ),
-                        selectedTextStyle: const TextStyle(color: Colors.black),
-                        todayTextStyle: const TextStyle(color: Colors.white),
-                        todayDecoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.dark,
+                        const SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      headerStyle: const HeaderStyle(
-                        formatButtonVisible: false,
-                        titleCentered: true,
-                      ),
+                        ...selectedEvents.map((CalendarEvent item) =>
+                            CalendarEventCard(
+                                event: item.event,
+                                courseName: item.courseName)),
+                      ],
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    ...selectedEvents.map((CalendarEvent item) =>
-                        CalendarEventCard(
-                            event: item.event, courseName: item.courseName)),
-                  ],
-                ),
-        ),
-      ),
-    );
+            ),
+          ),
+        ));
   }
 }

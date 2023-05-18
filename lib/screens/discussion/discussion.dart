@@ -47,20 +47,23 @@ class _DiscussionState extends State<Discussion> {
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
         child: _posts == null
             ? const Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-                child: Column(
-                children: [
-                  AddPost(courseId: widget.courseId, getData: _getData),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  _postCards.isEmpty
-                      ? const Text('There are no posts yet.')
-                      : const SizedBox(
-                          height: 0.0,
+            : RefreshIndicator(
+                onRefresh: _getData,
+                child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        AddPost(courseId: widget.courseId, getData: _getData),
+                        const SizedBox(
+                          height: 20.0,
                         ),
-                  ..._postCards,
-                ],
-              )));
+                        _postCards.isEmpty
+                            ? const Text('There are no posts yet.')
+                            : const SizedBox(
+                                height: 0.0,
+                              ),
+                        ..._postCards,
+                      ],
+                    ))));
   }
 }

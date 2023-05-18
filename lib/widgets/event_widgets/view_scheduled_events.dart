@@ -56,6 +56,6 @@ class _ViewScheduledEventsState extends State<ViewScheduledEvents> {
                 : EventList(
                     events: _events ?? [],
                     courseName: widget.courseName,
-                  ));
+                    getData: _getData));
   }
 }

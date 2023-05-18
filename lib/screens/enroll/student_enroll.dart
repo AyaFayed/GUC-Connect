@@ -98,56 +98,62 @@ class _StudentEnrollState extends State<StudentEnroll> {
         ),
         elevation: 0.0,
       ),
-      body: SingleChildScrollView(
-          child: Container(
-        alignment: Alignment.topCenter,
-        padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 30.0),
-        child: Column(
-          children: <Widget>[
-            const SizedBox(height: 40.0),
-            Text(
-              widget.courseName,
-              textAlign: TextAlign.center,
-              style:
-                  TextStyle(fontSize: Sizes.large, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 48.0),
-            groups == null
-                ? const CircularProgressIndicator()
-                : DropdownButton(
-                    hint: const Text('Select group'),
-                    value: selectedGroupId.isNotEmpty ? selectedGroupId : null,
-                    items: groups ?? [],
-                    onChanged: (value) => setState(() {
-                      selectedGroupId = value as String;
-                    }),
-                  ),
-            const SizedBox(height: 20.0),
-            tutorials == null
-                ? const CircularProgressIndicator()
-                : DropdownButton(
-                    hint: const Text('Select tutorial'),
-                    items: tutorials ?? [],
-                    value: selectedTutorialId.isNotEmpty
-                        ? selectedTutorialId
-                        : null,
-                    onChanged: (value) => setState(() {
-                          selectedTutorialId = value as String;
-                        })),
-            const SizedBox(
-              height: 12.0,
-            ),
-            Text(
-              error,
-              style: TextStyle(color: AppColors.error, fontSize: 14.0),
-            ),
-            const SizedBox(
-              height: 40.0,
-            ),
-            LargeBtn(onPressed: enroll, text: 'Enroll')
-          ],
-        ),
-      )),
+      body: RefreshIndicator(
+          onRefresh: _getData,
+          child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Container(
+                alignment: Alignment.topCenter,
+                padding: const EdgeInsets.symmetric(
+                    vertical: 18.0, horizontal: 30.0),
+                child: Column(
+                  children: <Widget>[
+                    const SizedBox(height: 40.0),
+                    Text(
+                      widget.courseName,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: Sizes.large, fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 48.0),
+                    groups == null
+                        ? const CircularProgressIndicator()
+                        : DropdownButton(
+                            hint: const Text('Select group'),
+                            value: selectedGroupId.isNotEmpty
+                                ? selectedGroupId
+                                : null,
+                            items: groups ?? [],
+                            onChanged: (value) => setState(() {
+                              selectedGroupId = value as String;
+                            }),
+                          ),
+                    const SizedBox(height: 20.0),
+                    tutorials == null
+                        ? const CircularProgressIndicator()
+                        : DropdownButton(
+                            hint: const Text('Select tutorial'),
+                            items: tutorials ?? [],
+                            value: selectedTutorialId.isNotEmpty
+                                ? selectedTutorialId
+                                : null,
+                            onChanged: (value) => setState(() {
+                                  selectedTutorialId = value as String;
+                                })),
+                    const SizedBox(
+                      height: 12.0,
+                    ),
+                    Text(
+                      error,
+                      style: TextStyle(color: AppColors.error, fontSize: 14.0),
+                    ),
+                    const SizedBox(
+                      height: 40.0,
+                    ),
+                    LargeBtn(onPressed: enroll, text: 'Enroll')
+                  ],
+                ),
+              ))),
     );
   }
 }

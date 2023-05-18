@@ -62,38 +62,42 @@ class _MyCoursesState extends State<MyCourses> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Center(
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-          child: _courses == null || _userType == null
-              ? const CircularProgressIndicator()
-              : Column(children: [
-                  SearchBar(search: onSearch, text: 'Search your courses'),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  _courses!.isEmpty
-                      ? const Image(
-                          image: AssetImage('assets/images/no_data.png'))
-                      : CourseList(
-                          courses: _courses ?? [],
-                          userType: _userType ?? UserType.student,
-                          enroll: false),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  SizedBox(
-                    width: 340,
-                    child: LargeIconBtn(
-                        color: AppColors.confirm,
-                        text: 'Enroll in new course',
-                        icon: const Icon(Icons.add),
-                        onPressed: addCourses),
-                  )
-                ]),
-        ),
-      ),
-    );
+    return RefreshIndicator(
+        onRefresh: _getData,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Center(
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+              child: _courses == null || _userType == null
+                  ? const CircularProgressIndicator()
+                  : Column(children: [
+                      SearchBar(search: onSearch, text: 'Search your courses'),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      _courses!.isEmpty
+                          ? const Image(
+                              image: AssetImage('assets/images/no_data.png'))
+                          : CourseList(
+                              courses: _courses ?? [],
+                              userType: _userType ?? UserType.student,
+                              enroll: false),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      SizedBox(
+                        width: 340,
+                        child: LargeIconBtn(
+                            color: AppColors.confirm,
+                            text: 'Enroll in new course',
+                            icon: const Icon(Icons.add),
+                            onPressed: addCourses),
+                      )
+                    ]),
+            ),
+          ),
+        ));
   }
 }

@@ -19,19 +19,23 @@ class EventList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: events
-            .map((event) => Column(children: [
-                  EventCard(
-                    event: event,
-                    courseName: courseName,
-                    editable: editable,
-                    getData: getData,
-                  ),
-                  Divider(
-                    color: AppColors.unselected,
-                  )
-                ]))
-            .toList());
+    return RefreshIndicator(
+        onRefresh: getData ?? () async {},
+        child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+                children: events
+                    .map((event) => Column(children: [
+                          EventCard(
+                            event: event,
+                            courseName: courseName,
+                            editable: editable,
+                            getData: getData,
+                          ),
+                          Divider(
+                            color: AppColors.unselected,
+                          )
+                        ]))
+                    .toList())));
   }
 }

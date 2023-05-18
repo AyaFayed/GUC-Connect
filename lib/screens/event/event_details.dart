@@ -49,45 +49,49 @@ class _EventDetailsState extends State<EventDetails> {
               ),
               elevation: 0.0,
             ),
-            body: SingleChildScrollView(
-                child: Container(
-              alignment: Alignment.topCenter,
-              padding:
-                  const EdgeInsets.symmetric(vertical: 18.0, horizontal: 30.0),
-              child: Column(
-                children: <Widget>[
-                  const SizedBox(height: 40.0),
-                  Text(
-                    widget.event!.title,
-                    style: TextStyle(
-                        fontSize: Sizes.large, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 20.0),
-                  Text(
-                    widget.event!.subtitle,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  const SizedBox(height: 20.0),
-                  Text(
-                    widget.event!.description,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  if (widget.event!.description.isNotEmpty)
-                    const SizedBox(height: 20.0),
-                  if (widget.event!.file != null)
-                    DownloadFile(file: widget.event!.file!),
-                  if (widget.event!.file != null)
-                    const SizedBox(
-                      height: 20,
+            body: RefreshIndicator(
+              onRefresh: _getData,
+              child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 18.0, horizontal: 30.0),
+                    child: Column(
+                      children: <Widget>[
+                        const SizedBox(height: 40.0),
+                        Text(
+                          widget.event!.title,
+                          style: TextStyle(
+                              fontSize: Sizes.large,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 20.0),
+                        Text(
+                          widget.event!.subtitle,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(height: 20.0),
+                        Text(
+                          widget.event!.description,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        if (widget.event!.description.isNotEmpty)
+                          const SizedBox(height: 20.0),
+                        if (widget.event!.file != null)
+                          DownloadFile(file: widget.event!.file!),
+                        if (widget.event!.file != null)
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        if (_currentUserType == UserType.student)
+                          SetReminderButton(
+                            title: 'Set reminder',
+                            eventId: widget.event?.id ?? '',
+                          ),
+                      ],
                     ),
-                  if (_currentUserType == UserType.student)
-                    SetReminderButton(
-                      title: 'Set reminder',
-                      eventId: widget.event?.id ?? '',
-                    ),
-                ],
-              ),
-            )),
-          );
+                  )),
+            ));
   }
 }

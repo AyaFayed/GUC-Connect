@@ -53,28 +53,32 @@ class _EnrollState extends State<Enroll> {
           ),
           elevation: 0.0,
         ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-              child: _courses == null
-                  ? const CircularProgressIndicator()
-                  : Column(children: [
-                      SearchBar(search: onSearch),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      _courses!.isEmpty
-                          ? const Image(
-                              image: AssetImage('assets/images/no_data.png'))
-                          : CourseList(
-                              courses: _courses ?? [],
-                              userType: widget.userType,
-                              enroll: true),
-                    ]),
-            ),
-          ),
-        ));
+        body: RefreshIndicator(
+            onRefresh: _getData,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15.0, horizontal: 10.0),
+                  child: _courses == null
+                      ? const CircularProgressIndicator()
+                      : Column(children: [
+                          SearchBar(search: onSearch),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          _courses!.isEmpty
+                              ? const Image(
+                                  image:
+                                      AssetImage('assets/images/no_data.png'))
+                              : CourseList(
+                                  courses: _courses ?? [],
+                                  userType: widget.userType,
+                                  enroll: true),
+                        ]),
+                ),
+              ),
+            )));
   }
 }

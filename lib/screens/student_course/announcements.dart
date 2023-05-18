@@ -47,10 +47,9 @@ class _AnnouncementsState extends State<Announcements> {
             ? const Center(child: CircularProgressIndicator())
             : _events!.isEmpty
                 ? const Image(image: AssetImage('assets/images/no_data.png'))
-                : SingleChildScrollView(
-                    child: EventList(
+                : EventList(
                     events: _events ?? [],
                     courseName: widget.courseName,
-                  )));
+                    getData: _getData));
   }
 }

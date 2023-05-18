@@ -49,6 +49,6 @@ class _AssignmentsState extends State<Assignments> {
                 : EventList(
                     events: _events ?? [],
                     courseName: widget.courseName,
-                  ));
+                    getData: _getData));
   }
 }

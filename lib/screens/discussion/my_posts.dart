@@ -78,17 +78,21 @@ class _MyPostsState extends State<MyPosts> {
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
             child: _posts == null
                 ? const Center(child: CircularProgressIndicator())
-                : SingleChildScrollView(
-                    child: Column(
-                    children: [
-                      _postCards.isEmpty
-                          ? const Image(
-                              image: AssetImage('assets/images/no_data.png'))
-                          : const SizedBox(
-                              height: 0.0,
-                            ),
-                      ..._postCards,
-                    ],
-                  ))));
+                : RefreshIndicator(
+                    onRefresh: _getData,
+                    child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            _postCards.isEmpty
+                                ? const Image(
+                                    image:
+                                        AssetImage('assets/images/no_data.png'))
+                                : const SizedBox(
+                                    height: 0.0,
+                                  ),
+                            ..._postCards,
+                          ],
+                        )))));
   }
 }

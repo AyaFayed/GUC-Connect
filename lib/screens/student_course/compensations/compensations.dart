@@ -39,16 +39,14 @@ class _CompensationsState extends State<Compensations>
         ),
         Expanded(
           child: TabBarView(controller: tabController, children: [
-            SingleChildScrollView(
-                child: CompensationLectures(
+            CompensationLectures(
               courseId: widget.courseId,
               courseName: widget.courseName,
-            )),
-            SingleChildScrollView(
-                child: CompensationTutorials(
+            ),
+            CompensationTutorials(
               courseId: widget.courseId,
               courseName: widget.courseName,
-            )),
+            ),
           ]),
         )
       ],
