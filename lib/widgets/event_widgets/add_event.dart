@@ -89,31 +89,24 @@ class _AddEventState extends State<AddEvent> {
                 : TutorialsDropdown(
                     courseId: widget.courseId,
                     selectedTutorialIds: widget.selectedGroupIds),
-            const SizedBox(height: 20.0),
+            const SizedBox(height: 24.0),
             Align(
-                alignment: Alignment.topLeft,
-                child: Row(children: [
-                  TextButton.icon(
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      alignment: Alignment.centerLeft,
-                    ),
-                    onPressed: pickFile,
-                    label: Text(
-                      widget.file.isEmpty ? 'Add file' : 'Change file',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: Sizes.small),
-                    ),
-                    icon: const Icon(Icons.attach_file),
-                  ),
-                  const Spacer(),
-                  Text(
-                    fileName,
-                    style: TextStyle(
-                        fontSize: Sizes.small, color: AppColors.unselected),
-                  ),
-                ])),
+              alignment: Alignment.topLeft,
+              child: TextButton.icon(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  alignment: Alignment.centerLeft,
+                ),
+                onPressed: pickFile,
+                label: Text(
+                  widget.file.isEmpty ? 'Add file' : fileName,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(fontSize: Sizes.smaller),
+                ),
+                icon: const Icon(Icons.attach_file),
+              ),
+            ),
           ]);
   }
 }

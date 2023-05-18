@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -22,7 +23,7 @@ class DownloadFile extends StatefulWidget {
 
 class _DownloadFileState extends State<DownloadFile> {
   bool _progress = false;
-  String downloadConfirmation = '';
+  String? downloadConfirmation;
 
   final ReceivePort _port = ReceivePort();
 
@@ -58,11 +59,16 @@ class _DownloadFileState extends State<DownloadFile> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: <Widget>[
         _progress
             ? const CircularProgressIndicator()
             : TextButton.icon(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  alignment: Alignment.centerLeft,
+                ),
                 onPressed: () async {
                   setState(() {
                     _progress = true;
@@ -82,6 +88,7 @@ class _DownloadFileState extends State<DownloadFile> {
 
                   setState(() {
                     _progress = false;
+                    downloadConfirmation = 'File downloaded';
                   });
                 },
                 icon: const Icon(Icons.attach_file),
@@ -90,7 +97,13 @@ class _DownloadFileState extends State<DownloadFile> {
                   style: TextStyle(fontSize: Sizes.xsmall),
                 ),
               ),
-        Text(downloadConfirmation, style: TextStyle(fontSize: Sizes.xsmall))
+        const Spacer(),
+        if (downloadConfirmation != null)
+          Text(downloadConfirmation!,
+              style: TextStyle(
+                fontSize: 12,
+                color: AppColors.unselected,
+              ))
       ],
     );
   }

@@ -4,6 +4,7 @@ import 'package:guc_scheduling_app/models/discussion/post_model.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
+import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/discussion_widgets/reply_list.dart';
 import 'package:guc_scheduling_app/widgets/download_file.dart';
 import 'package:quickalert/quickalert.dart';
@@ -86,41 +87,35 @@ class _PostCardState extends State<PostCard> {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
           widget.post.authorName,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: Sizes.small),
         ),
         const SizedBox(
           height: 10.0,
         ),
-        Text(widget.post.content),
+        Text(widget.post.content, style: TextStyle(fontSize: Sizes.smaller)),
         const SizedBox(
           height: 10.0,
         ),
-        widget.post.file != null
-            ? DownloadFile(file: widget.post.file!)
-            : const SizedBox(height: 0.0),
-        const SizedBox(
-          height: 5.0,
-        ),
+        if (widget.post.file != null) DownloadFile(file: widget.post.file!),
         Divider(
           color: AppColors.unselected,
         ),
         Row(
           children: [
-            _showDelete
-                ? TextButton.icon(
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      alignment: Alignment.centerLeft,
-                    ),
-                    onPressed: deletePost,
-                    icon: const Icon(
-                      Icons.delete_outline,
-                    ),
-                    label: const Text(
-                      'Delete post',
-                    ))
-                : const SizedBox(height: 0.0),
+            if (_showDelete)
+              TextButton.icon(
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    alignment: Alignment.centerLeft,
+                  ),
+                  onPressed: deletePost,
+                  icon: const Icon(
+                    Icons.delete_outline,
+                  ),
+                  label: const Text(
+                    'Delete post',
+                  )),
             const Spacer(),
             TextButton(
                 onPressed: () {
@@ -134,13 +129,12 @@ class _PostCardState extends State<PostCard> {
                 ))
           ],
         ),
-        _showReplies
-            ? ReplyList(
-                postId: widget.post.id,
-                replies: widget.post.replies,
-                getData: widget.getData,
-              )
-            : const SizedBox(height: 0.0)
+        if (_showReplies)
+          ReplyList(
+            postId: widget.post.id,
+            replies: widget.post.replies,
+            getData: widget.getData,
+          ),
       ]),
     ));
   }

@@ -4,6 +4,7 @@ import 'package:guc_scheduling_app/models/group/group_model.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
+import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class GroupsDropdown extends StatefulWidget {
@@ -50,7 +51,7 @@ class _GroupsDropdownState extends State<GroupsDropdown> {
       selectedColor: AppColors.selected,
       buttonText: Text(
         'Select groups',
-        style: TextStyle(color: Colors.grey[700], fontSize: 16),
+        style: TextStyle(color: Colors.grey[700], fontSize: Sizes.smaller),
       ),
       items: groups,
       title: const Text('Select groups'),

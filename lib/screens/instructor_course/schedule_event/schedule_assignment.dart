@@ -111,25 +111,22 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
             children: <Widget>[
               const SizedBox(height: 7.0),
               DateTimeSelector(onConfirm: setDateTime, dateTime: startDateTime),
-              error.isNotEmpty
-                  ? const SizedBox(
-                      height: 5.0,
-                    )
-                  : const SizedBox(
-                      height: 0.0,
-                    ),
+              if (error.isNotEmpty)
+                const SizedBox(
+                  height: 5.0,
+                ),
               Text(
                 error,
                 style: TextStyle(color: AppColors.error, fontSize: 13.0),
               ),
-              const SizedBox(height: 5.0),
+              if (error.isNotEmpty) const SizedBox(height: 5.0),
               AddEvent(
                   controllerTitle: controllerTitle,
                   controllerDescription: controllerDescription,
                   file: file,
                   selectedGroupIds: selectedGroupIds,
                   courseId: widget.courseId),
-              const SizedBox(height: 40.0),
+              const SizedBox(height: 24.0),
               LargeBtn(onPressed: scheduleAssignment, text: 'Post assignment'),
             ],
           ),
