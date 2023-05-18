@@ -102,15 +102,18 @@ class _AddPostState extends State<AddPost> {
               const SizedBox(height: 20.0),
               Row(
                 children: [
-                  TextButton.icon(
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        alignment: Alignment.centerLeft,
-                      ),
-                      onPressed: pickFile,
-                      icon: const Icon(Icons.attach_file),
-                      label: Text(fileName)),
+                  SizedBox(
+                    width: 220,
+                    child: TextButton.icon(
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          alignment: Alignment.centerLeft,
+                        ),
+                        onPressed: pickFile,
+                        icon: const Icon(Icons.attach_file),
+                        label: Text(fileName)),
+                  ),
                   const Spacer(),
                   SmallBtn(
                     onPressed: addPost,

@@ -83,8 +83,11 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     return Card(
         child: Container(
-      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const SizedBox(
+          height: 10,
+        ),
         Text(
           widget.post.authorName,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: Sizes.small),
