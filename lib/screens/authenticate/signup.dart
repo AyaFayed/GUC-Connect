@@ -1,3 +1,4 @@
+import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import 'package:guc_scheduling_app/services/authentication_service.dart';
 import "package:guc_scheduling_app/shared/constants.dart";
@@ -84,11 +85,10 @@ class _SignupState extends State<Signup> {
             child: Column(
               children: <Widget>[
                 const SizedBox(height: 80.0),
-                Text(
-                  appName,
-                  style: TextStyle(fontSize: Sizes.xlarge),
+                const Image(
+                  image: AssetImage('assets/images/app_name_logo.png'),
                 ),
-                const SizedBox(height: 40.0),
+                const SizedBox(height: 24.0),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Email'),
                   validator: (val) => !isValidMail(val!) ? Errors.email : null,
@@ -147,20 +147,23 @@ class _SignupState extends State<Signup> {
                       TextStyle(color: AppColors.error, fontSize: Sizes.xsmall),
                 ),
                 const SizedBox(
-                  height: 20.0,
+                  height: 16.0,
                 ),
-                Text(
-                  'Already have an account?',
-                  style: TextStyle(fontSize: Sizes.small),
-                ),
-                TextButton(
-                    style: TextButton.styleFrom(
-                        textStyle: TextStyle(fontSize: Sizes.small)),
-                    onPressed: () {
-                      widget.toggleView();
-                    },
-                    child: Text('Log in',
-                        style: TextStyle(color: AppColors.primary)))
+                RichText(
+                    text: TextSpan(
+                  text: "Have an account? ",
+                  children: [
+                    TextSpan(
+                      text: 'Log in',
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          widget.toggleView();
+                        },
+                      style: TextStyle(color: AppColors.primary),
+                    ),
+                  ],
+                  style: TextStyle(color: Colors.black, fontSize: Sizes.small),
+                )),
               ],
             ),
           )),

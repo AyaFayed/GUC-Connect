@@ -51,7 +51,7 @@ class _LoginState extends State<Login> {
             key: _formKey,
             child: Column(
               children: <Widget>[
-                const SizedBox(height: 120.0),
+                const SizedBox(height: 130.0),
                 const Image(
                   image: AssetImage('assets/images/app_name_logo.png'),
                 ),
