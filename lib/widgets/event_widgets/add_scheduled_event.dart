@@ -174,7 +174,8 @@ class _AddScheduledEventState extends State<AddScheduledEvent> {
                       FilteringTextInputFormatter.digitsOnly
                     ],
                     decoration: const InputDecoration(
-                        labelText: 'Duration in minutes', suffixText: 'days'),
+                        labelText: 'Duration in minutes',
+                        suffixText: 'minutes'),
                     validator: (val) => val!.isEmpty ? Errors.duration : null,
                     controller: controllerDuration,
                   ),
