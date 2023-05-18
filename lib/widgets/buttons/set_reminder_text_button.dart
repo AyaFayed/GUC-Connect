@@ -1,37 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/screens/event/set_reminder.dart';
+import 'package:guc_scheduling_app/widgets/buttons/large__icon_btn.dart';
 
-class SetReminderTextButton extends StatefulWidget {
+class SetReminderButton extends StatefulWidget {
   final String title;
   final String eventId;
-  const SetReminderTextButton(
+  const SetReminderButton(
       {super.key, required this.title, required this.eventId});
 
   @override
-  State<SetReminderTextButton> createState() => _SetReminderTextButtonState();
+  State<SetReminderButton> createState() => _SetReminderButtonState();
 }
 
-class _SetReminderTextButtonState extends State<SetReminderTextButton> {
+class _SetReminderButtonState extends State<SetReminderButton> {
   Future<void> setReminder() async {}
 
   @override
   Widget build(BuildContext context) {
-    return TextButton.icon(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => SetReminder(
-                      title: widget.title,
-                      eventId: widget.eventId,
-                    )),
-          );
-        },
-        icon: const Icon(Icons.alarm),
-        label: Text(
-          widget.title,
-          style: TextStyle(fontSize: Sizes.small),
-        ));
+    return LargeIconBtn(
+      onPressed: () async {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SetReminder(
+                    title: widget.title,
+                    eventId: widget.eventId,
+                  )),
+        );
+      },
+      color: AppColors.confirm,
+      icon: const Icon(Icons.alarm),
+      text: widget.title,
+    );
   }
 }

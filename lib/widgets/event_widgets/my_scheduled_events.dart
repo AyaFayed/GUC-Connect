@@ -73,8 +73,7 @@ class _MyScheduledEventsState extends State<MyScheduledEvents> {
           child: _events == null
               ? const Center(child: CircularProgressIndicator())
               : _events!.isEmpty
-                  ? Text(
-                      "You haven't scheduled any ${formatEventTypePlural(widget.eventType)} yet.")
+                  ? const Image(image: AssetImage('assets/images/no_data.png'))
                   : SingleChildScrollView(
                       child: EventList(
                       events: _events ?? [],

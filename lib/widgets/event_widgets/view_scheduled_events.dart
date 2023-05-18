@@ -3,7 +3,6 @@ import 'package:guc_scheduling_app/controllers/event_controllers/scheduled_event
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/models/events/scheduled_event.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
-import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/event_list.dart';
 
 class ViewScheduledEvents extends StatefulWidget {
@@ -53,8 +52,7 @@ class _ViewScheduledEventsState extends State<ViewScheduledEvents> {
         child: _events == null
             ? const Center(child: CircularProgressIndicator())
             : _events!.isEmpty
-                ? Text(
-                    'There are no ${formatEventTypePlural(widget.eventType)}.')
+                ? const Image(image: AssetImage('assets/images/no_data.png'))
                 : EventList(
                     events: _events ?? [],
                     courseName: widget.courseName,

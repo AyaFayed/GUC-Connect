@@ -391,10 +391,22 @@ class _EditEventState extends State<EditEvent> {
                           fileUrl != null
                               ? DownloadFile(file: fileUrl!)
                               : const SizedBox(height: 0.0),
-                          const SizedBox(height: 20.0),
-                          SmallIconBtn(
-                            onPressed: _disableAllButtons ? null : pickFile,
-                            text: fileUrl == null ? 'Add file' : 'Change file',
+                          const SizedBox(height: 10.0),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: TextButton.icon(
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                alignment: Alignment.centerLeft,
+                              ),
+                              onPressed: _disableAllButtons ? null : pickFile,
+                              label: Text(
+                                fileUrl == null ? 'Add file' : 'Change file',
+                                style: TextStyle(fontSize: Sizes.small),
+                              ),
+                              icon: const Icon(Icons.attach_file),
+                            ),
                           ),
                           const SizedBox(height: 5),
                           Text(
@@ -417,7 +429,7 @@ class _EditEventState extends State<EditEvent> {
                           LargeBtn(
                             onPressed: _disableAllButtons ? null : cancel,
                             text: 'Cancel',
-                            color: AppColors.unselected,
+                            color: AppColors.secondary,
                           ),
                         ],
                       ),

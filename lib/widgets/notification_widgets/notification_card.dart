@@ -9,7 +9,10 @@ import 'package:guc_scheduling_app/screens/instructor_course/professor_course.da
 import 'package:guc_scheduling_app/screens/instructor_course/ta_course.dart';
 import 'package:guc_scheduling_app/screens/student_course/student_course.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
+import 'package:quickalert/quickalert.dart';
 
 class NotificationCard extends StatefulWidget {
   final NotificationDisplay displayNotification;
@@ -38,6 +41,18 @@ class _NotificationCardState extends State<NotificationCard> {
       Course? course = await _notificationController.getCourseFromNotification(
           widget.displayNotification.notification.eventId,
           widget.displayNotification.notification.notificationType);
+      if (course == null) {
+        if (context.mounted) {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            confirmBtnColor: AppColors.confirm,
+            text: Errors.notExist,
+          );
+        }
+        return;
+      }
+
       if (context.mounted) {
         switch (currentUserType) {
           case null:
@@ -47,8 +62,8 @@ class _NotificationCardState extends State<NotificationCard> {
               context,
               MaterialPageRoute(
                   builder: (context) => StudentCourse(
-                        courseId: course?.id ?? '',
-                        courseName: course?.name ?? '',
+                        courseId: course.id,
+                        courseName: course.name,
                         selectedIndex: 3,
                       )),
             );
@@ -58,8 +73,8 @@ class _NotificationCardState extends State<NotificationCard> {
               context,
               MaterialPageRoute(
                   builder: (context) => TACourse(
-                        courseId: course?.id ?? '',
-                        courseName: course?.name ?? '',
+                        courseId: course.id,
+                        courseName: course.name,
                         selectedIndex: 3,
                       )),
             );
@@ -69,8 +84,8 @@ class _NotificationCardState extends State<NotificationCard> {
               context,
               MaterialPageRoute(
                   builder: (context) => ProfessorCourse(
-                        courseId: course?.id ?? '',
-                        courseName: course?.name ?? '',
+                        courseId: course.id,
+                        courseName: course.name,
                         selectedIndex: 3,
                       )),
             );
@@ -90,7 +105,8 @@ class _NotificationCardState extends State<NotificationCard> {
           MaterialPageRoute(
               builder: (context) => EventDetails(
                   courseName:
-                      widget.displayNotification.notification.courseName ?? '',
+                      widget.displayNotification.notification.courseName ??
+                          widget.displayNotification.notification.title,
                   event: displayEvent)),
         );
       }

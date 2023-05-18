@@ -31,11 +31,14 @@ class _ReplyListState extends State<ReplyList> {
           ? const Text('There are no replies yet.')
           : const SizedBox(height: 0),
       ...widget.replies
+          .asMap()
+          .entries
           .map((reply) => Column(children: [
-                Divider(
-                  color: AppColors.unselected,
-                ),
-                ReplyCard(postId: widget.postId, reply: reply),
+                if (reply.key > 0)
+                  Divider(
+                    color: AppColors.unselected,
+                  ),
+                ReplyCard(postId: widget.postId, reply: reply.value),
               ]))
           .toList(),
     ]);

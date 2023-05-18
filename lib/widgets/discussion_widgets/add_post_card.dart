@@ -103,6 +103,11 @@ class _AddPostState extends State<AddPost> {
               Row(
                 children: [
                   TextButton.icon(
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        alignment: Alignment.centerLeft,
+                      ),
                       onPressed: pickFile,
                       icon: const Icon(Icons.attach_file),
                       label: Text(fileName)),

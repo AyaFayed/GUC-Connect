@@ -108,6 +108,11 @@ class _PostCardState extends State<PostCard> {
           children: [
             _showDelete
                 ? TextButton.icon(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      alignment: Alignment.centerLeft,
+                    ),
                     onPressed: deletePost,
                     icon: const Icon(
                       Icons.delete_outline,

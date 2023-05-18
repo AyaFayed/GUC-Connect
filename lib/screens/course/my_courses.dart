@@ -86,7 +86,7 @@ class _MyCoursesState extends State<MyCourses> {
                   SizedBox(
                     width: 340,
                     child: LargeIconBtn(
-                        color: AppColors.secondary,
+                        color: AppColors.confirm,
                         text: 'Enroll in new course',
                         icon: const Icon(Icons.add),
                         onPressed: addCourses),

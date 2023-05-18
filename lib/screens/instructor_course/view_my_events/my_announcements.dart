@@ -75,7 +75,8 @@ class _MyAnnouncementsState extends State<MyAnnouncements> {
                 child: _events == null
                     ? const Center(child: CircularProgressIndicator())
                     : _events!.isEmpty
-                        ? const Text("You haven't added any announcements yet.")
+                        ? const Image(
+                            image: AssetImage('assets/images/no_data.png'))
                         : SingleChildScrollView(
                             child: EventList(
                             events: _events ?? [],

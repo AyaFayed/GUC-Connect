@@ -56,7 +56,7 @@ class _MyAssignmentsState extends State<MyAssignments> {
           child: _events == null
               ? const Center(child: CircularProgressIndicator())
               : _events!.isEmpty
-                  ? const Text("You haven't added any assignments yet.")
+                  ? const Image(image: AssetImage('assets/images/no_data.png'))
                   : SingleChildScrollView(
                       child: EventList(
                       events: _events ?? [],

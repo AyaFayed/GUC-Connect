@@ -45,7 +45,7 @@ class _AssignmentsState extends State<Assignments> {
         child: _events == null
             ? const Center(child: CircularProgressIndicator())
             : _events!.isEmpty
-                ? const Text('There are no assignments.')
+                ? const Image(image: AssetImage('assets/images/no_data.png'))
                 : EventList(
                     events: _events ?? [],
                     courseName: widget.courseName,

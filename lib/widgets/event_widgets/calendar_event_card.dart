@@ -19,11 +19,11 @@ class CalendarEventCard extends StatelessWidget {
       borderOnForeground: true,
       child: ListTile(
         title: Text(
-          event.title,
+          courseName,
           style: TextStyle(fontSize: Sizes.small),
         ),
         subtitle: Text(
-          event.subtitle,
+          event.title,
         ),
         onTap: () {
           Navigator.push(

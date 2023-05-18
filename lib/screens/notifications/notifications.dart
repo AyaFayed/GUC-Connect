@@ -41,17 +41,20 @@ class _NotificationsState extends State<Notifications> {
                 const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
             child: _notifications == null
                 ? const CircularProgressIndicator()
-                : ListView.separated(
-                    itemBuilder: (BuildContext context, int index) =>
-                        NotificationCard(
-                      displayNotification: _notifications![index],
-                      openNotification: widget.openNotification,
-                    ),
-                    itemCount: _notifications!.length,
-                    separatorBuilder: (BuildContext context, int index) =>
-                        Divider(
-                      color: AppColors.unselected,
-                    ),
-                  )));
+                : _notifications!.isEmpty
+                    ? const Image(
+                        image: AssetImage('assets/images/no_data.png'))
+                    : ListView.separated(
+                        itemBuilder: (BuildContext context, int index) =>
+                            NotificationCard(
+                          displayNotification: _notifications![index],
+                          openNotification: widget.openNotification,
+                        ),
+                        itemCount: _notifications!.length,
+                        separatorBuilder: (BuildContext context, int index) =>
+                            Divider(
+                          color: AppColors.unselected,
+                        ),
+                      )));
   }
 }

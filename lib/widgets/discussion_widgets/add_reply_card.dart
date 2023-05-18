@@ -69,20 +69,17 @@ class _AddReplyState extends State<AddReply> {
             keyboardType: TextInputType.multiline,
             minLines: 1,
             maxLines: 5,
-            decoration: const InputDecoration(hintText: 'Reply'),
+            decoration: InputDecoration(
+                hintText: 'Reply',
+                suffixIcon: IconButton(
+                    icon: Icon(
+                      Icons.send,
+                      color: AppColors.confirm,
+                    ),
+                    onPressed: addReply)),
             validator: (val) => val!.isEmpty ? Errors.required : null,
             controller: controllerReply,
           ),
-          const SizedBox(height: 20.0),
-          Row(
-            children: [
-              const Spacer(),
-              SmallBtn(
-                onPressed: addReply,
-                text: 'Post reply',
-              )
-            ],
-          )
         ],
       ),
     );

@@ -82,7 +82,8 @@ class _MyPostsState extends State<MyPosts> {
                     child: Column(
                     children: [
                       _postCards.isEmpty
-                          ? const Text("You haven't added any posts yet.")
+                          ? const Image(
+                              image: AssetImage('assets/images/no_data.png'))
                           : const SizedBox(
                               height: 0.0,
                             ),

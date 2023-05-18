@@ -13,6 +13,7 @@ class Errors {
   static String dateTime = 'Select a date and time';
   static String duration = 'Enter a valid duration';
   static String backend = 'Something went wrong';
+  static String notExist = "This is no longer available";
   static String scheduling(int conflicts) =>
       '$conflicts ${conflicts > 1 ? 'students' : 'student'} has conflicts with this timing.';
 }

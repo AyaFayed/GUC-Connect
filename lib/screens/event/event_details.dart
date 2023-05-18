@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/set_reminder_text_button.dart';
 import 'package:guc_scheduling_app/widgets/download_file.dart';
 
@@ -52,13 +53,14 @@ class _EventDetailsState extends State<EventDetails> {
                 child: Container(
               alignment: Alignment.topCenter,
               padding:
-                  const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                  const EdgeInsets.symmetric(vertical: 18.0, horizontal: 30.0),
               child: Column(
                 children: <Widget>[
                   const SizedBox(height: 40.0),
                   Text(
                     widget.event!.title,
-                    style: const TextStyle(fontSize: 20),
+                    style: TextStyle(
+                        fontSize: Sizes.large, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 20.0),
                   Text(
@@ -80,7 +82,7 @@ class _EventDetailsState extends State<EventDetails> {
                       height: 20,
                     ),
                   if (_currentUserType == UserType.student)
-                    SetReminderTextButton(
+                    SetReminderButton(
                       title: 'Set reminder',
                       eventId: widget.event?.id ?? '',
                     ),
