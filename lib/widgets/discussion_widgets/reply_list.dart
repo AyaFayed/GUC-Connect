@@ -27,9 +27,7 @@ class _ReplyListState extends State<ReplyList> {
       const SizedBox(
         height: 5.0,
       ),
-      widget.replies.isEmpty
-          ? const Text('No replies')
-          : const SizedBox(height: 0),
+      if (widget.replies.isEmpty) const Text('No replies'),
       ...widget.replies
           .asMap()
           .entries

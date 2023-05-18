@@ -74,9 +74,8 @@ class _EventDetailsState extends State<EventDetails> {
                   ),
                   if (widget.event!.description.isNotEmpty)
                     const SizedBox(height: 20.0),
-                  widget.event!.file != null
-                      ? DownloadFile(file: widget.event!.file!)
-                      : const SizedBox(height: 0.0),
+                  if (widget.event!.file != null)
+                    DownloadFile(file: widget.event!.file!),
                   if (widget.event!.file != null)
                     const SizedBox(
                       height: 20,

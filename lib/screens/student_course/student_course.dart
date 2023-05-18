@@ -67,7 +67,7 @@ class _StudentCourseState extends State<StudentCourse> {
       drawer: StudentDrawer(
           courseId: widget.courseId, courseName: widget.courseName, pop: false),
       body: _widgetOptions == null
-          ? const CircularProgressIndicator()
+          ? const Center(child: CircularProgressIndicator())
           : _widgetOptions?.elementAt(_selectedIndex),
       bottomNavigationBar:
           StudentBottomBar(selectedIndex: _selectedIndex, onTap: _onItemTapped),

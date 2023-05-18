@@ -221,7 +221,7 @@ class _AdminCourseState extends State<AdminCourse> {
               children: <Widget>[
                 const SizedBox(height: 40.0),
                 controllerName == null
-                    ? const CircularProgressIndicator()
+                    ? const Center(child: CircularProgressIndicator())
                     : TextFormField(
                         decoration: const InputDecoration(
                           labelText: 'Name',

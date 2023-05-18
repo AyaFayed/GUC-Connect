@@ -61,7 +61,7 @@ class _TACourseState extends State<TACourse> {
       drawer: TADrawer(
           courseId: widget.courseId, courseName: widget.courseName, pop: false),
       body: _widgetOptions == null
-          ? const CircularProgressIndicator()
+          ? const Center(child: CircularProgressIndicator())
           : _widgetOptions?.elementAt(_selectedIndex),
       bottomNavigationBar:
           TABottomBar(selectedIndex: _selectedIndex, onTap: _onItemTapped),

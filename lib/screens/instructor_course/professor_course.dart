@@ -66,7 +66,7 @@ class _ProfessorCourseState extends State<ProfessorCourse> {
           pop: false,
         ),
         body: _widgetOptions == null
-            ? const CircularProgressIndicator()
+            ? const Center(child: CircularProgressIndicator())
             : _widgetOptions?.elementAt(_selectedIndex),
         bottomNavigationBar: ProfessorBottomBar(
             selectedIndex: _selectedIndex, onTap: _onItemTapped));

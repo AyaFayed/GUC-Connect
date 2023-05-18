@@ -333,7 +333,7 @@ class _EditEventState extends State<EditEvent> {
               padding:
                   const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
               child: _isLoading
-                  ? const CircularProgressIndicator()
+                  ? const Center(child: CircularProgressIndicator())
                   : Form(
                       key: _formKey,
                       child: Column(
@@ -354,19 +354,18 @@ class _EditEventState extends State<EditEvent> {
                                 color: AppColors.error, fontSize: 13.0),
                           ),
                           const SizedBox(height: 5.0),
-                          widget.eventType == EventType.assignment
-                              ? const SizedBox(height: 0.0)
-                              : TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  decoration: const InputDecoration(
-                                      labelText: 'Duration in minutes'),
-                                  validator: (val) =>
-                                      val!.isEmpty ? Errors.duration : null,
-                                  controller: controllerDuration,
-                                ),
+                          if (widget.eventType != EventType.assignment)
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              decoration: const InputDecoration(
+                                  labelText: 'Duration in minutes'),
+                              validator: (val) =>
+                                  val!.isEmpty ? Errors.duration : null,
+                              controller: controllerDuration,
+                            ),
                           const SizedBox(height: 20.0),
                           TextFormField(
                             decoration:
@@ -387,9 +386,7 @@ class _EditEventState extends State<EditEvent> {
                             controller: controllerDescription,
                           ),
                           const SizedBox(height: 20.0),
-                          fileUrl != null
-                              ? DownloadFile(file: fileUrl!)
-                              : const SizedBox(height: 0.0),
+                          if (fileUrl != null) DownloadFile(file: fileUrl!),
                           const SizedBox(height: 10.0),
                           Align(
                             alignment: Alignment.topLeft,

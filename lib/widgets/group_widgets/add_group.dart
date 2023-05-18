@@ -126,21 +126,20 @@ class _AddGroupState extends State<AddGroup> {
                     },
                     text: 'Add lecture'),
               ),
-              addLecture.length > 1
-                  ? SizedBox(
-                      width: 180,
-                      child: SmallIconBtn(
-                        onPressed: () {
-                          setState(() {
-                            lectures.removeLast();
-                            addLecture.removeLast();
-                          });
-                        },
-                        text: 'Remove lecture',
-                        color: AppColors.primary,
-                        icon: const Icon(Icons.delete_outline),
-                      ))
-                  : const SizedBox(height: 0.0),
+              if (addLecture.length > 1)
+                SizedBox(
+                    width: 180,
+                    child: SmallIconBtn(
+                      onPressed: () {
+                        setState(() {
+                          lectures.removeLast();
+                          addLecture.removeLast();
+                        });
+                      },
+                      text: 'Remove lecture',
+                      color: AppColors.primary,
+                      icon: const Icon(Icons.delete_outline),
+                    )),
               const SizedBox(height: 30.0),
               LargeBtn(
                   onPressed: addGroup,
