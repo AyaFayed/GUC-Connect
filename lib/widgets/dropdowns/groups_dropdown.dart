@@ -47,9 +47,10 @@ class _GroupsDropdownState extends State<GroupsDropdown> {
   @override
   Widget build(BuildContext context) {
     return MultiSelectDialogField(
+      selectedColor: AppColors.selected,
       buttonText: Text(
         'Select groups',
-        style: TextStyle(color: AppColors.dark, fontSize: 16),
+        style: TextStyle(color: Colors.grey[700], fontSize: 16),
       ),
       items: groups,
       title: const Text('Select groups'),

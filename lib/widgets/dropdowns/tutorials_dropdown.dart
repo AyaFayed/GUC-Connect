@@ -47,9 +47,10 @@ class _TutorialsDropdownState extends State<TutorialsDropdown> {
   @override
   Widget build(BuildContext context) {
     return MultiSelectDialogField(
+      selectedColor: AppColors.selected,
       buttonText: Text(
         'Select tutorials',
-        style: TextStyle(color: AppColors.dark, fontSize: 16),
+        style: TextStyle(color: Colors.grey[700], fontSize: 16),
       ),
       items: tutorials,
       title: const Text('Select tutorials'),

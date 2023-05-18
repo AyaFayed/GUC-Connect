@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/small_icon_btn.dart';
 import 'package:guc_scheduling_app/widgets/dropdowns/groups_dropdown.dart';
@@ -81,7 +82,7 @@ class _AddEventState extends State<AddEvent> {
               decoration: const InputDecoration(labelText: 'Description'),
               controller: widget.controllerDescription,
             ),
-            const SizedBox(height: 20.0),
+            const SizedBox(height: 32.0),
             _userType == UserType.professor
                 ? GroupsDropdown(
                     courseId: widget.courseId,
@@ -90,16 +91,30 @@ class _AddEventState extends State<AddEvent> {
                     courseId: widget.courseId,
                     selectedTutorialIds: widget.selectedGroupIds),
             const SizedBox(height: 20.0),
-            SmallIconBtn(
-              onPressed: pickFile,
-              text: widget.file.isEmpty ? 'Add file' : 'Change file',
-            ),
-            const SizedBox(height: 5),
-            Text(
-              fileName,
-              style: TextStyle(
-                  fontSize: Sizes.xsmall, fontWeight: FontWeight.w400),
-            ),
+            Align(
+                alignment: Alignment.topLeft,
+                child: Row(children: [
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      alignment: Alignment.centerLeft,
+                    ),
+                    onPressed: pickFile,
+                    label: Text(
+                      widget.file.isEmpty ? 'Add file' : 'Change file',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(fontSize: Sizes.small),
+                    ),
+                    icon: const Icon(Icons.attach_file),
+                  ),
+                  const Spacer(),
+                  Text(
+                    fileName,
+                    style: TextStyle(
+                        fontSize: Sizes.small, color: AppColors.unselected),
+                  ),
+                ])),
           ]);
   }
 }

@@ -409,12 +409,14 @@ class _EditEventState extends State<EditEvent> {
                             ),
                           ),
                           const SizedBox(height: 5),
-                          Text(
-                            fileName,
-                            style: TextStyle(
-                                fontSize: Sizes.xsmall,
-                                fontWeight: FontWeight.w400),
-                          ),
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                fileName,
+                                style: TextStyle(
+                                    fontSize: Sizes.xsmall,
+                                    color: AppColors.unselected),
+                              )),
                           const SizedBox(height: 20.0),
                           LargeBtn(
                               onPressed: _disableAllButtons ? null : editEvent,

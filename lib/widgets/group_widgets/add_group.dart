@@ -96,7 +96,7 @@ class _AddGroupState extends State<AddGroup> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              const SizedBox(height: 40.0),
+              const SizedBox(height: 18.0),
               TextFormField(
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
@@ -108,32 +108,38 @@ class _AddGroupState extends State<AddGroup> {
                 validator: (val) => val!.isEmpty ? Errors.required : null,
                 controller: controllerGroupNumber,
               ),
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 10.0),
               ...addLecture,
               const SizedBox(height: 20.0),
-              SmallIconBtn(
-                  onPressed: () {
-                    setState(() {
-                      Lecture lecture =
-                          Lecture(day: Day.monday, slot: Slot.first);
-                      lectures.add(lecture);
-                      addLecture.add(AddLecture(
-                        lecture: lecture,
-                      ));
-                    });
-                  },
-                  text: 'Add lecture'),
+              SizedBox(
+                width: 180,
+                child: SmallIconBtn(
+                    onPressed: () {
+                      setState(() {
+                        Lecture lecture =
+                            Lecture(day: Day.monday, slot: Slot.first);
+                        lectures.add(lecture);
+                        addLecture.add(AddLecture(
+                          lecture: lecture,
+                        ));
+                      });
+                    },
+                    text: 'Add lecture'),
+              ),
               addLecture.length > 1
-                  ? SmallIconBtn(
-                      onPressed: () {
-                        setState(() {
-                          lectures.removeLast();
-                          addLecture.removeLast();
-                        });
-                      },
-                      text: 'Remove lecture',
-                      icon: const Icon(Icons.delete_outline),
-                    )
+                  ? SizedBox(
+                      width: 180,
+                      child: SmallIconBtn(
+                        onPressed: () {
+                          setState(() {
+                            lectures.removeLast();
+                            addLecture.removeLast();
+                          });
+                        },
+                        text: 'Remove lecture',
+                        color: AppColors.primary,
+                        icon: const Icon(Icons.delete_outline),
+                      ))
                   : const SizedBox(height: 0.0),
               const SizedBox(height: 30.0),
               LargeBtn(

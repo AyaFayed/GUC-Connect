@@ -102,7 +102,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 50.0),
         child: _userType == null
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
@@ -110,7 +110,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    const SizedBox(height: 40.0),
+                    const SizedBox(height: 20.0),
                     AddEvent(
                         controllerTitle: controllerTitle,
                         controllerDescription: controllerDescription,
