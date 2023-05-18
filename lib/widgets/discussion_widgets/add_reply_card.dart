@@ -4,7 +4,6 @@ import 'package:guc_scheduling_app/models/discussion/post_model.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
-import 'package:guc_scheduling_app/widgets/buttons/small_btn.dart';
 import 'package:quickalert/quickalert.dart';
 
 class AddReply extends StatefulWidget {

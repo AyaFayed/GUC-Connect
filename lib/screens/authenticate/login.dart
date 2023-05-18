@@ -2,7 +2,6 @@ import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:guc_scheduling_app/screens/authenticate/forgot_password.dart";
 import 'package:guc_scheduling_app/services/authentication_service.dart';
-import "package:guc_scheduling_app/shared/constants.dart";
 import "package:guc_scheduling_app/shared/errors.dart";
 import "package:guc_scheduling_app/theme/colors.dart";
 import "package:guc_scheduling_app/theme/sizes.dart";

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
-import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/screens/event/set_reminder.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large__icon_btn.dart';
 

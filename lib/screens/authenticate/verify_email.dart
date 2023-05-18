@@ -6,8 +6,8 @@ import 'package:guc_scheduling_app/screens/home/home.dart';
 import 'package:guc_scheduling_app/services/authentication_service.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
-import 'package:guc_scheduling_app/theme/sizes.dart';
-import 'package:guc_scheduling_app/widgets/buttons/large__icon_btn.dart';
+// import 'package:guc_scheduling_app/theme/sizes.dart';
+// import 'package:guc_scheduling_app/widgets/buttons/large__icon_btn.dart';
 import 'package:quickalert/quickalert.dart';
 
 class VerifyEmail extends StatefulWidget {

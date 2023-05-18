@@ -17,7 +17,6 @@ import 'package:guc_scheduling_app/shared/helper.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
-import 'package:guc_scheduling_app/widgets/buttons/small_icon_btn.dart';
 import 'package:guc_scheduling_app/widgets/date_time_selector.dart';
 import 'package:guc_scheduling_app/widgets/download_file.dart';
 import 'package:quickalert/quickalert.dart';

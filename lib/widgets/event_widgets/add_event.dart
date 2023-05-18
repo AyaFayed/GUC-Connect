@@ -7,7 +7,6 @@ import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
-import 'package:guc_scheduling_app/widgets/buttons/small_icon_btn.dart';
 import 'package:guc_scheduling_app/widgets/dropdowns/groups_dropdown.dart';
 import 'package:guc_scheduling_app/widgets/dropdowns/tutorials_dropdown.dart';
 import 'package:path/path.dart';

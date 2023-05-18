@@ -28,7 +28,7 @@ class NotificationService {
     );
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print(".............onMessage...............");
+      // print(".............onMessage...............");
 
       BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
         message.notification!.body.toString(),

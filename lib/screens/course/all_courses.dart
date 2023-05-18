@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/course_controller.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
-import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/course_widgets/course_list.dart';
 import 'package:guc_scheduling_app/widgets/search_bar.dart';
 

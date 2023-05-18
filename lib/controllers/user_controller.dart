@@ -133,8 +133,6 @@ class UserController {
     if (event != null) {
       DateTime reminderDateTime =
           event.start.subtract(Duration(days: days, hours: hours));
-      print(reminderDateTime);
-      print(DateTime.now());
       if (reminderDateTime
           .isBefore(DateTime.now().add(const Duration(minutes: 5)))) {
         return "You need to set a reminder in the future";

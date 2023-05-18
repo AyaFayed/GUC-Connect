@@ -22,12 +22,12 @@ class MessagingService {
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
+      // print('User granted permission');
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      print('User granted provisional permission');
+      // print('User granted provisional permission');
     } else {
-      print('User declined permission');
+      // print('User declined permission');
     }
   }
 
