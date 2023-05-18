@@ -31,7 +31,7 @@ class _FloatingBtnState extends State<FloatingBtn> {
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: _isButtonDisabled ? null : onPressed,
-      backgroundColor: AppColors.dark,
+      backgroundColor: AppColors.confirm,
       label: Text(
         _isButtonDisabled ? 'Loading...' : widget.text,
       ),

@@ -69,9 +69,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       'Receive an email to reset your password',
                       style: TextStyle(fontSize: Sizes.medium),
                     ),
-                    const SizedBox(height: 60.0),
+                    const SizedBox(height: 28.0),
                     TextFormField(
-                      decoration: const InputDecoration(labelText: 'Email'),
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(), labelText: 'Email'),
                       validator: (val) => val!.isEmpty ? Errors.required : null,
                       controller: controllerEmail,
                     ),
