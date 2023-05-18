@@ -54,7 +54,10 @@ class _ProfessorCourseState extends State<ProfessorCourse> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.courseName),
+          title: Text(
+            widget.courseName,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
           elevation: 0.0,
         ),
         drawer: ProfessorDrawer(

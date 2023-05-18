@@ -63,10 +63,8 @@ class _AllCoursesState extends State<AllCourses> {
                       height: 20.0,
                     ),
                     _courses!.isEmpty
-                        ? Text(
-                            "There are no courses.",
-                            style: TextStyle(fontSize: Sizes.medium),
-                          )
+                        ? const Image(
+                            image: AssetImage('assets/images/no_data.png'))
                         : CourseList(
                             courses: _courses ?? [],
                             userType: _userType ?? UserType.student,

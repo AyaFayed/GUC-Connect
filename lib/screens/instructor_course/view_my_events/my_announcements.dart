@@ -54,7 +54,10 @@ class _MyAnnouncementsState extends State<MyAnnouncements> {
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
             appBar: AppBar(
-              title: const Text('My announcements'),
+              title: const Text(
+                'My announcements',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               elevation: 0.0,
             ),
             drawer: _currentUserType == UserType.professor

@@ -93,7 +93,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   //     ? const Home()
   //     : Scaffold(
   //         appBar: AppBar(
-  //           title: const Text('Verify Email'),
+  //           title: const Text('Verify Email' style: const TextStyle(fontWeight: FontWeight.bold),),
   //         ),
   //         body: Padding(
   //             padding: const EdgeInsets.all(16),

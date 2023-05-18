@@ -43,7 +43,10 @@ class _MyAssignmentsState extends State<MyAssignments> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Posted assignments'),
+        title: const Text(
+          'Posted assignments',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         elevation: 0.0,
       ),
       drawer: ProfessorDrawer(

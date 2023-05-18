@@ -48,7 +48,10 @@ class _EnrollState extends State<Enroll> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Enroll'),
+          title: const Text(
+            'Enroll',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           elevation: 0.0,
         ),
         body: SingleChildScrollView(
@@ -64,10 +67,8 @@ class _EnrollState extends State<Enroll> {
                         height: 20.0,
                       ),
                       _courses!.isEmpty
-                          ? Text(
-                              "There are no courses.",
-                              style: TextStyle(fontSize: Sizes.medium),
-                            )
+                          ? const Image(
+                              image: AssetImage('assets/images/no_data.png'))
                           : CourseList(
                               courses: _courses ?? [],
                               userType: widget.userType,

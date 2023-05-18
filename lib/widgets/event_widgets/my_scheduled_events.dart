@@ -53,7 +53,10 @@ class _MyScheduledEventsState extends State<MyScheduledEvents> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scheduled ${formatEventTypePlural(widget.eventType)}'),
+        title: Text(
+          'Scheduled ${formatEventTypePlural(widget.eventType)}',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         elevation: 0.0,
       ),
       drawer: widget.eventType == EventType.compensationTutorial

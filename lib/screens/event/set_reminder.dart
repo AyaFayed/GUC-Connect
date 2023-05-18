@@ -84,7 +84,10 @@ class _SetReminderState extends State<SetReminder> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(
+          widget.title,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         elevation: 0.0,
       ),
       body: SingleChildScrollView(

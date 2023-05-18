@@ -32,7 +32,10 @@ class _AdminHomeState extends State<AdminHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(appName),
+        title: Text(
+          appName,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         elevation: 0.0,
       ),
       drawer: const AdminDrawer(pop: false),

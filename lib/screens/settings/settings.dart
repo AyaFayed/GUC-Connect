@@ -5,6 +5,7 @@ import 'package:guc_scheduling_app/services/authentication_service.dart';
 import 'package:guc_scheduling_app/services/messaging_service.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/auth_btn.dart';
+import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -65,7 +66,7 @@ class _SettingsState extends State<Settings> {
                     const SizedBox(
                       height: 60,
                     ),
-                    AuthBtn(
+                    LargeBtn(
                         onPressed: () async {
                           await _messaging.removeToken();
                           await _auth.logout();

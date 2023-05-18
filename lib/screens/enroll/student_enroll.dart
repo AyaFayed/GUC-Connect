@@ -5,7 +5,8 @@ import 'package:guc_scheduling_app/models/group/group_model.dart';
 import 'package:guc_scheduling_app/screens/home/home.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
-import 'package:guc_scheduling_app/widgets/buttons/floating_btn.dart';
+import 'package:guc_scheduling_app/theme/sizes.dart';
+import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 
 class StudentEnroll extends StatefulWidget {
   final String courseId;
@@ -90,55 +91,63 @@ class _StudentEnrollState extends State<StudentEnroll> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.courseName),
-          elevation: 0.0,
+      appBar: AppBar(
+        title: const Text(
+          'Enroll',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        body: SingleChildScrollView(
-            child: Container(
-          alignment: Alignment.topCenter,
-          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-          child: Column(
-            children: <Widget>[
-              const SizedBox(height: 40.0),
-              Text(
-                widget.courseName,
-                style: const TextStyle(fontSize: 20),
-              ),
-              const SizedBox(height: 20.0),
-              groups == null
-                  ? const CircularProgressIndicator()
-                  : DropdownButton(
-                      hint: const Text('Select group'),
-                      value:
-                          selectedGroupId.isNotEmpty ? selectedGroupId : null,
-                      items: groups ?? [],
-                      onChanged: (value) => setState(() {
-                        selectedGroupId = value as String;
-                      }),
-                    ),
-              const SizedBox(height: 20.0),
-              tutorials == null
-                  ? const CircularProgressIndicator()
-                  : DropdownButton(
-                      hint: const Text('Select tutorial'),
-                      items: tutorials ?? [],
-                      value: selectedTutorialId.isNotEmpty
-                          ? selectedTutorialId
-                          : null,
-                      onChanged: (value) => setState(() {
-                            selectedTutorialId = value as String;
-                          })),
-              const SizedBox(
-                height: 12.0,
-              ),
-              Text(
-                error,
-                style: TextStyle(color: AppColors.error, fontSize: 14.0),
-              ),
-            ],
-          ),
-        )),
-        floatingActionButton: FloatingBtn(onPressed: enroll, text: 'Enroll'));
+        elevation: 0.0,
+      ),
+      body: SingleChildScrollView(
+          child: Container(
+        alignment: Alignment.topCenter,
+        padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 30.0),
+        child: Column(
+          children: <Widget>[
+            const SizedBox(height: 40.0),
+            Text(
+              widget.courseName,
+              textAlign: TextAlign.center,
+              style:
+                  TextStyle(fontSize: Sizes.large, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 48.0),
+            groups == null
+                ? const CircularProgressIndicator()
+                : DropdownButton(
+                    hint: const Text('Select group'),
+                    value: selectedGroupId.isNotEmpty ? selectedGroupId : null,
+                    items: groups ?? [],
+                    onChanged: (value) => setState(() {
+                      selectedGroupId = value as String;
+                    }),
+                  ),
+            const SizedBox(height: 20.0),
+            tutorials == null
+                ? const CircularProgressIndicator()
+                : DropdownButton(
+                    hint: const Text('Select tutorial'),
+                    items: tutorials ?? [],
+                    value: selectedTutorialId.isNotEmpty
+                        ? selectedTutorialId
+                        : null,
+                    onChanged: (value) => setState(() {
+                          selectedTutorialId = value as String;
+                        })),
+            const SizedBox(
+              height: 12.0,
+            ),
+            Text(
+              error,
+              style: TextStyle(color: AppColors.error, fontSize: 14.0),
+            ),
+            const SizedBox(
+              height: 40.0,
+            ),
+            LargeBtn(onPressed: enroll, text: 'Enroll')
+          ],
+        ),
+      )),
+    );
   }
 }

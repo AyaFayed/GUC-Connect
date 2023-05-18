@@ -94,7 +94,10 @@ class _HomeState extends State<Home> {
             ? const AdminHome()
             : Scaffold(
                 appBar: AppBar(
-                  title: Text(appName),
+                  title: Text(
+                    appName,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   elevation: 0.0,
                 ),
                 body: _widgetOptions.elementAt(_selectedIndex),
@@ -126,7 +129,8 @@ class _HomeState extends State<Home> {
                   currentIndex: _selectedIndex,
                   type: BottomNavigationBarType.fixed,
                   backgroundColor: AppColors.bottomNavbar,
-                  showUnselectedLabels: true,
+                  showSelectedLabels: false,
+                  showUnselectedLabels: false,
                   unselectedItemColor: AppColors.unselected,
                   selectedItemColor: AppColors.selected,
                   onTap: (val) async {

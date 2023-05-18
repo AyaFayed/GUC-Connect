@@ -54,6 +54,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         appBar: AppBar(
           title: const Text(
             'Reset password',
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         body: SingleChildScrollView(

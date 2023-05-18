@@ -63,7 +63,10 @@ class _AddAdminState extends State<AddAdmin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(appName),
+        title: Text(
+          appName,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         elevation: 0.0,
       ),
       body: SingleChildScrollView(

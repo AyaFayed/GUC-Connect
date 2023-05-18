@@ -36,7 +36,8 @@ class _TABottomBarState extends State<TABottomBar> {
       currentIndex: widget.selectedIndex,
       type: BottomNavigationBarType.fixed,
       backgroundColor: AppColors.bottomNavbar,
-      showUnselectedLabels: true,
+      showSelectedLabels: false,
+      showUnselectedLabels: false,
       unselectedItemColor: AppColors.unselected,
       selectedItemColor: AppColors.selected,
       onTap: (val) async {

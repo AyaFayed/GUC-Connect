@@ -53,7 +53,10 @@ class _MyPostsState extends State<MyPosts> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('My posts'),
+          title: const Text(
+            'My posts',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           elevation: 0.0,
         ),
         drawer: _currentUserType == UserType.student
