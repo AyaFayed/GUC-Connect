@@ -1,3 +1,4 @@
+import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:guc_scheduling_app/screens/authenticate/forgot_password.dart";
 import 'package:guc_scheduling_app/services/authentication_service.dart';
@@ -50,12 +51,11 @@ class _LoginState extends State<Login> {
             key: _formKey,
             child: Column(
               children: <Widget>[
-                const SizedBox(height: 150.0),
-                Text(
-                  appName,
-                  style: TextStyle(fontSize: Sizes.xlarge),
+                const SizedBox(height: 120.0),
+                const Image(
+                  image: AssetImage('assets/images/app_name_logo.png'),
                 ),
-                const SizedBox(height: 60.0),
+                const SizedBox(height: 40.0),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Email'),
                   validator: (val) => val!.isEmpty ? Errors.required : null,
@@ -68,7 +68,22 @@ class _LoginState extends State<Login> {
                   validator: (val) => val!.isEmpty ? Errors.required : null,
                   controller: controllerPassword,
                 ),
-                const SizedBox(height: 60.0),
+                const SizedBox(height: 24.0),
+                Row(children: [
+                  const Spacer(),
+                  GestureDetector(
+                    child: Text(
+                      'Forgot Password?',
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontSize: Sizes.xsmall,
+                      ),
+                    ),
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const ForgotPassword())),
+                  ),
+                ]),
+                const SizedBox(height: 32.0),
                 AuthBtn(onPressed: login, text: 'Log in'),
                 const SizedBox(
                   height: 12.0,
@@ -78,35 +93,22 @@ class _LoginState extends State<Login> {
                   style:
                       TextStyle(color: AppColors.error, fontSize: Sizes.xsmall),
                 ),
-                const SizedBox(height: 10.0),
-                GestureDetector(
-                  child: Text(
-                    'Forgot Password?',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: Sizes.small,
-                    ),
-                  ),
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const ForgotPassword())),
-                ),
                 const SizedBox(height: 25.0),
-                Text(
-                  "Don't have an account?",
-                  style: TextStyle(fontSize: Sizes.small),
-                ),
-                TextButton(
-                    style: TextButton.styleFrom(
-                        textStyle: TextStyle(
-                      fontSize: Sizes.small,
-                    )),
-                    onPressed: () {
-                      widget.toggleView();
-                    },
-                    child: Text(
-                      'Sign up',
+                RichText(
+                    text: TextSpan(
+                  text: "No account? ",
+                  children: [
+                    TextSpan(
+                      text: 'Sign up',
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          widget.toggleView();
+                        },
                       style: TextStyle(color: AppColors.primary),
-                    ))
+                    ),
+                  ],
+                  style: TextStyle(color: Colors.black, fontSize: Sizes.small),
+                )),
               ],
             ),
           )),

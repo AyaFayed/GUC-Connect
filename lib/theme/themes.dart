@@ -4,6 +4,7 @@ import 'package:guc_scheduling_app/theme/colors.dart';
 class CustomTheme {
   static ThemeData get lightTheme {
     return ThemeData(
+        fontFamily: 'Poppins',
         colorScheme: ColorScheme(
             brightness: Brightness.light,
             primary: AppColors.primary,

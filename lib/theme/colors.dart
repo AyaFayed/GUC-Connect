@@ -7,7 +7,7 @@ class AppColors {
   static Color confirm = const Color.fromARGB(255, 50, 55, 59);
   static Color success = const Color.fromARGB(255, 50, 55, 59);
   static Color light = Colors.white;
-  static Color error = Colors.red;
+  static Color error = const Color.fromARGB(255, 191, 26, 47);
   static Color selected = Colors.black;
   static Color unselected = Colors.grey;
   static Color newItem = const Color.fromARGB(111, 64, 195, 255);
