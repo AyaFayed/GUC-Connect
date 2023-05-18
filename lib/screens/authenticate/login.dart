@@ -21,6 +21,7 @@ class _LoginState extends State<Login> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
+  bool showPassword = false;
   String error = '';
 
   Future<void> login() async {
@@ -62,8 +63,19 @@ class _LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
-                  obscureText: true,
-                  decoration: const InputDecoration(labelText: 'Password'),
+                  obscureText: !showPassword,
+                  decoration: InputDecoration(
+                      labelText: 'Password',
+                      suffix: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              showPassword = !showPassword;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.remove_red_eye,
+                            color: AppColors.unselected,
+                          ))),
                   validator: (val) => val!.isEmpty ? Errors.required : null,
                   controller: controllerPassword,
                 ),
