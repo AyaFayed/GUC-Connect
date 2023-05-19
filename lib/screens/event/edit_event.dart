@@ -18,7 +18,6 @@ import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:guc_scheduling_app/widgets/date_time_selector.dart';
-import 'package:guc_scheduling_app/widgets/download_file.dart';
 import 'package:quickalert/quickalert.dart';
 
 class EditEvent extends StatefulWidget {
@@ -387,8 +386,6 @@ class _EditEventState extends State<EditEvent> {
                             controller: controllerDescription,
                           ),
                           const SizedBox(height: 20.0),
-                          if (fileUrl != null) DownloadFile(file: fileUrl!),
-                          const SizedBox(height: 10.0),
                           Align(
                             alignment: Alignment.topLeft,
                             child: TextButton.icon(
@@ -402,7 +399,7 @@ class _EditEventState extends State<EditEvent> {
                                 fileUrl == null ? 'Add file' : 'Change file',
                                 style: TextStyle(fontSize: Sizes.small),
                               ),
-                              icon: const Icon(Icons.add),
+                              icon: const Icon(Icons.attach_file),
                             ),
                           ),
                           const SizedBox(height: 5),

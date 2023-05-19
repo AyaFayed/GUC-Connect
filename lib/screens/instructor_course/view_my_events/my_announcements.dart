@@ -55,7 +55,7 @@ class _MyAnnouncementsState extends State<MyAnnouncements> {
         : Scaffold(
             appBar: AppBar(
               title: const Text(
-                'My announcements',
+                'My Announcements',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               elevation: 0.0,

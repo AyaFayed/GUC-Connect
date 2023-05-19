@@ -14,14 +14,12 @@ class CourseList extends StatelessWidget {
   final List<Course> courses;
   final UserType userType;
   final bool enroll;
-  final Future<void> Function()? getData;
 
   const CourseList(
       {super.key,
       required this.courses,
       required this.userType,
-      required this.enroll,
-      this.getData});
+      required this.enroll});
 
   Widget getWidget(Course course) {
     switch (userType) {
@@ -32,22 +30,14 @@ class CourseList extends StatelessWidget {
         );
       case UserType.professor:
         return enroll
-            ? InstructorEnroll(
-                courseName: course.name,
-                courseId: course.id,
-                getData: getData ?? () async {},
-              )
+            ? InstructorEnroll(courseName: course.name, courseId: course.id)
             : ProfessorCourse(
                 courseId: course.id,
                 courseName: course.name,
               );
       case UserType.ta:
         return enroll
-            ? InstructorEnroll(
-                courseName: course.name,
-                courseId: course.id,
-                getData: getData ?? () async {},
-              )
+            ? InstructorEnroll(courseName: course.name, courseId: course.id)
             : TACourse(
                 courseId: course.id,
                 courseName: course.name,
@@ -57,7 +47,6 @@ class CourseList extends StatelessWidget {
             ? StudentEnroll(
                 courseId: course.id,
                 courseName: course.name,
-                getData: getData ?? () async {},
               )
             : StudentCourse(courseId: course.id, courseName: course.name);
     }

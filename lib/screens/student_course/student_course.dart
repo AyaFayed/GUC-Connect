@@ -28,7 +28,7 @@ class _StudentCourseState extends State<StudentCourse> {
   List<String> appBarLabels = [
     'Announcements',
     'Assignments',
-    'Assessments',
+    'Compensations',
     'Posts'
   ];
 

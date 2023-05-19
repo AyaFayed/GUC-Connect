@@ -249,14 +249,14 @@ String formatEventType(EventType eventType) {
 String formatEventTypePlural(EventType eventType) {
   switch (eventType) {
     case EventType.announcement:
-      return 'announcements';
+      return 'Announcements';
     case EventType.assignment:
-      return 'assignments';
+      return 'Assignments';
     case EventType.quiz:
-      return 'quizzes';
+      return 'Quizzes';
     case EventType.compensationLecture:
-      return 'compensation lectures';
+      return 'Compensation Lectures';
     case EventType.compensationTutorial:
-      return 'compensation tutorials';
+      return 'Compensation Tutorials';
   }
 }

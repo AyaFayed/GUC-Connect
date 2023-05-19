@@ -54,7 +54,7 @@ class _MyPostsState extends State<MyPosts> {
     return Scaffold(
         appBar: AppBar(
           title: const Text(
-            'My posts',
+            'My Posts',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           elevation: 0.0,

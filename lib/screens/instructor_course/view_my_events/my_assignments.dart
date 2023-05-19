@@ -44,7 +44,7 @@ class _MyAssignmentsState extends State<MyAssignments> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Posted assignments',
+          'Posted Assignments',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         elevation: 0.0,
