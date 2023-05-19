@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/user_controller.dart';
 import 'package:guc_scheduling_app/models/events/event_model.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
+import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/set_reminder_text_button.dart';
 import 'package:guc_scheduling_app/widgets/download_file.dart';
@@ -56,10 +57,10 @@ class _EventDetailsState extends State<EventDetails> {
                   child: Container(
                     alignment: Alignment.topCenter,
                     padding: const EdgeInsets.symmetric(
-                        vertical: 18.0, horizontal: 30.0),
+                        vertical: 18.0, horizontal: 32.0),
                     child: Column(
                       children: <Widget>[
-                        const SizedBox(height: 40.0),
+                        const SizedBox(height: 30.0),
                         Text(
                           widget.event!.title,
                           style: TextStyle(
@@ -69,12 +70,14 @@ class _EventDetailsState extends State<EventDetails> {
                         const SizedBox(height: 20.0),
                         Text(
                           widget.event!.subtitle,
-                          style: const TextStyle(fontSize: 20),
+                          style: TextStyle(
+                              fontSize: Sizes.small,
+                              color: AppColors.unselected),
                         ),
                         const SizedBox(height: 20.0),
                         Text(
                           widget.event!.description,
-                          style: const TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: Sizes.smaller),
                         ),
                         if (widget.event!.description.isNotEmpty)
                           const SizedBox(height: 20.0),
