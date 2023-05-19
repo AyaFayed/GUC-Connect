@@ -25,15 +25,11 @@ class _GroupsDropdownState extends State<GroupsDropdown> {
 
   List<MultiSelectItem<String>> groups = [];
 
-  @override
-  void initState() {
-    super.initState();
-    _getData();
-  }
-
   Future<void> _getData() async {
     List<Group> allGroups =
         await _divisionController.getCourseLectureGroups(widget.courseId);
+
+    allGroups.sort((a, b) => a.number - b.number);
 
     setState(() {
       groups = allGroups
@@ -43,6 +39,12 @@ class _GroupsDropdownState extends State<GroupsDropdown> {
               ))
           .toList();
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getData();
   }
 
   @override

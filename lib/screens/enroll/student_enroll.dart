@@ -65,6 +65,8 @@ class _StudentEnrollState extends State<StudentEnroll> {
     setState(() {
       _groups = groupsData;
       _tutorials = tutorialsData;
+      _groups?.sort((a, b) => a.number - b.number);
+      _tutorials?.sort((a, b) => a.number - b.number);
       groups = _groups!
           .map((group) => DropdownMenuItem(
                 value: group.id,
@@ -118,28 +120,46 @@ class _StudentEnrollState extends State<StudentEnroll> {
                     const SizedBox(height: 48.0),
                     groups == null
                         ? const CircularProgressIndicator()
-                        : DropdownButton(
-                            hint: const Text('Select group'),
-                            value: selectedGroupId.isNotEmpty
-                                ? selectedGroupId
-                                : null,
-                            items: groups ?? [],
-                            onChanged: (value) => setState(() {
-                              selectedGroupId = value as String;
-                            }),
-                          ),
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                                Text(
+                                  'Group: ',
+                                  style: TextStyle(fontSize: Sizes.smaller),
+                                ),
+                                const SizedBox(width: 16.0),
+                                DropdownButton(
+                                  hint: const Text('Select group'),
+                                  value: selectedGroupId.isNotEmpty
+                                      ? selectedGroupId
+                                      : null,
+                                  items: groups ?? [],
+                                  onChanged: (value) => setState(() {
+                                    selectedGroupId = value as String;
+                                  }),
+                                )
+                              ]),
                     const SizedBox(height: 20.0),
                     tutorials == null
                         ? const CircularProgressIndicator()
-                        : DropdownButton(
-                            hint: const Text('Select tutorial'),
-                            items: tutorials ?? [],
-                            value: selectedTutorialId.isNotEmpty
-                                ? selectedTutorialId
-                                : null,
-                            onChanged: (value) => setState(() {
-                                  selectedTutorialId = value as String;
-                                })),
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                                Text(
+                                  'Tutorial: ',
+                                  style: TextStyle(fontSize: Sizes.smaller),
+                                ),
+                                const SizedBox(width: 16.0),
+                                DropdownButton(
+                                    hint: const Text('Select tutorial'),
+                                    items: tutorials ?? [],
+                                    value: selectedTutorialId.isNotEmpty
+                                        ? selectedTutorialId
+                                        : null,
+                                    onChanged: (value) => setState(() {
+                                          selectedTutorialId = value as String;
+                                        }))
+                              ]),
                     const SizedBox(
                       height: 12.0,
                     ),
