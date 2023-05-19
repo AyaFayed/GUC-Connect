@@ -88,7 +88,8 @@ class _EventDetailsState extends State<EventDetails> {
                             DownloadFile(file: widget.event!.file!),
                           ]),
                         const SizedBox(height: 30.0),
-                        if (_currentUserType == UserType.student)
+                        if (_currentUserType == UserType.student &&
+                            widget.event?.eventType != EventType.announcement)
                           SetReminderButton(
                             title: 'Set reminder',
                             eventId: widget.event?.id ?? '',
