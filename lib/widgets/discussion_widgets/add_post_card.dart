@@ -53,6 +53,7 @@ class _AddPostState extends State<AddPost> {
         setState(() {
           file = null;
           task = null;
+          fileName = 'Add file';
         });
         if (mounted) {
           QuickAlert.show(
