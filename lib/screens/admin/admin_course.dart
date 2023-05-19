@@ -224,9 +224,9 @@ class _AdminCourseState extends State<AdminCourse> {
                     ? const Center(child: CircularProgressIndicator())
                     : TextFormField(
                         decoration: const InputDecoration(
-                          labelText: 'Name',
-                          hintText: 'Name e.g.(CSEN 702 Microprocessors)',
-                        ),
+                            labelText: 'Name',
+                            hintText: 'Name e.g.(CSEN 702 Microprocessors)',
+                            errorMaxLines: 3),
                         validator: (val) =>
                             val!.isEmpty ? Errors.required : null,
                         controller: controllerName,

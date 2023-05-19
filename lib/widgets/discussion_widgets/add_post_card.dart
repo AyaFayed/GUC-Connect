@@ -96,7 +96,10 @@ class _AddPostState extends State<AddPost> {
                 keyboardType: TextInputType.multiline,
                 minLines: 1,
                 maxLines: 7,
-                decoration: const InputDecoration(hintText: 'write a post'),
+                decoration: const InputDecoration(
+                  hintText: 'write a post',
+                  errorMaxLines: 3,
+                ),
                 validator: (val) => val!.isEmpty ? Errors.required : null,
                 controller: controllerPost,
               ),

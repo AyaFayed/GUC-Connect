@@ -119,6 +119,7 @@ class _SetReminderState extends State<SetReminder> {
                     ],
                     decoration: const InputDecoration(
                         suffixText: 'days',
+                        errorMaxLines: 3,
                         label: Text('Days'),
                         border: OutlineInputBorder()),
                     validator: (val) => val!.isEmpty ? Errors.required : null,
@@ -134,6 +135,7 @@ class _SetReminderState extends State<SetReminder> {
                     ],
                     decoration: const InputDecoration(
                         label: Text('Hours'),
+                        errorMaxLines: 3,
                         suffixText: 'hours',
                         border: OutlineInputBorder()),
                     validator: (val) => val!.isEmpty ? Errors.required : null,

@@ -75,7 +75,8 @@ class _CreateCourseState extends State<CreateCourse> {
             TextFormField(
               decoration: const InputDecoration(
                   hintText: 'Name e.g.(CSEN 702 Microprocessors)',
-                  labelText: 'Name'),
+                  labelText: 'Name',
+                  errorMaxLines: 3),
               validator: (val) => val!.isEmpty ? Errors.required : null,
               controller: controllerName,
             ),

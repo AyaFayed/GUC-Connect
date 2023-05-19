@@ -73,7 +73,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     const SizedBox(height: 28.0),
                     TextFormField(
                       decoration: const InputDecoration(
-                          border: OutlineInputBorder(), labelText: 'Email'),
+                          border: OutlineInputBorder(),
+                          labelText: 'Email',
+                          errorMaxLines: 3),
                       validator: (val) => val!.isEmpty ? Errors.required : null,
                       controller: controllerEmail,
                     ),

@@ -79,22 +79,24 @@ class _AddAdminState extends State<AddAdmin> {
                 const SizedBox(height: 20.0),
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(labelText: 'Email'),
+                  decoration: const InputDecoration(
+                      labelText: 'Email', errorMaxLines: 3),
                   validator: (val) => val!.isEmpty ? Errors.required : null,
                   controller: controllerEmail,
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
                   obscureText: true,
-                  decoration: const InputDecoration(labelText: 'Password'),
+                  decoration: const InputDecoration(
+                      labelText: 'Password', errorMaxLines: 3),
                   validator: (val) => val!.length < 6 ? Errors.password : null,
                   controller: controllerPassword,
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
                   obscureText: true,
-                  decoration:
-                      const InputDecoration(labelText: 'Confirm password'),
+                  decoration: const InputDecoration(
+                      labelText: 'Confirm password', errorMaxLines: 3),
                   validator: (val) => val != controllerPassword.text
                       ? Errors.confirmPassword
                       : null,

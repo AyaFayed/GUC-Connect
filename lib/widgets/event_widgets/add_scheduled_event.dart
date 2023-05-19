@@ -175,6 +175,7 @@ class _AddScheduledEventState extends State<AddScheduledEvent> {
                     ],
                     decoration: const InputDecoration(
                         labelText: 'Duration in minutes',
+                        errorMaxLines: 3,
                         suffixText: 'minutes'),
                     validator: (val) => val!.isEmpty ? Errors.duration : null,
                     controller: controllerDuration,

@@ -57,7 +57,8 @@ class _LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 40.0),
                 TextFormField(
-                  decoration: const InputDecoration(labelText: 'Email'),
+                  decoration: const InputDecoration(
+                      labelText: 'Email', errorMaxLines: 3),
                   validator: (val) => val!.isEmpty ? Errors.required : null,
                   controller: controllerEmail,
                 ),
@@ -66,6 +67,7 @@ class _LoginState extends State<Login> {
                   obscureText: !showPassword,
                   decoration: InputDecoration(
                       labelText: 'Password',
+                      errorMaxLines: 3,
                       suffix: IconButton(
                           onPressed: () {
                             setState(() {

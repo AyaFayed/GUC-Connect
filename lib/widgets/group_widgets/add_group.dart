@@ -103,6 +103,7 @@ class _AddGroupState extends State<AddGroup> {
                   FilteringTextInputFormatter.digitsOnly
                 ],
                 decoration: InputDecoration(
+                    errorMaxLines: 3,
                     labelText:
                         '${widget.groupType == GroupType.lectureGroup ? 'Group' : 'Tutorial'} number'),
                 validator: (val) => val!.isEmpty ? Errors.required : null,

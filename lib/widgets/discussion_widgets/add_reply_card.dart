@@ -70,6 +70,7 @@ class _AddReplyState extends State<AddReply> {
             maxLines: 5,
             decoration: InputDecoration(
                 hintText: 'Reply',
+                errorMaxLines: 3,
                 suffixIcon: IconButton(
                     icon: Icon(
                       Icons.send,

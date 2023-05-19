@@ -361,15 +361,16 @@ class _EditEventState extends State<EditEvent> {
                                 FilteringTextInputFormatter.digitsOnly
                               ],
                               decoration: const InputDecoration(
-                                  labelText: 'Duration in minutes'),
+                                  labelText: 'Duration in minutes',
+                                  errorMaxLines: 3),
                               validator: (val) =>
                                   val!.isEmpty ? Errors.duration : null,
                               controller: controllerDuration,
                             ),
                           const SizedBox(height: 20.0),
                           TextFormField(
-                            decoration:
-                                const InputDecoration(labelText: 'Title'),
+                            decoration: const InputDecoration(
+                                labelText: 'Title', errorMaxLines: 3),
                             validator: (val) =>
                                 val!.isEmpty ? Errors.required : null,
                             controller: controllerTitle,
@@ -379,8 +380,8 @@ class _EditEventState extends State<EditEvent> {
                             keyboardType: TextInputType.multiline,
                             minLines: 1,
                             maxLines: 7,
-                            decoration:
-                                const InputDecoration(labelText: 'Description'),
+                            decoration: const InputDecoration(
+                                labelText: 'Description', errorMaxLines: 3),
                             validator: (val) =>
                                 val!.isEmpty ? Errors.required : null,
                             controller: controllerDescription,
