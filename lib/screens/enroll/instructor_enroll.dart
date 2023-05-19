@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/enrollment_controller.dart';
-import 'package:guc_scheduling_app/screens/home/home.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 
 class InstructorEnroll extends StatelessWidget {
   final String courseId;
   final String courseName;
+  final Future<void> Function() getData;
 
   const InstructorEnroll(
-      {super.key, required this.courseName, required this.courseId});
+      {super.key,
+      required this.courseName,
+      required this.courseId,
+      required this.getData});
 
   Future<void> enroll(BuildContext context) async {
     final EnrollmentController enrollmentController = EnrollmentController();
@@ -17,12 +20,7 @@ class InstructorEnroll extends StatelessWidget {
     if (context.mounted) {
       Navigator.pop(context);
       Navigator.pop(context);
-      Navigator.pop(context);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const Card(child: Home()),
-          ));
+      getData();
     }
   }
 

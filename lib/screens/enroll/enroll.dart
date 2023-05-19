@@ -7,7 +7,8 @@ import 'package:guc_scheduling_app/widgets/search_bar.dart';
 
 class Enroll extends StatefulWidget {
   final UserType userType;
-  const Enroll({super.key, required this.userType});
+  final Future<void> Function() getData;
+  const Enroll({super.key, required this.userType, required this.getData});
 
   @override
   State<Enroll> createState() => _EnrollState();

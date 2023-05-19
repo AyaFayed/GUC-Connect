@@ -38,8 +38,11 @@ class _MyCoursesState extends State<MyCourses> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              Card(child: Enroll(userType: _userType ?? UserType.student)),
+          builder: (context) => Card(
+              child: Enroll(
+            userType: _userType ?? UserType.student,
+            getData: _getData,
+          )),
         ));
   }
 

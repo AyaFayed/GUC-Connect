@@ -7,6 +7,7 @@ import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:guc_scheduling_app/theme/sizes.dart';
 
 class ClearCourses extends StatefulWidget {
   const ClearCourses({super.key});
@@ -155,6 +156,12 @@ class _ClearCoursesState extends State<ClearCourses> {
                 children: <Widget>[
                   const SizedBox(height: 40.0),
                   MultiSelectDialogField(
+                    selectedColor: AppColors.selected,
+                    buttonText: Text(
+                      'Select courses',
+                      style: TextStyle(
+                          color: Colors.grey[700], fontSize: Sizes.smaller),
+                    ),
                     items: courses,
                     title: const Text('Select courses'),
                     searchable: true,
