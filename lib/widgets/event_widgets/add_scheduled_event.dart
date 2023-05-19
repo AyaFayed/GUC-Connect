@@ -151,7 +151,7 @@ class _AddScheduledEventState extends State<AddScheduledEvent> {
     return SingleChildScrollView(
         child: Container(
             padding:
-                const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                const EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
             child: Form(
               key: _formKey,
               child: Column(

@@ -147,7 +147,7 @@ class _ClearCoursesState extends State<ClearCourses> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
         child: _courses == null
             ? const Center(
                 child: CircularProgressIndicator(),
@@ -173,7 +173,7 @@ class _ClearCoursesState extends State<ClearCourses> {
                       });
                     },
                   ),
-                  const SizedBox(height: 40.0),
+                  const SizedBox(height: 60.0),
                   LargeBtn(
                       onPressed: _disableAllButtons ? null : clearSelected,
                       text: 'Clear selected'),

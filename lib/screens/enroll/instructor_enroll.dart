@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/enrollment_controller.dart';
-import 'package:guc_scheduling_app/screens/home/home.dart';
+import 'package:guc_scheduling_app/screens/wrapper.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
 import 'package:guc_scheduling_app/widgets/buttons/large_btn.dart';
 
@@ -21,7 +21,7 @@ class InstructorEnroll extends StatelessWidget {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const Card(child: Home()),
+            builder: (context) => const Card(child: Wrapper()),
           ));
     }
   }

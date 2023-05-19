@@ -23,7 +23,7 @@ class CourseDetails extends StatelessWidget {
       body: SingleChildScrollView(
           child: Container(
         alignment: Alignment.topCenter,
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
         child: Column(
           children: <Widget>[
             const SizedBox(height: 40.0),

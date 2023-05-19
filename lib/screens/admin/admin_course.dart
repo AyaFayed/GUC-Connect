@@ -214,7 +214,7 @@ class _AdminCourseState extends State<AdminCourse> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+          padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -231,7 +231,7 @@ class _AdminCourseState extends State<AdminCourse> {
                             val!.isEmpty ? Errors.required : null,
                         controller: controllerName,
                       ),
-                const SizedBox(height: 40.0),
+                const SizedBox(height: 60.0),
                 LargeBtn(
                     onPressed: _disableAllButtons ? null : editCourse,
                     text: 'Save changes'),

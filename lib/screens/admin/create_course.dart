@@ -66,7 +66,7 @@ class _CreateCourseState extends State<CreateCourse> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+      padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
       child: Form(
         key: _formKey,
         child: Column(
@@ -80,7 +80,7 @@ class _CreateCourseState extends State<CreateCourse> {
               validator: (val) => val!.isEmpty ? Errors.required : null,
               controller: controllerName,
             ),
-            const SizedBox(height: 40.0),
+            const SizedBox(height: 60.0),
             LargeBtn(onPressed: createCourse, text: 'Create course'),
           ],
         ),

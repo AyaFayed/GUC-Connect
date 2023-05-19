@@ -90,13 +90,13 @@ class _AddGroupState extends State<AddGroup> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
         child: SingleChildScrollView(
             child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
-              const SizedBox(height: 18.0),
+              const SizedBox(height: 20.0),
               TextFormField(
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[

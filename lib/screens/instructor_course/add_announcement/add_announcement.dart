@@ -102,7 +102,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 50.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
         child: _userType == null
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(

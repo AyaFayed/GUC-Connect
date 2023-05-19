@@ -106,7 +106,7 @@ class _ScheduleAssignmentState extends State<ScheduleAssignment> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
         child: Form(
           key: _formKey,
           child: Column(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/group_controller.dart';
 import 'package:guc_scheduling_app/controllers/enrollment_controller.dart';
 import 'package:guc_scheduling_app/models/group/group_model.dart';
-import 'package:guc_scheduling_app/screens/home/home.dart';
+import 'package:guc_scheduling_app/screens/wrapper.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
 import 'package:guc_scheduling_app/theme/colors.dart';
 import 'package:guc_scheduling_app/theme/sizes.dart';
@@ -51,7 +51,7 @@ class _StudentEnrollState extends State<StudentEnroll> {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const Card(child: Home()),
+            builder: (context) => const Card(child: Wrapper()),
           ));
     }
   }

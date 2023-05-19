@@ -59,7 +59,7 @@ class _AllCoursesState extends State<AllCourses> {
                 : Column(children: [
                     SearchBar(search: onSearch),
                     const SizedBox(
-                      height: 20.0,
+                      height: 15.0,
                     ),
                     _courses!.isEmpty
                         ? const Image(

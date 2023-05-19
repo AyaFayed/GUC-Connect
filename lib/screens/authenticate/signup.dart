@@ -78,7 +78,7 @@ class _SignupState extends State<Signup> {
     return Scaffold(
         body: SingleChildScrollView(
       child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
           child: Form(
             key: _formKey,
             child: Column(

@@ -330,7 +330,7 @@ class _EditEventState extends State<EditEvent> {
       body: SingleChildScrollView(
           child: Container(
               padding:
-                  const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : Form(

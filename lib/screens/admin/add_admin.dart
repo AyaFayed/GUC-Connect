@@ -71,7 +71,7 @@ class _AddAdminState extends State<AddAdmin> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+          padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
           child: Form(
             key: _formKey,
             child: Column(

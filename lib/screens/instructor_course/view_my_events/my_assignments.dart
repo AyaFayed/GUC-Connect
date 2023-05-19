@@ -52,7 +52,7 @@ class _MyAssignmentsState extends State<MyAssignments> {
       drawer: ProfessorDrawer(
           courseId: widget.courseId, courseName: widget.courseName, pop: true),
       body: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
           child: _events == null
               ? const Center(child: CircularProgressIndicator())
               : _events!.isEmpty
