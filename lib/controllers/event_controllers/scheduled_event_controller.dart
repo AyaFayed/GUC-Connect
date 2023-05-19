@@ -27,8 +27,8 @@ class ScheduledEventsController {
   final AssignmentWrites _assignmentWrites = AssignmentWrites();
   final AssignmentReads _assignmentReads = AssignmentReads();
 
-  Future<bool> isConflicting(List<ScheduledEvent> scheduledEvents,
-      DateTime start, DateTime end) async {
+  static bool isConflicting(
+      List<ScheduledEvent> scheduledEvents, DateTime start, DateTime end) {
     for (ScheduledEvent scheduledEvent in scheduledEvents) {
       DateTime startGap = start.subtract(const Duration(minutes: 15));
       DateTime endGap = end.add(const Duration(minutes: 15));
@@ -59,7 +59,7 @@ class ScheduledEventsController {
     String? excludedEventId,
   ) async {
     List<Group> groups = await _groupReads.getAllStudentGroups(studentId);
-    List<Future<bool>> conflicts = [];
+    List<bool> conflicts = [];
     for (Group group in groups) {
       List<ScheduledEvent> scheduledEvents = await _scheduledEventReads
           .getGroupScheduledEvents(group.id, group.courseId);
@@ -69,8 +69,8 @@ class ScheduledEventsController {
 
       conflicts.add(isConflicting(scheduledEvents, start, end));
     }
-    List<bool> hasConflicts = await Future.wait(conflicts);
-    return hasConflicts.contains(true);
+
+    return conflicts.contains(true);
   }
 
   Future<int> canScheduleGroups(
