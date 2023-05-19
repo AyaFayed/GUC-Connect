@@ -25,6 +25,13 @@ class _ProfessorCourseState extends State<ProfessorCourse> {
   int _selectedIndex = 0;
   List<Widget>? _widgetOptions;
 
+  List<String> appBarLabels = [
+    'Announcement',
+    'Schedule',
+    'Add Group',
+    'Posts'
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -55,7 +62,7 @@ class _ProfessorCourseState extends State<ProfessorCourse> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            widget.courseName,
+            appBarLabels[_selectedIndex],
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           elevation: 0.0,

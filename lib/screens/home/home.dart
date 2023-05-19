@@ -33,6 +33,13 @@ class _HomeState extends State<Home> {
     const Settings(),
   ];
 
+  List<String> appBarLabels = [
+    appName,
+    'Notifications',
+    'Calendar',
+    'Settings'
+  ];
+
   Future<void> _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
@@ -95,7 +102,7 @@ class _HomeState extends State<Home> {
             : Scaffold(
                 appBar: AppBar(
                   title: Text(
-                    appName,
+                    appBarLabels[_selectedIndex],
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   elevation: 0.0,

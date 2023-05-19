@@ -22,6 +22,8 @@ class _AdminHomeState extends State<AdminHome> {
     ClearCourses(),
   ];
 
+  List<String> appBarLabels = [appName, 'Create Course', 'Clear Courses'];
+
   Future<void> _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
@@ -33,7 +35,7 @@ class _AdminHomeState extends State<AdminHome> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          appName,
+          appBarLabels[_selectedIndex],
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         elevation: 0.0,

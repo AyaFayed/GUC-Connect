@@ -25,6 +25,13 @@ class _TACourseState extends State<TACourse> {
   int _selectedIndex = 0;
   List<Widget>? _widgetOptions;
 
+  List<String> appBarLabels = [
+    'Announcement',
+    'Compensation',
+    'Add Tutorial',
+    'Posts'
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -53,7 +60,7 @@ class _TACourseState extends State<TACourse> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.courseName,
+          appBarLabels[_selectedIndex],
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         elevation: 0.0,
