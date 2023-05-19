@@ -35,6 +35,15 @@ class _LoginState extends State<Login> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    setState(() {
+      showPassword = false;
+    });
+  }
+
+  @override
   void dispose() {
     controllerEmail.dispose();
     controllerPassword.dispose();
