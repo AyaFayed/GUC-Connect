@@ -24,6 +24,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       dynamic result = await _auth.resetPassword(controllerEmail.text.trim());
       if (context.mounted) {
         if (result == null) {
+          controllerEmail.clear();
           QuickAlert.show(
             context: context,
             type: QuickAlertType.success,
