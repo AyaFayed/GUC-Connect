@@ -31,13 +31,20 @@ class ScheduledEventsController {
       DateTime start, DateTime end) async {
     for (ScheduledEvent scheduledEvent in scheduledEvents) {
       DateTime startGap = start.subtract(const Duration(minutes: 15));
-      DateTime endGap = start.add(const Duration(minutes: 15));
+      DateTime endGap = end.add(const Duration(minutes: 15));
+      if (scheduledEvent.start == startGap || scheduledEvent.end == endGap) {
+        return true;
+      }
       if (scheduledEvent.end.isAfter(startGap) &&
           scheduledEvent.end.isBefore(endGap)) {
         return true;
       }
       if (scheduledEvent.start.isAfter(startGap) &&
           scheduledEvent.start.isBefore(endGap)) {
+        return true;
+      }
+      if (scheduledEvent.start.isBefore(startGap) &&
+          scheduledEvent.end.isAfter(endGap)) {
         return true;
       }
     }
