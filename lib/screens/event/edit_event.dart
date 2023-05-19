@@ -402,7 +402,7 @@ class _EditEventState extends State<EditEvent> {
                                 fileUrl == null ? 'Add file' : 'Change file',
                                 style: TextStyle(fontSize: Sizes.small),
                               ),
-                              icon: const Icon(Icons.attach_file),
+                              icon: const Icon(Icons.add),
                             ),
                           ),
                           const SizedBox(height: 5),
