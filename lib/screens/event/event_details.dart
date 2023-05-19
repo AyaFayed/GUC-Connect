@@ -74,19 +74,20 @@ class _EventDetailsState extends State<EventDetails> {
                               fontSize: Sizes.small,
                               color: AppColors.unselected),
                         ),
-                        const SizedBox(height: 20.0),
-                        Text(
-                          widget.event!.description,
-                          style: TextStyle(fontSize: Sizes.smaller),
-                        ),
                         if (widget.event!.description.isNotEmpty)
-                          const SizedBox(height: 20.0),
+                          Column(children: [
+                            const SizedBox(height: 30.0),
+                            Text(
+                              widget.event!.description,
+                              style: TextStyle(fontSize: Sizes.smaller),
+                            ),
+                          ]),
                         if (widget.event!.file != null)
-                          DownloadFile(file: widget.event!.file!),
-                        if (widget.event!.file != null)
-                          const SizedBox(
-                            height: 20,
-                          ),
+                          Column(children: [
+                            const SizedBox(height: 20.0),
+                            DownloadFile(file: widget.event!.file!),
+                          ]),
+                        const SizedBox(height: 30.0),
                         if (_currentUserType == UserType.student)
                           SetReminderButton(
                             title: 'Set reminder',
