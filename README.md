@@ -1,4 +1,5 @@
-![Screenshot 2023-05-17 233129](https://github.com/AyaFayed/GUC-Scheduling-App/assets/79098945/e1f9112a-3ccd-4c7a-a24f-759e35ab15bf)
+![app_logo_dark](https://github.com/AyaFayed/GUC-Scheduling-App/assets/79098945/48545894-a024-4cf8-b9b9-6b5ad60c9616)
+
 
 
 GUC Connect application allows professors to send
