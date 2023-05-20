@@ -1,4 +1,5 @@
-# Guc_Connect
+![Screenshot 2023-05-17 233129](https://github.com/AyaFayed/GUC-Scheduling-App/assets/79098945/e1f9112a-3ccd-4c7a-a24f-759e35ab15bf)
+
 
 GUC Connect application allows professors to send
 announcements, post assignments, schedule quizzes and lectures, and write posts and
