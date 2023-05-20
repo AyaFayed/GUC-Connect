@@ -1,4 +1,4 @@
-# guc_connect
+# Guc_Connect
 
 GUC Connect application allows professors to send
 announcements, post assignments, schedule quizzes and lectures, and write posts and
