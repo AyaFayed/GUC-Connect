@@ -32,7 +32,7 @@ class AddEvent extends StatefulWidget {
 class _AddEventState extends State<AddEvent> {
   final UserController _userController = UserController();
 
-  UserType? _userType;
+  UserType? _currentUserType;
   String fileName = 'No File Selected';
 
   void pickFile() async {
@@ -52,7 +52,7 @@ class _AddEventState extends State<AddEvent> {
     UserType? userType = await _userController.getCurrentUserType();
 
     setState(() {
-      _userType = userType;
+      _currentUserType = userType;
     });
   }
 
@@ -64,11 +64,14 @@ class _AddEventState extends State<AddEvent> {
 
   @override
   Widget build(BuildContext context) {
-    return _userType == null
+    return _currentUserType == null
         ? const CircularProgressIndicator()
         : Column(children: <Widget>[
             TextFormField(
-              decoration: const InputDecoration(labelText: 'Title', errorMaxLines: 3,),
+              decoration: const InputDecoration(
+                labelText: 'Title',
+                errorMaxLines: 3,
+              ),
               validator: (val) => val!.isEmpty ? Errors.required : null,
               controller: widget.controllerTitle,
             ),
@@ -77,11 +80,14 @@ class _AddEventState extends State<AddEvent> {
               keyboardType: TextInputType.multiline,
               minLines: 1,
               maxLines: 7,
-              decoration: const InputDecoration(labelText: 'Description', errorMaxLines: 3,),
+              decoration: const InputDecoration(
+                labelText: 'Description',
+                errorMaxLines: 3,
+              ),
               controller: widget.controllerDescription,
             ),
             const SizedBox(height: 32.0),
-            _userType == UserType.professor
+            _currentUserType == UserType.professor
                 ? GroupsDropdown(
                     courseId: widget.courseId,
                     selectedGroupIds: widget.selectedGroupIds)

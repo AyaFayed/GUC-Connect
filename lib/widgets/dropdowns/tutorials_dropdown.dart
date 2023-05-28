@@ -10,9 +10,13 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 class TutorialsDropdown extends StatefulWidget {
   final String courseId;
   final List<String> selectedTutorialIds;
+  final Function? onConfirm;
 
   const TutorialsDropdown(
-      {super.key, required this.courseId, required this.selectedTutorialIds});
+      {super.key,
+      required this.courseId,
+      required this.selectedTutorialIds,
+      this.onConfirm});
 
   @override
   State<TutorialsDropdown> createState() => _TutorialsDropdownState();
@@ -60,11 +64,12 @@ class _TutorialsDropdownState extends State<TutorialsDropdown> {
       searchable: true,
       validator: (val) => val == null || val.isEmpty ? Errors.tutorial : null,
       listType: MultiSelectListType.LIST,
-      onConfirm: (values) {
+      onConfirm: (values) async {
         setState(() {
           widget.selectedTutorialIds.clear();
           widget.selectedTutorialIds.addAll(values);
         });
+        await widget.onConfirm!();
       },
     );
   }

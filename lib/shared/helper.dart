@@ -246,6 +246,21 @@ String formatEventType(EventType eventType) {
   }
 }
 
+String formatEventTypeAndCapitalizeFirstLetter(EventType eventType) {
+  switch (eventType) {
+    case EventType.announcement:
+      return 'Announcement';
+    case EventType.assignment:
+      return 'Assignment';
+    case EventType.quiz:
+      return 'Quiz';
+    case EventType.compensationLecture:
+      return 'Compensation lecture';
+    case EventType.compensationTutorial:
+      return 'Compensation tutorial';
+  }
+}
+
 String formatEventTypePlural(EventType eventType) {
   switch (eventType) {
     case EventType.announcement:

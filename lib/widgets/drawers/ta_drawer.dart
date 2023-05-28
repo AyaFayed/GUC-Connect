@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/enrollment_controller.dart';
 import 'package:guc_scheduling_app/screens/discussion/my_posts.dart';
+import 'package:guc_scheduling_app/screens/instructor_course/groups_schedules.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_announcements.dart';
 import 'package:guc_scheduling_app/screens/instructor_course/view_my_events/my_compensation_tutorials.dart';
 import 'package:guc_scheduling_app/screens/wrapper.dart';
@@ -87,6 +88,24 @@ class _TADrawerState extends State<TADrawer> {
               Navigator.pop(context);
               Navigator.pop(context);
               if (widget.pop) Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.backup_table_outlined),
+            title: const Text('Groups Schedules'),
+            onTap: () {
+              Navigator.pop(context);
+              if (widget.pop) Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Card(
+                      child: GroupSchedules(
+                    courseId: widget.courseId,
+                    courseName: widget.courseName,
+                  )),
+                ),
+              );
             },
           ),
           ListTile(

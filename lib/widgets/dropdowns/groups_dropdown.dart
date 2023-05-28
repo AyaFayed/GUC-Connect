@@ -10,9 +10,13 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 class GroupsDropdown extends StatefulWidget {
   final String courseId;
   final List<String> selectedGroupIds;
+  final Function? onConfirm;
 
   const GroupsDropdown(
-      {super.key, required this.courseId, required this.selectedGroupIds});
+      {super.key,
+      required this.courseId,
+      required this.selectedGroupIds,
+      this.onConfirm});
 
   @override
   State<GroupsDropdown> createState() => _GroupsDropdownState();
@@ -60,11 +64,12 @@ class _GroupsDropdownState extends State<GroupsDropdown> {
       searchable: true,
       validator: (val) => val == null || val.isEmpty ? Errors.group : null,
       listType: MultiSelectListType.LIST,
-      onConfirm: (values) {
+      onConfirm: (values) async {
         setState(() {
           widget.selectedGroupIds.clear();
           widget.selectedGroupIds.addAll(values);
         });
+        await widget.onConfirm!();
       },
     );
   }

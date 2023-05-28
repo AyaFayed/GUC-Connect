@@ -14,6 +14,17 @@ class Assignment extends Event {
       required this.deadline});
 
   @override
+  bool operator ==(Object other) {
+    if (other is Assignment) {
+      return id == other.id;
+    }
+    return false;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
   Map<String, dynamic> toJson() => {
         ...super.toJson(),
         'deadline': deadline.millisecondsSinceEpoch,

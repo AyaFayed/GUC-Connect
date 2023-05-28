@@ -20,6 +20,17 @@ class ScheduledEvent extends Event {
       required this.type});
 
   @override
+  bool operator ==(Object other) {
+    if (other is ScheduledEvent) {
+      return id == other.id;
+    }
+    return false;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
   Map<String, dynamic> toJson() => {
         ...super.toJson(),
         'start': start.millisecondsSinceEpoch,

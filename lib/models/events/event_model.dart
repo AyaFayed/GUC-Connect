@@ -120,3 +120,17 @@ class CalendarEvent {
       required this.courseId,
       required this.event});
 }
+
+class CourseCalendarEvent {
+  DateTime date;
+  DisplayEvent event;
+  String courseName;
+  String courseId;
+  int stdentsCount;
+  CourseCalendarEvent(
+      {required this.date,
+      required this.courseName,
+      required this.courseId,
+      required this.event,
+      required this.stdentsCount});
+}
