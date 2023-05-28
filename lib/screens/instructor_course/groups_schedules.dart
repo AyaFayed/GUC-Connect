@@ -8,7 +8,6 @@ import 'package:guc_scheduling_app/widgets/drawers/professor_drawer.dart';
 import 'package:guc_scheduling_app/widgets/drawers/ta_drawer.dart';
 import 'package:guc_scheduling_app/widgets/dropdowns/groups_dropdown.dart';
 import 'package:guc_scheduling_app/widgets/dropdowns/tutorials_dropdown.dart';
-import 'package:guc_scheduling_app/widgets/event_widgets/calendar_event_card.dart';
 import 'package:guc_scheduling_app/widgets/event_widgets/group_calendar_event_card.dart';
 import 'package:table_calendar/table_calendar.dart';
 
