@@ -73,7 +73,7 @@ class _GroupSchedulesState extends State<GroupSchedules> {
         : Scaffold(
             appBar: AppBar(
               title: const Text(
-                'Groups Schedules',
+                'Group schedules',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               elevation: 0.0,

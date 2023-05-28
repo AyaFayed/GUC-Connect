@@ -92,7 +92,7 @@ class _TADrawerState extends State<TADrawer> {
           ),
           ListTile(
             leading: const Icon(Icons.backup_table_outlined),
-            title: const Text('Groups Schedules'),
+            title: const Text('Group schedules'),
             onTap: () {
               Navigator.pop(context);
               if (widget.pop) Navigator.pop(context);
