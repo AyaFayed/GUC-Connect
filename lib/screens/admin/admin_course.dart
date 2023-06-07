@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/course_controller.dart';
 import 'package:guc_scheduling_app/screens/admin/admin_home.dart';
+import 'package:guc_scheduling_app/screens/wrapper.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';
 import 'package:guc_scheduling_app/shared/errors.dart';
@@ -34,7 +35,7 @@ class _AdminCourseState extends State<AdminCourse> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const Card(child: AdminHome()),
+          builder: (context) => const Card(child: Wrapper()),
         ));
   }
 
