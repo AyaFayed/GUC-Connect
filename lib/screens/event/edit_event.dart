@@ -381,8 +381,6 @@ class _EditEventState extends State<EditEvent> {
                             maxLines: 7,
                             decoration: const InputDecoration(
                                 labelText: 'Description', errorMaxLines: 3),
-                            validator: (val) =>
-                                val!.isEmpty ? Errors.required : null,
                             controller: controllerDescription,
                           ),
                           const SizedBox(height: 20.0),

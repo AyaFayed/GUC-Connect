@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:guc_scheduling_app/controllers/course_controller.dart';
-import 'package:guc_scheduling_app/screens/admin/admin_home.dart';
 import 'package:guc_scheduling_app/screens/wrapper.dart';
 import 'package:guc_scheduling_app/shared/confirmations.dart';
 import 'package:guc_scheduling_app/shared/constants.dart';

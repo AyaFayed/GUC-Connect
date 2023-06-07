@@ -51,9 +51,7 @@ class _NotificationCardState extends State<NotificationCard> {
           );
         }
         return;
-      }
-
-      if (context.mounted) {
+      } else if (context.mounted) {
         switch (currentUserType) {
           case null:
             break;
